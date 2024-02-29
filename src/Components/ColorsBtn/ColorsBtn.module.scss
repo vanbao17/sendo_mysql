@@ -1,0 +1,27 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 20px 0px;
+    gap: 10px;
+    button {
+        display: block;
+        padding: 5px 17px;
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 1.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        &.active {
+            border: 2px solid #ee2624;
+            background-color: #fff;
+        }
+    }
+}
+.displaySize {
+    min-width: 25%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

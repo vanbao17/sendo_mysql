@@ -1,0 +1,115 @@
+.wrapper {
+    width: 100%;
+    background-color: #f2f3f4;
+}
+.container {
+    width: 85%;
+    margin: 0px auto;
+}
+//infor shop
+.infor {
+    width: 100%;
+    background-color: #fff;
+
+    padding-bottom: 11px;
+}
+.bgImageInfor {
+    overflow: hidden;
+    width: 100%;
+    img {
+        height: auto;
+    }
+}
+.inforBasicShop {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    .left,
+    .right {
+        width: 50%;
+        padding: 20px;
+    }
+}
+.inforBasicShop .left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .nameShop {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .nameShop .imageShop {
+        width: 72px;
+        height: 72px;
+    }
+    .nameShop .imageShop img {
+        width: 100%;
+        height: auto;
+    }
+    .nameShop .name {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .nameShop .name > p {
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .nameShop .name .tag {
+        width: 44px;
+        height: 16px;
+    }
+    .nameShop .name .rateAndFollow {
+        font-size: 11px;
+        color: #0f1e29;
+    }
+    .btnShop {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .btnShop button {
+        padding: 7px;
+        background-color: #e7e8ea;
+        border-radius: 4px;
+    }
+}
+.inforBasicShop .right {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .righitem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 14px;
+    }
+    span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    p {
+        color: #ee6c0e;
+        font-weight: 700;
+    }
+}
+.infor {
+    height: 100%;
+}
+.infor .navShop {
+    width: 100%;
+    height: 100%;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 80px;
+    .item {
+        color: #0f1e29;
+        padding: 12px 24px;
+        border-bottom: 2px solid transparent;
+    }
+    .item.active {
+        border-color: #ee6c0e;
+    }
+}

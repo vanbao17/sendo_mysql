@@ -1,0 +1,42 @@
+.newProd {
+    width: 100%;
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 16px 0px;
+}
+.filterProds {
+    background-color: #fff;
+    width: 100%;
+    gap: 10px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 60px;
+    display: flex;
+    align-items: center;
+    margin: 16px 0px;
+    padding: 16px;
+    button {
+        padding: 6px 16px;
+        background-color: transparent;
+        cursor: pointer;
+    }
+    button.active {
+        border: 1px solid #f47c7b;
+
+        background-color: #fef2f2;
+        border-radius: 4px;
+    }
+    button.active span {
+        color: #ee2624 !important;
+    }
+    span {
+        font-weight: 700;
+        color: #3f4b53;
+    }
+    .sortPrice button {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+    }
+}

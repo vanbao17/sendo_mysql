@@ -1,0 +1,15 @@
+.wrapper {
+    width: 100%;
+    background-color: #fff;
+}
+.container {
+    width: 85%;
+    margin: 0px auto;
+    .setWidth {
+        width: 100%;
+        display: flex;
+    }
+}
+.container.children {
+    width: 100% !important;
+}

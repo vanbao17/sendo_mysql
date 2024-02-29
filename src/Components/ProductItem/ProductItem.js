@@ -1,0 +1,108 @@
+import classNames from 'classnames/bind';
+import styles from './ProductItem.module.scss';
+import { important } from '../../Assets/images/image/image';
+import { ig } from '../../Assets/images';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+const cx = classNames.bind(styles);
+
+function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd }) {
+    const classes = cx('wrapper', {
+        [className]: className,
+    });
+    const navigate = useNavigate();
+    function HandlePath() {
+        navigate(`/detail/${data.nameProduct}`, { state: { dt: data.idProduct } });
+    }
+    var imagePath = '';
+    if (pdmain == true) {
+        imagePath = `../../src/Assets/images/products/${data.imageProduct}`;
+    }
+    return (
+        <div className={classes}>
+            {pdnormal && (
+                <div className={cx('item-slide')}>
+                    <a className={cx('item')} href="">
+                        <div className={cx('content')} style={{ width: width, height: height }}>
+                            <div className={cx('image')}>
+                                <img className={cx('img-main')} src={data.img}></img>
+                                {data.name ? <></> : <img className={cx('img-sale')} src={important.sale}></img>}
+                            </div>
+                            {data.name && <div className={cx('name')}>{data.name}</div>}
+                            <div className={cx('price')} style={{ paddingTop: data.name ? ' 0px' : '20px' }}>
+                                {!data.name && <h3>{data.price}</h3>}
+                                <span className={cx('linethrought')}>{data.oldPrice}</span>
+                                <span className={cx('sale')}>{data.precent}</span>
+                                {data.name && <h3>{data.price}</h3>}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            )}
+            {pdmain && (
+                <div className={cx('item-pdmain')} onClick={() => HandlePath(data.idProduct)}>
+                    <a href={`/detail/${data.nameProduct}`}>
+                        <div className={cx('item')}>
+                            <div className={cx('pdmain-content')}>
+                                <div className={cx('image')}>
+                                    <img className={cx('img-main')} src={`${imagePath}`} alt="Product Image" />
+                                </div>
+                                <div className={cx('infor')}>
+                                    <div className={cx('name')}>
+                                        {newProd == true ? (
+                                            <img className={cx('img-shop')} src={ig.shoptag}></img>
+                                        ) : (
+                                            <></>
+                                        )}
+                                        <span>{data.nameProduct}</span>
+                                    </div>
+                                    <div className={cx('price')}>
+                                        {!data.priceSale && (
+                                            <span className={cx('linethrought')}>{data.priceSale}</span>
+                                        )}
+                                        <span className={cx('sale')}>{data.precent}</span>
+
+                                        <h3>{data.priceSale}</h3>
+                                    </div>
+
+                                    <div className={cx('tag')}>
+                                        {!newProd && (
+                                            <>
+                                                <img className={cx('img-shop')} src={ig.tragoptag}></img>
+                                                <span>Trả góp Kredivo</span>
+                                            </>
+                                        )}
+                                    </div>
+                                    {!newProd && (
+                                        <div className={cx('buyopen')}>
+                                            <span>Mở bán</span>
+                                        </div>
+                                    )}
+
+                                    <div className={cx('infother')}>
+                                        <p>{newProd && `Đã bán ${data.selledQuality}`}</p>
+                                        <div className={cx('rate-address')}>
+                                            {newProd && (
+                                                <>
+                                                    <div className={cx('rate')}>
+                                                        <span>4.2/5</span>
+                                                        <span className={cx('star')}></span>
+                                                    </div>
+                                                </>
+                                            )}
+                                            {newProd && <span></span>}
+
+                                            <span>Bình Thuận</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default ProductItem;

@@ -1,0 +1,42 @@
+.wrapper {
+    padding: 0px 24px 24px;
+    background-color: transparent;
+    margin-top: 24px;
+    border-radius: 24px;
+}
+.questionProduct {
+    padding: 24px;
+    background-color: #fff;
+    width: 100%;
+    border-radius: 8px;
+    .title {
+        font-weight: 700;
+    }
+    p {
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+    button {
+        width: 100%;
+        padding: 7px;
+        display: flex;
+        align-items: center;
+        border-radius: 4px;
+        justify-content: center;
+        gap: 10px;
+        height: 40px;
+        cursor: pointer;
+        transition: 0.25s;
+        &:hover {
+            background-color: #f2f3f4;
+        }
+    }
+    span {
+        font-size: 14px;
+        line-height: 1.3rem;
+        font-weight: 700;
+    }
+    .icon {
+        font-size: 20px;
+    }
+}

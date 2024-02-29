@@ -1,0 +1,28 @@
+.wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0px auto;
+    flex-wrap: wrap;
+    display: flex;
+    gap: 14px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.seemore {
+    width: 100%;
+    padding: 8px 0px 24px 0px;
+    .container {
+        width: 30%;
+        display: block;
+        margin: 0px auto;
+    }
+    .btn-seemore {
+        width: 100%;
+        padding: 15px;
+        background-color: #fff;
+        color: black;
+        font-weight: 700;
+        font-size: 16px;
+        border-radius: 4px;
+    }
+}

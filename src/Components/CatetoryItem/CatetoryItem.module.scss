@@ -1,0 +1,40 @@
+.mini {
+    width: 100%;
+}
+.mini a img {
+    width: 44px;
+    height: 44px;
+    display: block;
+    margin: 0px auto;
+}
+.mini a span {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+}
+.mini a {
+    flex-direction: column;
+    text-align: center;
+}
+.mini {
+    padding: 16px;
+    width: calc(100%/10);
+}
+//bg
+.bg {
+    padding: 14px 16px !important;
+    margin-right: 16px;
+    border-radius: 8px;
+}
+//large
+.large
+{
+    width: 198px;
+    text-align: center;
+    font-weight: 700;
+    img {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}

@@ -1,0 +1,51 @@
+.wrapper {
+    width: 100%;
+}
+.fcol1 {
+    width: 100%;
+    background-color: #fff;
+    padding: 16px;
+}
+.container {
+    width: 90%;
+    margin: 0px auto;
+    display: flex;
+    align-items: center;
+}
+.fcol3 {
+    width: 100%;
+    font-size: 12px;
+    background-color: #27343e;
+    padding: 24px 24px;
+    color: #fff;
+    .title {
+        font-weight: 700;
+    }
+    .container {
+        display: flex;
+        align-items: normal;
+        justify-content: space-between;
+    }
+    .infor {
+        width: 40%;
+    }
+    .sign {
+        width: 50%;
+    }
+    p {
+        margin-bottom: 16px;
+    }
+    img {
+        width: 108px ;
+        margin-right: 24px;
+    }
+}
+.sign {
+    input {
+        border-radius: 7px;
+        width: 50%;
+        padding: 8px;
+        font-size: 14px;
+        margin-right: 5px;
+    }
+}

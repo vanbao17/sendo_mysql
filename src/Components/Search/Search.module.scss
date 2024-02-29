@@ -1,0 +1,32 @@
+.wrapper {
+    display: flex;
+    flex-grow: 1;
+    max-width: 100%;
+    gap: 7px;
+    align-items: center;
+    input {
+        width: 100%;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        background-color: #fff;
+        font-weight: inherit;
+        font-size: 1rem;
+        outline: 0;
+        padding: 0.5rem 1.6rem;
+        line-height: 1.5rem;
+    }
+    .search-icon {
+        border-radius: 5px;
+        width: 3rem;
+        padding: 8px 0px;
+    }
+}
+.listcate {
+    padding: 4px;
+    border-radius: 3px;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.271);
+        cursor: pointer;
+    }
+}

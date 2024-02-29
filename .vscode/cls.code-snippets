@@ -1,0 +1,20 @@
+{
+	"clns": {
+        "prefix": "cls",
+        "body": [
+            "import classNames from 'classnames/bind'"
+        ]
+    },
+	"cx": {
+        "prefix": "cx",
+        "body": [
+            "const cx = classNames.bind(styles)"
+        ]
+    },
+	"cln": {
+		"prefix":"cln",
+		"body": [
+			"className={cx('')}"
+		]
+	}
+}

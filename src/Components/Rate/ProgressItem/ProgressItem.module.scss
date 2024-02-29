@@ -1,0 +1,71 @@
+.star {
+    width: 50%;
+}
+.star5::before {
+    content: '★★★★★';
+    display: block;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(90deg, #ffc600 100%, #e7e8ea 0);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+.star4::before {
+    content: '★★★★★';
+    display: block;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(90deg, #ffc600 80%, #e7e8ea 0);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+.star3::before {
+    content: '★★★★★';
+    display: block;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(90deg, #ffc600 60%, #e7e8ea 0);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+.star2::before {
+    content: '★★★★★';
+    display: block;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(90deg, #ffc600 40%, #e7e8ea 0);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+.star1::before {
+    content: '★★★★★';
+    display: block;
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(90deg, #ffc600 20%, #e7e8ea 0);
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+.onestar {
+    margin-right: 5px;
+}
+.item {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+}
+.progress {
+    display: inline-block;
+    border-radius: 5px;
+    position: relative;
+}
+.count {
+    width: 12%;
+    margin-left: 12px;
+}
+.bgr-red {
+    border-radius: 5px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #e5101d;
+    z-index: 9;
+}

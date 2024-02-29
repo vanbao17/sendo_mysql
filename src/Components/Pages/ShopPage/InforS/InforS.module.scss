@@ -1,0 +1,51 @@
+.containInfor {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    margin: 16px 0px;
+    gap: 24px;
+    .leftcontain {
+        width: 30%;
+        background-color: #fff;
+        border-radius: 8px;
+    }
+    .leftcontain .content {
+        padding: 24px;
+    }
+    .leftcontain .updateProgress {
+        padding: 8px;
+    }
+    .leftcontain .line {
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .leftcontain .line hr {
+        width: 100%;
+        height: 1px;
+        background-color: #e7e8ea;
+        margin: 0;
+        display: block;
+    }
+    .leftcontain ul li {
+        list-style-type: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px;
+    }
+    .leftcontain ul li span {
+        font-size: 14px;
+        font-weight: 400;
+    }
+    .rightcontain {
+        background-color: #fff;
+        border-radius: 8px;
+        width: 70%;
+    }
+}
+
+.icon {
+    color: #6f787e;
+}

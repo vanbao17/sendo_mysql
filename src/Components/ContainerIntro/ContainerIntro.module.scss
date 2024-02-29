@@ -1,0 +1,27 @@
+.wrapper {
+    width: 85%;
+    margin: 0px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 16px;
+        padding: 16px;
+    }
+}
+.title a {
+    text-decoration: none;
+    color: #0f62fe;
+    margin-right: 0.8rem;
+}
+.content {
+    padding: 0px 16px 16px 16px;
+}
+h2 {
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
