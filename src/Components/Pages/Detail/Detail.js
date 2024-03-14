@@ -11,18 +11,16 @@ import { important } from '../../../Assets/images/image/image';
 import InforShop from '../../InforShop/InforShop';
 import InforProRight from './InforProRight/InforProRight';
 import Products from '../../Products/Products';
-import { proSale } from '../../../Assets/images/sale';
 import { BinIcon, ChatIcon, ShopIcon } from '../../IconSvg';
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../store/Context';
 const cx = classNames.bind(styles);
 function Detai() {
-    //const { hasReloaded, setHasReloaded } = useContext(Context);
     const { showGototop, setshowGototop } = useContext(Context);
     const [datadetail, setdatadetail] = useState([]);
+    const [favoriteProds, setfavoriteProds] = useState([]);
     const location = useLocation();
     const dataIdProduct = location.state?.dt;
-
     useEffect(() => {
         fetch(`http://localhost:3001/api/v1/detail/${dataIdProduct}`)
             .then((respone) => respone.json())
@@ -30,11 +28,7 @@ function Detai() {
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
-    var path = '';
-    if (datadetail != null) {
-        path = datadetail.imageProduct;
-    }
+    }, [dataIdProduct]);
     const imgData = [
         { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
         { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
@@ -44,6 +38,15 @@ function Detai() {
         { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
         { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
     ];
+    useEffect(() => {
+        let idCate = datadetail.madm1 + '' + datadetail.madm2;
+        fetch(`http://localhost:3001/api/v1/favoriteProdShop/${idCate}`)
+            .then((respone) => respone.json())
+            .then((data) => setfavoriteProds(data))
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -60,10 +63,7 @@ function Detai() {
                                 src="https://media3.scdn.vn/img4/2022/02_16/sz4EeQTY9v3EHfkPa3Uv.png"
                             ></img>
 
-                            <img
-                                //src={require(process.env.PUBLIC_URL + `../../Assets/images/products/${path}`)}
-                                alt="Product Image"
-                            />
+                            <img src={`${datadetail.imageProduct}`} alt={`${datadetail.nameProduct}`} />
 
                             <div className={cx('action')}>
                                 <span className={cx('count-img')}>1/9</span>
@@ -84,15 +84,17 @@ function Detai() {
                         <div className={cx('name')}>
                             <img src={important.shop}></img>
                             <h1>{datadetail.nameProduct}</h1>
-                            <span className={cx('reduce-percent ', 'redtext')}>Giảm 61%</span>
+                            <span className={cx('reduce-percent ', 'redtext')}>
+                                Giảm {Math.round((datadetail.priceSale / datadetail.priceDefault) * 100)}%
+                            </span>
                         </div>
                         <div className={cx('trademark')}>
                             <span>Thương hiệu:</span>
                             <span>{datadetail.trademark}</span>
                         </div>
-                        <div className={cx('price', 'redtext')}>{datadetail.priceDefault}đ</div>
+                        <div className={cx('price', 'redtext')}>{datadetail.priceSale}đ</div>
                         <div className={cx('reduce')}>
-                            <span className={cx('reduce-price')}>{datadetail.priceSale}đ</span>
+                            <span className={cx('reduce-price')}>{datadetail.priceDefault}đ</span>
                         </div>
                         <div className={cx('code-reduce')}>
                             {/* <span>
@@ -175,23 +177,23 @@ function Detai() {
                 </div>
                 <div className={cx('productyourlike')} id="productyourlike">
                     <span>Ở đây có sản phẩm bạn thích</span>
-                    <Products data={proSale}></Products>
+                    <Products data={favoriteProds}></Products>
                 </div>
             </div>
             <div className={cx('containerFixed', showGototop == true ? 'show' : '')}>
                 <div className={cx('container')}>
                     <div className={cx('left')}>
                         <div className={cx('imageProd')}>
-                            <img src="https://media3.scdn.vn/img4/2023/09_20/8oWHSMHSs7PEiK7oLl4V_simg_b5529c_250x250_maxb.jpg"></img>
+                            <img src={datadetail.imageProduct}></img>
                         </div>
                         <div className={cx('inforProd')}>
                             <div className={cx('nameProd')}>
-                                <p>Combo 10 Giấy In Nhiệt A4 Làm Mạch In Thủ g Ăn Mòn Phíp Đồng</p>
+                                <p>{datadetail.nameProduct}</p>
                                 <span>Tạm tính</span>
                             </div>
                             <div className={cx('priceProd')}>
                                 <p>Mặc định | x1</p>
-                                <span>13.000đ</span>
+                                <span>{datadetail.priceSale}đ</span>
                             </div>
                         </div>
                     </div>

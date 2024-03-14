@@ -6,7 +6,8 @@ import HeaderNoneCate from '../Pages/HeaderNoneCate/HeaderNoneCate';
 import Detail from '../Pages/Detail/Detail';
 import FindProduct from '../Pages/FindProduct/FindProduct';
 import ShopPage from '../Pages/ShopPage/ShopPage';
-import Home from '../Pages/ShopPage/Home/Home';
+import ShopProd from '../Pages/ShopPage/ShopProds/ShopProds';
+import HomeShopPage from '../Pages/ShopPage/HomeShopPage/HomeShopPage';
 const publicRoutes = [
     {
         path: routes.home,
@@ -49,12 +50,17 @@ const publicRoutes = [
     },
     {
         path: routes.shopPage,
-        component: ShopPage,
+        component: HomeShopPage,
         layout: HeaderNoneCate,
     },
     {
         path: routes.shopPageProduct,
-        component: Home,
+        component: ShopProd,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.findProd,
+        component: FindProduct,
         layout: HeaderNoneCate,
     },
 ];

@@ -1,0 +1,21 @@
+hr {
+    margin-top: 0;
+}
+.wrapperItem .item {
+    padding: 12px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    span {
+        margin-left: 12px;
+        text-align: center;
+        color: #0f1e29;
+        font-size: 14px;
+        font-weight: 700;
+    }
+    .icon {
+        padding: 7px;
+        font-size: 12px;
+        font-weight: 400;
+    }
+}

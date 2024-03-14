@@ -1,18 +1,43 @@
 import classNames from 'classnames/bind';
 import styles from './ShopPage.module.scss';
 import { BoxIcon, ChatIcon, OclockIcon, ShopIcon } from '../../IconSvg';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ig } from '../../../Assets/images';
 import Rate from '../../Rate/Rate';
 import Products from '../../Products/Products';
 import { proSale } from '../../../Assets/images/sale';
 import Footer from '../../Layout/Components/Footer/Footer';
 import Header from '../../Layout/Components/Header/Header';
+import { useState, useEffect, useContext } from 'react';
+import { Context } from '../../store/Context';
 const cx = classNames.bind(styles);
 
 function ShopPage({ children }) {
-    const location = useLocation();
-    const data = location.state?.dt;
+    // const location = useLocation();
+    //const { idShop, setidShop } = useContext(Context);
+    const [data, setdata] = useState(JSON.parse(localStorage.getItem('dataShop')));
+    const dataCates = [
+        {
+            name: 'Trang chủ',
+            path: '/shop/cong-nghe',
+        },
+        {
+            name: 'Sản Phẩm',
+            path: '/shop/cong-nghe/san-pham',
+        },
+        {
+            name: 'Bộ sưu tập ',
+            path: '/shop/cong-nghe/bo-suu-tap',
+        },
+        {
+            name: 'Gía tốt hôm nay',
+            path: '/shop/cong-nghe/gia-tot-hom-nay',
+        },
+        {
+            name: 'Thông tin shop',
+            path: '/shop/thong-tin-shop',
+        },
+    ];
     return (
         <div className={cx('wrapper')}>
             <Header />
@@ -71,33 +96,17 @@ function ShopPage({ children }) {
                         </div>
                     </div>
                     <div className={cx('navShop')}>
-                        <NavLink to="/shop/cong-nghe" className={(nav) => cx('item', { active: nav.isActive })}>
-                            Trang chủ
-                        </NavLink>
-                        <NavLink
-                            to="/shop/cong-nghe/san-pham"
-                            className={(nav) => cx('item', { active: nav.isActive })}
-                        >
-                            Sản phẩm
-                        </NavLink>
-                        <NavLink
-                            to="/shop/cong-nghe/bo-suu-tap"
-                            className={(nav) => cx('item', { active: nav.isActive })}
-                        >
-                            Bộ sưu tập
-                        </NavLink>
-                        <NavLink
-                            to="/shop/cong-nghe/gia-tot-hom-nay"
-                            className={(nav) => cx('item', { active: nav.isActive })}
-                        >
-                            Gía tốt hôm nay
-                        </NavLink>
-                        <NavLink
-                            to="/shop/cong-nghe/thong-tin-shop"
-                            className={(nav) => cx('item', { active: nav.isActive })}
-                        >
-                            Thông tin shop
-                        </NavLink>
+                        {dataCates.map((cateItem, index) => {
+                            return (
+                                <NavLink
+                                    key={index}
+                                    to={cateItem.path}
+                                    className={(nav) => cx('item', { active: nav.isActive })}
+                                >
+                                    {cateItem.name}
+                                </NavLink>
+                            );
+                        })}
                     </div>
                 </div>
                 {children}

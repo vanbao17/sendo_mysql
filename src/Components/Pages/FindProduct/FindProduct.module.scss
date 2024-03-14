@@ -1,0 +1,31 @@
+body {
+    background-color: #f2f3f4;
+}
+.wrapper {
+    width: 85%;
+    margin: 0px auto;
+}
+.titlePage {
+    padding: 16px 0px;
+    .pathWeb {
+        font-size: 14px;
+        height: inherit;
+        padding: 10px 0px;
+        color: #3f4b53;
+    }
+    .titleResult .title {
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .titleResult .result {
+        font-size: 14px;
+        margin-left: 14px;
+    }
+}
+.contentLeft {
+    max-height: 90vh;
+    min-height: 80vh;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 206px;
+}

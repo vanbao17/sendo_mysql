@@ -14,10 +14,6 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
     function HandlePath() {
         navigate(`/detail/${data.nameProduct}`, { state: { dt: data.idProduct } });
     }
-    var imagePath = '';
-    if (pdmain == true) {
-        imagePath = `../../src/Assets/images/products/${data.imageProduct}`;
-    }
     return (
         <div className={classes}>
             {pdnormal && (
@@ -25,15 +21,19 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
                     <a className={cx('item')} href="">
                         <div className={cx('content')} style={{ width: width, height: height }}>
                             <div className={cx('image')}>
-                                <img className={cx('img-main')} src={data.img}></img>
+                                <img className={cx('img-main')} src={data.imageProduct}></img>
                                 {data.name ? <></> : <img className={cx('img-sale')} src={important.sale}></img>}
                             </div>
-                            {data.name && <div className={cx('name')}>{data.name}</div>}
-                            <div className={cx('price')} style={{ paddingTop: data.name ? ' 0px' : '20px' }}>
-                                {!data.name && <h3>{data.price}</h3>}
-                                <span className={cx('linethrought')}>{data.oldPrice}</span>
-                                <span className={cx('sale')}>{data.precent}</span>
-                                {data.name && <h3>{data.price}</h3>}
+                            {data.nameProduct && <div className={cx('name')}>{data.nameProduct}</div>}
+                            <div className={cx('price')}>
+                                {!data.nameProduct && <h3>{data.priceDefault}</h3>}
+                                {data.nameProduct && <h3>{data.priceSale}đ</h3>}
+                                <span className={cx('linethrought')} style={{ fontWeight: 400 }}>
+                                    {data.priceDefault}đ
+                                </span>
+                                <span className={cx('sale')} style={{ fontWeight: 400 }}>
+                                    -{Math.round((data.priceSale / data.priceDefault) * 100)}%
+                                </span>
                             </div>
                         </div>
                     </a>
@@ -45,7 +45,7 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
                         <div className={cx('item')}>
                             <div className={cx('pdmain-content')}>
                                 <div className={cx('image')}>
-                                    <img className={cx('img-main')} src={`${imagePath}`} alt="Product Image" />
+                                    <img className={cx('img-main')} src={`${data.imageProduct}`} alt="Product Image" />
                                 </div>
                                 <div className={cx('infor')}>
                                     <div className={cx('name')}>
@@ -57,8 +57,8 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
                                         <span>{data.nameProduct}</span>
                                     </div>
                                     <div className={cx('price')}>
-                                        {!data.priceSale && (
-                                            <span className={cx('linethrought')}>{data.priceSale}</span>
+                                        {data.priceDefault && (
+                                            <span className={cx('linethrought')}>{data.priceDefault}</span>
                                         )}
                                         <span className={cx('sale')}>{data.precent}</span>
 

@@ -87,6 +87,7 @@ const dataSidebar = [
 ];
 function ShopCollection() {
     const [currentPage, setCurrentPage] = useState(0);
+    const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
 
     const handlePageChange = ({ selected }) => {
         setCurrentPage(selected);
@@ -95,7 +96,7 @@ function ShopCollection() {
     const itemsPerPage = 24; // Số lượng mục trên mỗi trang
 
     const startIndex = currentPage * itemsPerPage;
-    const slicedData = proSale.slice(startIndex, startIndex + itemsPerPage);
+    const slicedData = dataProds.slice(startIndex, startIndex + itemsPerPage);
     return (
         <ShopPage>
             <div className={cx('containerShopColl')}>
@@ -136,7 +137,10 @@ function ShopCollection() {
                         </div>
                     </div>
                     <Products data={slicedData} notbutton />
-                    <Pagination pageCount={Math.ceil(proSale.length / itemsPerPage)} onPageChange={handlePageChange} />
+                    <Pagination
+                        pageCount={Math.ceil(dataProds.length / itemsPerPage)}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </div>
         </ShopPage>

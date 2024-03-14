@@ -6,6 +6,7 @@ function Provider({ children }) {
     const [menufix, setmenufix] = useState(false);
     const [dis, setdis] = useState(false);
     const [user, setuser] = useState({});
+    const [idShop, setidShop] = useState(JSON.parse(localStorage.getItem('dataShop')));
     const [usergg, setusergg] = useState(false);
     const [userfb, setuserfb] = useState(false);
     useEffect(() => {
@@ -47,6 +48,8 @@ function Provider({ children }) {
                 setuserfb,
                 hasReloaded,
                 setHasReloaded,
+                idShop,
+                setidShop,
             }}
         >
             {children}

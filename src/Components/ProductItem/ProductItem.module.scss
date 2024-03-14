@@ -25,12 +25,16 @@ a {
 .content {
     width: 144px;
     .name {
+        width: 100%;
         margin-top: 7px;
         padding: 0px 8px;
         color: black;
         font-weight: 400;
         font-size: 14px;
         height: 36px;
+        white-space: nowrap; /* Ngăn ngừa text xuống dòng */
+        overflow: hidden; /* Ẩn nội dung vượt quá chiều rộng */
+        text-overflow: ellipsis;
     }
 }
 .content .image {

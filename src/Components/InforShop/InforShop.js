@@ -5,60 +5,39 @@ import { faHeart, faPhoneVolume, faShop } from '@fortawesome/free-solid-svg-icon
 import Slide from '../Layout/Components/Slides/Slide';
 import { important } from '../../Assets/images/image/image';
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { Context } from '../store/Context';
 const cx = classNames.bind(styles);
 function InforShop({ Shopinfor }) {
     const newData = 'cong-nghe';
     const route = useNavigate();
-    const proSale = [
-        {
-            img: 'https://media3.scdn.vn/img4/2022/05_04/kInFypEq5pprnjmNzGTj.jpg',
-            price: '18.000đ',
-            oldPrice: '64.000đ',
-            precent: '-52%',
-            name: 'Bộ Bình Giữ Nhiệt 500ml Kèm 2 Ly',
-        },
-        {
-            img: 'https://media3.scdn.vn/img4/2022/05_04/kInFypEq5pprnjmNzGTj.jpg',
-            price: '18.000đ',
-            oldPrice: '64.000đ',
-            name: 'Bộ Bình Giữ Nhiệt 500ml Kèm 2 Ly',
-            precent: '-52%',
-        },
-        {
-            img: 'https://media3.scdn.vn/img4/2022/05_04/kInFypEq5pprnjmNzGTj.jpg',
-            price: '18.000đ',
-            oldPrice: '64.000đ',
-            name: 'Bộ Bình Giữ Nhiệt 500ml Kèm 2 Ly',
-            precent: '-52%',
-        },
-        {
-            img: 'https://media3.scdn.vn/img4/2022/05_04/kInFypEq5pprnjmNzGTj.jpg',
-            price: '18.000đ',
-            oldPrice: '64.000đ',
-            name: 'Bộ Bình Giữ Nhiệt 500ml Kèm 2 Ly',
-            precent: '-52%',
-        },
-        {
-            img: 'https://media3.scdn.vn/img4/2022/05_04/kInFypEq5pprnjmNzGTj.jpg',
-            price: '18.000đ',
-            oldPrice: '64.000đ',
-            name: 'Bộ Bình Giữ Nhiệt 500ml Kèm 2 Ly',
-            precent: '-52%',
-        },
-    ];
+    const [proSale, setproSale] = useState([]);
+    const { idShop, setidShop } = useContext(Context);
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/v1/prodShop/${Shopinfor.idShop}`)
+            .then((respone) => respone.json())
+            .then((data) => setproSale(data))
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [Shopinfor]);
     const handleShopInfor = () => {
-        route(`/shop/${newData}`, { state: { dt: Shopinfor } });
+        route(`/shop/${newData}?`, { state: { dt: Shopinfor } });
     };
+    // useEffect(() => {
+    //     setidShop(Shopinfor);
+    // });
+    localStorage.setItem('dataShop', JSON.stringify(Shopinfor));
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title')}>
                 <span>Thông tin nhà cung cấp</span>
             </div>
+
             <a href={`/shop/${newData}`}>
                 <div className={cx('infor')} onClick={handleShopInfor}>
                     <div className={cx('image')}>
-                        <img src="https://media3.scdn.vn/img4/2021/05_18/wph75ICqBY2NXlrzeiV1.png"></img>
+                        <img className={cx('imageShop')} src={Shopinfor.imageShop}></img>
                         <div className={cx('active')}></div>
                     </div>
                     <div className={cx('infor-shop')}>
@@ -76,6 +55,7 @@ function InforShop({ Shopinfor }) {
                     </div>
                 </div>
             </a>
+
             <div className={cx('infor-others')}>
                 <div className={cx('item-infor')}>
                     <span className={cx('important')}>7 năm</span>

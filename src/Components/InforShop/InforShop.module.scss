@@ -1,5 +1,6 @@
 .wrapper {
     width: 41.6666666667%;
+    //width: 100%;
     margin-right: 24px;
     padding: 24px;
     background-color: #fff;
@@ -118,4 +119,8 @@ hr {
     .large {
         width: 100%;
     }
+}
+.imageShop {
+    width: 100%;
+    border-radius: 50%;
 }

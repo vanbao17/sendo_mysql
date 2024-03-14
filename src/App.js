@@ -5,7 +5,7 @@ import BtnGototop from './Components/Layout/Components/BtnGototop/BtnGototop';
 import BtnChat from './Components/Layout/Components/BtnChat/BtnChat';
 import { Fragment } from 'react';
 import ShopProds from './Components/Pages/ShopPage/ShopProds/ShopProds';
-import Home from './Components/Pages/ShopPage/Home/Home';
+import HomeShopPage from './Components/Pages/ShopPage/HomeShopPage/HomeShopPage';
 import ShopCollection from './Components/Pages/ShopPage/ShopCollection/ShopCollection';
 import ShopBestPrice from './Components/Pages/ShopPage/ShopBestPrice/ShopBestPrice';
 import InforS from './Components/Pages/ShopPage/InforS/InforS';
@@ -35,7 +35,7 @@ function App() {
                                         </Layout>
                                     }
                                 ></Route>
-                                <Route path={'/shop/:paramValue'} element={<Home />}></Route>
+                                <Route path={'/shop/:paramValue'} element={<HomeShopPage />}></Route>
                                 <Route path={'/shop/:paramValue/san-pham'} element={<ShopProds />}></Route>
                                 <Route path={'/shop/:paramValue/bo-suu-tap'} element={<ShopCollection />}></Route>
                                 <Route path={'/shop/:paramValue/gia-tot-hom-nay'} element={<ShopBestPrice />}></Route>

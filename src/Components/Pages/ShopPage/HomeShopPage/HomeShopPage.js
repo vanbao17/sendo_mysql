@@ -6,17 +6,30 @@ import ShopPage from '../ShopPage';
 import Slide from '../../../Layout/Components/Slides/Slide';
 import { genuine } from '../../../../Assets/images/Genuine/Genuine';
 import Pagination from '../../../Pagination/Pagination';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Context } from '../../../store/Context';
 const cx = classNames.bind(styles);
 const newArray = proSale.splice(0, 9);
 function Home() {
     const [currentPage, setCurrentPage] = useState(0);
+    const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
+    const { idShop, setidShop } = useContext(Context);
     const handleChange = ({ selected }) => {
         setCurrentPage(selected);
     };
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/v1/prodShop/${idShop.idShop}`)
+            .then((respone) => respone.json())
+            .then((data) => localStorage.setItem('dataProdsShop', JSON.stringify(data)))
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
     const itemsPerPage = 24;
     const startindex = currentPage * itemsPerPage;
-    const sliceData = proSale.splice(startindex, startindex + itemsPerPage);
+    const sliceData = dataProds.slice(startindex, startindex + itemsPerPage);
     return (
         <ShopPage>
             <div className={cx('newProd')}>

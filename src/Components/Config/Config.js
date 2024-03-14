@@ -10,6 +10,7 @@ const routes = {
     detail: '/detail/:paramValue',
     sitemap: '/sitemap',
     shopPage: `/shop/:paramValue`,
+    findProd: `/:paramValue`,
     shopPageProduct: `/shop/:paramValue/san-pham`,
 };
 export default routes;
