@@ -22,10 +22,73 @@ body {
         margin-left: 14px;
     }
 }
+.contentPage {
+    display: flex;
+}
 .contentLeft {
     max-height: 90vh;
     min-height: 80vh;
+    overflow-y: overlay;
     background-color: #fff;
     border-radius: 10px;
     width: 206px;
+    margin-right: 40px;
+}
+.contentRight {
+    width: calc(80%);
+    .sort {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .inputSort {
+        width: 20%;
+        border-radius: 5px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        display: flex;
+        align-items: center;
+    }
+    .inputSort span {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0px 8px 8px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #6f787e;
+        transition: 0.25s;
+    }
+    .inputSort:hover {
+        border: 1px solid #3f81fe;
+    }
+    .inputSort .icon {
+        padding: 0px 8px;
+    }
+}
+.drop_down_input_sort {
+    width: 100%;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 -4px 16px 0 rgba(0, 0, 0, 0.1), 0 8px 16px 0 rgba(0, 0, 0, 0.1);
+    .listSort {
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+    }
+    .listSort .item {
+        padding: 4px 12px;
+        transition: 0.25s;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .listSort .item.active {
+        font-weight: 700;
+    }
+    .listSort .item:hover {
+        background-color: #f2f3f4;
+    }
 }
