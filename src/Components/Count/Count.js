@@ -1,11 +1,17 @@
 import classNames from 'classnames/bind';
 import styles from './Count.module.scss';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
-function Count({ update }) {
+function Count({ update, quanlityFunc, index }) {
     let [count, setcount] = useState(1);
+    const handleClickAdd = () => {
+        quanlityFunc(count + 1);
+    };
+    const handleClick = () => {
+        quanlityFunc(count - 1);
+    };
     return (
         <div className={cx('count')}>
             {update && (
@@ -15,13 +21,14 @@ function Count({ update }) {
                     onClick={() => {
                         if (count > 1) {
                             setcount(count - 1);
+                            handleClick();
                         }
                     }}
                 />
             )}
             {update && (
                 <input
-                    value={count}
+                    value={index ?? count}
                     onChange={(e) => {
                         setcount(e.target.value);
                     }}
@@ -35,6 +42,7 @@ function Count({ update }) {
                     className={cx('icon')}
                     onClick={() => {
                         setcount(count + 1);
+                        handleClickAdd();
                     }}
                 />
             )}

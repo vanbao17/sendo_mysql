@@ -18,21 +18,22 @@ import TippyUpdate from './UpdateCart/TippyUpdate';
 import Count from '../../Count/Count';
 const cx = classNames.bind(styles);
 
-function CartItem({ update }) {
+function CartItem({ update, data, handleDeleteCart }) {
     const [showTippy, setshowTippy] = useState(false);
     // const [listbuys, setlistbuys] = useState([]);
     function renderSizeColor() {
         return <TippyUpdate />;
     }
+
     return (
         <div className={cx('item')}>
             <div className={cx('infor-shop')}>
                 <div className={cx('image-shop')}>
                     <div className={cx('img')}>
                         {!update && <input type={'checkbox'} className="checkbox" />}
-                        <img src="https://media3.scdn.vn/images/ecom/shop_blank-logo-2.jpg" alt=""></img>
+                        <img src={data.imageShop} alt=""></img>
                     </div>
-                    <span>Âu Cơ 369</span>
+                    <span>{data.tenshop}</span>
                 </div>
                 {update && (
                     <div className={cx('chat-shop')}>
@@ -45,16 +46,13 @@ function CartItem({ update }) {
                 <div className={cx('left')}>
                     <input type={'checkbox'} className="checkbox" />
                     <div className={cx('img-name')}>
-                        <img
-                            src="https://media3.scdn.vn/img4/2023/04_04/u84a89WHW0iMtXgBWfMr_simg_de2fe0_500x500_maxb.png"
-                            alt=""
-                        ></img>
+                        <img src={data.imageProduct} alt=""></img>
 
                         <div className={cx('name')}>
                             <div className={cx('tag')}>
                                 <span>Mua trước trả sau</span>
                             </div>
-                            <span className={cx('name-product')}>[Gia dụng] bộ vệ sinh máy tính</span>
+                            <span className={cx('name-product')}>{data.nameProduct}</span>
                             <TippyHeadless
                                 interactive
                                 appendTo={() => document.body}
@@ -79,10 +77,10 @@ function CartItem({ update }) {
                 </div>
                 <div className={cx('right')}>
                     <div className={cx('price')}>
-                        <strong>30.000đ</strong>
-                        <span>10.000đ</span>
+                        <strong>{data.priceSale}đ</strong>
+                        <span>{data.priceDefault}đ</span>
                     </div>
-                    <Count update={update} />
+                    <Count update={update} index={data.quanlityCart} />
 
                     <div className={cx('action-cart')}>
                         {update && (
@@ -92,7 +90,13 @@ function CartItem({ update }) {
                         )}
                         {update && (
                             <Tippy content="Xóa">
-                                <FontAwesomeIcon icon={faTrashCan} className={cx('icon')} />
+                                <FontAwesomeIcon
+                                    onClick={() => {
+                                        handleDeleteCart(data.idProduct);
+                                    }}
+                                    icon={faTrashCan}
+                                    className={cx('icon')}
+                                />
                             </Tippy>
                         )}
                     </div>

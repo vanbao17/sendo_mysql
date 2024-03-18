@@ -4,11 +4,16 @@ import { faPersonBooth, faPersonDress, faShirt, faChevronRight } from '@fortawes
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import ContainerCateItems from './ContainerCateItems';
+import { useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function ListCates() {
     const [index, setindex] = useState();
     const [data, setdata] = useState([]);
+    const route = useNavigate();
+    const handleRoute = (data) => {
+        route(`/${data.tendm1}`, { state: { dt: data } });
+    };
     useEffect(() => {
         fetch('http://localhost:3001/api/v1/danhmuc1')
             .then((res) => res.json())
@@ -33,7 +38,13 @@ function ListCates() {
                         >
                             <div>
                                 {/* //<FontAwesomeIcon className={cx('icon')} icon={item.icon} /> */}
-                                <span>{item.tendm1}</span>
+                                <span
+                                    onClick={() => {
+                                        handleRoute(item);
+                                    }}
+                                >
+                                    {item.tendm1}
+                                </span>
                             </div>
                             <FontAwesomeIcon icon={faChevronRight} />
                         </div>

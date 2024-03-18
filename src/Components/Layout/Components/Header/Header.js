@@ -83,7 +83,7 @@ function Header({ nav }) {
         if (Object.keys(user).length != 0) {
             setdis(true);
         } else {
-            navigate('/cart', { state: { data: user } });
+            navigate('/gio-hang', { state: { data: user } });
         }
     }
     return (

@@ -4,11 +4,30 @@ import ListItemFilter from './ItemFilter/ListItemFilter';
 import Popup from 'reactjs-popup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faTicket } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Products from '../../Products/Products';
+import { useLocation } from 'react-router-dom';
 const cx = classNames.bind(styles);
 function FindProduct() {
-    const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
+    const location = useLocation();
+    const dataIdCate = location.state?.dt;
+    const [prods, setprods] = useState([]);
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/v1/productswithcate/${dataIdCate.madm1}`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data !== undefined) {
+                    setprods(data);
+                }
+            })
+            .catch((rejected) => {
+                console.log(rejected);
+            });
+    }, [dataIdCate]);
+    console.log(prods);
+    //const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
     return (
         <div className={cx('wrapper')}>
             <div className={cx('titlePage')}>
@@ -52,7 +71,7 @@ function FindProduct() {
                             </div>
                         </Popup>
                     </div>
-                    <Products data={dataProds} notbutton />
+                    <Products data={prods} notbutton />
                 </div>
             </div>
         </div>

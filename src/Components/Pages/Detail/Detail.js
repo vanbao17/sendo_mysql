@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Detail.module.scss';
 import Slide from '../../Layout/Components/Slides/Slide';
@@ -18,9 +18,13 @@ const cx = classNames.bind(styles);
 function Detai() {
     const { showGototop, setshowGototop } = useContext(Context);
     const [datadetail, setdatadetail] = useState([]);
+    const [quanlity, setquanlity] = useState(1);
+    //const [attribute, setattribute] = useState({});
     const [favoriteProds, setfavoriteProds] = useState([]);
     const location = useLocation();
     const dataIdProduct = location.state?.dt;
+    const route = useNavigate();
+    const { user, setuser } = useContext(Context);
     useEffect(() => {
         fetch(`http://localhost:3001/api/v1/detail/${dataIdProduct}`)
             .then((respone) => respone.json())
@@ -46,7 +50,81 @@ function Detai() {
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
+    }, [datadetail]);
+
+    const handleAddToCart = (event) => {
+        const dataPost = {
+            idUser: 1,
+            idProd: dataIdProduct,
+            quanlity: quanlity,
+        };
+        const optionsAdd = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dataPost),
+        };
+        fetch(`http://localhost:3001/api/v1/check-prods-select/${dataIdProduct}`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                if (data.length == 1) {
+                    let dataUpdate = {
+                        idUser: 1,
+                        idProduct: dataIdProduct,
+                        quanlity: quanlity,
+                        oldQuanlity: data[0].quanlityCart,
+                    };
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(dataUpdate),
+                    };
+                    fetch(`http://localhost:3001/api/v1/update-cart`, options)
+                        .then((response) => {
+                            console.log(response);
+                            if (!response.ok) {
+                                throw new Error('Failed to update item from cart');
+                            }
+                            return response.text();
+                        })
+                        .then((data) => {
+                            route('/gio-hang', { state: { dt: 1 } });
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                } else {
+                    fetch(`http://localhost:3001/api/v1/addtocart`, optionsAdd)
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.text();
+                        })
+                        .then((data) => {
+                            route('/gio-hang', { state: { dt: 1 } });
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        event.preventDefault();
+    };
+    const handleSetQuanlity = (q) => {
+        setquanlity(q);
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -117,10 +195,10 @@ function Detai() {
                         <SizesBtn />
                         <div className={cx('chose-quantity')}>
                             <span>Chọn số lượng</span>
-                            <Count update />
+                            <Count update quanlityFunc={handleSetQuanlity} />
                         </div>
                         <div className={cx('btn', 'list-btn')}>
-                            <button className={cx('addtocart')}>
+                            <button onClick={handleAddToCart} className={cx('addtocart')}>
                                 <span>Thêm vào giỏ</span>
                             </button>
                             {/* <button className={cx('installment')}>

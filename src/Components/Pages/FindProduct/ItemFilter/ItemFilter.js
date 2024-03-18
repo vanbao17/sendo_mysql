@@ -7,7 +7,7 @@ import ItemFilterClick from './ItemFilterClick';
 import ItemColor from './ItemColor';
 const cx = classNames.bind(styles);
 function ItemFilter({ title, attribute }) {
-    const [dropDownState, setdropDownState] = useState(false);
+    const [dropDownState, setdropDownState] = useState(true);
     const [filter1State, setfilter1State] = useState(false);
     const [filter2State, setfilter2State] = useState(false);
     const handleItemFilter = () => {

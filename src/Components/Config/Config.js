@@ -6,7 +6,7 @@ const routes = {
     tuixach: '/tuixach',
     phukien: '/phukien',
     dodung: '/dodung',
-    cart: '/cart',
+    cart: '/gio-hang',
     detail: '/detail/:paramValue',
     sitemap: '/sitemap',
     shopPage: `/shop/:paramValue`,
