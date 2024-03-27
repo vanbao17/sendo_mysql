@@ -26,7 +26,6 @@ function FindProduct() {
                 console.log(rejected);
             });
     }, [dataIdCate]);
-    console.log(prods);
     //const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
     return (
         <div className={cx('wrapper')}>
@@ -43,7 +42,7 @@ function FindProduct() {
             </div>
             <div className={cx('contentPage')}>
                 <div className={cx('contentLeft')}>
-                    <ListItemFilter />
+                    <ListItemFilter madm1={dataIdCate.madm1} />
                 </div>
                 <div className={cx('contentRight')}>
                     <div className={cx('sort')}>

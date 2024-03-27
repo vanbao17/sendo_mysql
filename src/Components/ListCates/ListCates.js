@@ -4,7 +4,7 @@ import { faPersonBooth, faPersonDress, faShirt, faChevronRight } from '@fortawes
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import ContainerCateItems from './ContainerCateItems';
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
 function ListCates() {
@@ -17,13 +17,12 @@ function ListCates() {
     useEffect(() => {
         fetch('http://localhost:3001/api/v1/danhmuc1')
             .then((res) => res.json())
-            .then((data) => {
-                setdata(data);
-            })
+            .then((data) => setdata(data))
             .catch((rejected) => {
                 console.log(rejected);
             });
     }, []);
+    localStorage.setItem('danhmuc1', JSON.stringify(data));
     return (
         <div className={cx('wrapper')}>
             <div className={cx('list')}>

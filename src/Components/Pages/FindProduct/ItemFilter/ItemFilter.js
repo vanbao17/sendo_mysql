@@ -2,23 +2,27 @@ import { faAdd, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
 import styles from './ItemFilter.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ItemFilterClick from './ItemFilterClick';
 import ItemColor from './ItemColor';
 const cx = classNames.bind(styles);
-function ItemFilter({ title, attribute }) {
+function ItemFilter({ attributeId, title, attribute }) {
     const [dropDownState, setdropDownState] = useState(true);
-    const [filter1State, setfilter1State] = useState(false);
-    const [filter2State, setfilter2State] = useState(false);
+    const [indexSliceData, setindexSliceData] = useState(5);
+    const [dataItemFilters, setdataItemFilters] = useState([]);
     const handleItemFilter = () => {
         setdropDownState(!dropDownState);
     };
-    const handleItem1Filter = () => {
-        setfilter1State(!filter1State);
-    };
-    const handleItem2Filter = () => {
-        setfilter2State(!filter2State);
-    };
+    useEffect(() => {
+        fetch('http://localhost:3001/api/v1/getAttributeValues/' + attributeId)
+            .then((response) => response.json())
+            .then((data) => setdataItemFilters(data))
+            .catch((err) => {
+                if (err) throw err;
+            });
+    }, [attributeId]);
+    const sliceData = dataItemFilters.slice(0, indexSliceData);
+
     return (
         <div className={cx('wrapperItem')}>
             <div className={cx('item')}>
@@ -28,61 +32,30 @@ function ItemFilter({ title, attribute }) {
                 </span>
             </div>
             <hr></hr>
-            {dropDownState == true && attribute == 'dropDown' ? (
-                <div className={cx('dropdown')}>
-                    <a href="#">Về tất cả các danh mục</a>
-                    <div className={cx('filter1')}>
-                        <div className={cx('titleFilter')}>
-                            <FontAwesomeIcon
-                                onClick={handleItem1Filter}
-                                className={cx('filterIcon')}
-                                icon={filter1State == false ? faChevronDown : faChevronUp}
-                            />
-                            <span>Điện thoại máy tính</span>
-                        </div>
-                        {filter1State == true ? (
-                            <div className={cx('filter2')}>
-                                <div className={cx('titleFilter2')}>
-                                    <FontAwesomeIcon
-                                        onClick={handleItem2Filter}
-                                        className={cx('filterIcon')}
-                                        icon={filter2State == false ? faChevronDown : faChevronUp}
-                                    />
-                                    <span>Điện thoại máy tính</span>
-                                </div>
-                                {filter2State == true ? (
-                                    <div className={cx('filter3')}>
-                                        <span>Điện thoại máy tính</span>
-                                    </div>
-                                ) : (
-                                    <></>
-                                )}
-                            </div>
-                        ) : (
-                            <></>
-                        )}
-                    </div>
-                </div>
-            ) : (
-                <></>
-            )}
+
             {dropDownState == true && attribute == 'checkBox' ? (
-                <div className={cx('containerCheckbox')}>
-                    <div className={cx('checkBox')}>
-                        <div className={cx('filter1')}>
-                            <div className={cx('titleFilter')}>
-                                <input type="checkbox" />
-                                <span>Điện thoại máy tính</span>
+                <>
+                    {sliceData.map((item, index) => {
+                        return (
+                            <div className={cx('containerCheckbox')}>
+                                <div className={cx('checkBox')}>
+                                    <div className={cx('filter1')}>
+                                        <div className={cx('titleFilter')}>
+                                            <input type="checkbox" />
+                                            <span>{item.value}</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        );
+                    })}
                     <button className={cx('seeMore')}>
                         <span>
                             <FontAwesomeIcon icon={faAdd} />
                             Xem thêm
                         </span>
                     </button>
-                </div>
+                </>
             ) : (
                 <></>
             )}
@@ -114,7 +87,9 @@ function ItemFilter({ title, attribute }) {
                         </button>
                     </form>
                     <div className={cx('list_filter')}>
-                        <ItemFilterClick />
+                        {sliceData.map((item, index) => {
+                            return <ItemFilterClick key={index} value={item.value} />;
+                        })}
                     </div>
 
                     <button className={cx('seeMore')}>
@@ -130,7 +105,9 @@ function ItemFilter({ title, attribute }) {
             {dropDownState == true && attribute == 'filterColor' ? (
                 <div className={cx('containerInput')}>
                     <div className={cx('list_Item_Color')}>
-                        <ItemColor />
+                        {sliceData.map((item, index) => {
+                            return <ItemColor color={item.value} />;
+                        })}
                     </div>
                 </div>
             ) : (

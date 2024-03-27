@@ -22,6 +22,7 @@ function ContainerCateItems({ index }) {
                 console.log(rejected);
             });
     }, [index]);
+    localStorage.setItem('danhmuc2', JSON.stringify(dm2));
     var a = dm2.filter((item) => item.madm1 == index);
     return (
         <div className={cx('container')}>
