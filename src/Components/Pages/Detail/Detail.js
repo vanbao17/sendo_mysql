@@ -24,7 +24,6 @@ function Detai() {
     const location = useLocation();
     const dataIdProduct = location.state?.dt;
     const route = useNavigate();
-    const { user, setuser } = useContext(Context);
     useEffect(() => {
         fetch(`http://localhost:3001/api/v1/detail/${dataIdProduct}`)
             .then((respone) => respone.json())

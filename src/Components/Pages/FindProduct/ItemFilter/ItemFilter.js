@@ -7,12 +7,14 @@ import ItemFilterClick from './ItemFilterClick';
 import ItemColor from './ItemColor';
 const cx = classNames.bind(styles);
 function ItemFilter({ attributeId, title, attribute }) {
+    const [stateButton, setstateButton] = useState(false);
     const [dropDownState, setdropDownState] = useState(true);
-    const [indexSliceData, setindexSliceData] = useState(5);
     const [dataItemFilters, setdataItemFilters] = useState([]);
+    const [indexSliceData, setindexSliceData] = useState(5);
     const handleItemFilter = () => {
         setdropDownState(!dropDownState);
     };
+    console.log(indexSliceData);
     useEffect(() => {
         fetch('http://localhost:3001/api/v1/getAttributeValues/' + attributeId)
             .then((response) => response.json())
@@ -49,12 +51,26 @@ function ItemFilter({ attributeId, title, attribute }) {
                             </div>
                         );
                     })}
-                    <button className={cx('seeMore')}>
-                        <span>
-                            <FontAwesomeIcon icon={faAdd} />
-                            Xem thêm
-                        </span>
-                    </button>
+                    {dataItemFilters.length >= 5 ? (
+                        <button
+                            className={cx('seeMore')}
+                            onClick={() => {
+                                setstateButton(!stateButton);
+                                if (stateButton == false) {
+                                    setindexSliceData(dataItemFilters.length);
+                                } else {
+                                    setindexSliceData(5);
+                                }
+                            }}
+                        >
+                            <span>
+                                <FontAwesomeIcon icon={faAdd} />
+                                Xem thêm
+                            </span>
+                        </button>
+                    ) : (
+                        <></>
+                    )}
                 </>
             ) : (
                 <></>
@@ -91,13 +107,26 @@ function ItemFilter({ attributeId, title, attribute }) {
                             return <ItemFilterClick key={index} value={item.value} />;
                         })}
                     </div>
-
-                    <button className={cx('seeMore')}>
-                        <span>
-                            <FontAwesomeIcon icon={faAdd} />
-                            Xem thêm
-                        </span>
-                    </button>
+                    {dataItemFilters.length >= 5 ? (
+                        <button
+                            className={cx('seeMore')}
+                            onClick={() => {
+                                setstateButton(!stateButton);
+                                if (stateButton == false) {
+                                    setindexSliceData(dataItemFilters.length);
+                                } else {
+                                    setindexSliceData(5);
+                                }
+                            }}
+                        >
+                            <span>
+                                <FontAwesomeIcon icon={faAdd} />
+                                Xem thêm
+                            </span>
+                        </button>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             ) : (
                 <></>
