@@ -18,11 +18,11 @@ function HomePage() {
     const searchParams = new URLSearchParams(location.search);
     const cateRecommendValue = searchParams.get('cate_recommend');
     useEffect(() => {
-        if (cateRecommendValue != null) {
+        if (cateRecommendValue !== null) {
             fetch(`http://localhost:3001/api/v1/productswithcate/${cateRecommendValue}`)
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data != null) {
+                    if (data !== null) {
                         setdataProd(data);
                     }
                 })
@@ -33,7 +33,7 @@ function HomePage() {
             fetch(`http://localhost:3001/api/v1/products`)
                 .then((response) => response.json())
                 .then((data) => {
-                    if (data != null) {
+                    if (data !== null) {
                         setdataProd(data);
                     }
                 })

@@ -10,7 +10,7 @@ import {
     faMessage,
     faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
 import TippyHeadless from '@tippyjs/react/headless';
@@ -20,11 +20,28 @@ const cx = classNames.bind(styles);
 
 function CartItem({ update, data, handleDeleteCart }) {
     const [showTippy, setshowTippy] = useState(false);
+    const [color, setcolor] = useState();
+    const [size, setsize] = useState();
     // const [listbuys, setlistbuys] = useState([]);
     function renderSizeColor() {
-        return <TippyUpdate />;
+        return <TippyUpdate idProduct={data.idProduct} colorItem={color} sizeItem={size} />;
     }
-
+    useEffect(() => {
+        if (data.length != 0) {
+            fetch(`http://localhost:3001/api/v1/getColorSize/` + data.color)
+                .then((response) => response.json())
+                .then((dt) => setcolor(dt[0]))
+                .catch((err) => {
+                    console.log(err);
+                });
+            fetch(`http://localhost:3001/api/v1/getColorSize/` + data.size)
+                .then((response) => response.json())
+                .then((dt) => setsize(dt[0]))
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [data]);
     return (
         <div className={cx('item')}>
             <div className={cx('infor-shop')}>
@@ -68,7 +85,9 @@ function CartItem({ update, data, handleDeleteCart }) {
                                         setshowTippy(!showTippy);
                                     }}
                                 >
-                                    <span className={cx('sizeColor')}>Đen | XL</span>
+                                    <span className={cx('sizeColor')}>
+                                        {color != undefined ? color.value : ''} | {size != undefined ? size.value : ''}
+                                    </span>
                                     <FontAwesomeIcon icon={showTippy ? faChevronDown : faChevronUp} />
                                 </div>
                             </TippyHeadless>

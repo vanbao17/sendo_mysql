@@ -18,9 +18,12 @@ function PopupLogin({ className, style }) {
         gapi.load('client:auth2', start);
     });
     const classes = cx('wrapper', { [className]: className });
-    const { setuser, setusergg, setuserfb, setdis } = useContext(Context);
+    const { setuser, setusergg, setuserfb, setdis, dis } = useContext(Context);
     const buttonref = useRef();
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setpassword] = useState('');
+    const [whatnext, setwhatnext] = useState(null);
+    const [inforuser, setinforuser] = useState(null);
     const [otp, setOtp] = useState('');
     const [step, setStep] = useState('INPUT_PHONE_NUMBER');
     const [result, setResult] = useState('');
@@ -41,6 +44,40 @@ function PopupLogin({ className, style }) {
             buttonref.current.style.cursor = 'not-allowed';
         }
     }
+    const handleButtonLogin = () => {
+        if (whatnext == null) {
+            const phone_data = '+84' + phoneNumber.slice(1);
+            console.log(phone_data);
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ phone_data }),
+            };
+            fetch('http://localhost:3001/api/v1/get-customer', options)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.length !== 0) {
+                        setwhatnext(true);
+                        setinforuser(data[0]);
+                    } else {
+                        setwhatnext(false);
+                    }
+                })
+                .catch((err) => {
+                    if (err) throw err;
+                });
+        } else {
+            if (whatnext == true) {
+                if (password == inforuser.password) {
+                    setdis(!dis);
+                }
+            } else {
+                ValidateOtp();
+            }
+        }
+    };
     const ValidateOtp = () => {
         if (otp === null) return;
 
@@ -48,6 +85,7 @@ function PopupLogin({ className, style }) {
             .confirm(otp)
             .then((result) => {
                 setStep('VERIFY_SUCCESS');
+                setwhatnext(true);
             })
             .catch((err) => {
                 alert('Incorrect code');
@@ -66,7 +104,9 @@ function PopupLogin({ className, style }) {
         setusergg(true);
         setdis(false);
     };
-
+    useEffect(() => {
+        sessionStorage.setItem('user', JSON.stringify(inforuser));
+    }, [inforuser]);
     return (
         <div className={classes} style={style}>
             <div
@@ -91,15 +131,41 @@ function PopupLogin({ className, style }) {
                         <div className={cx('content1')}>
                             <h2>Xin Chào</h2>
                             <p>Đăng nhập hay đăng kí tài khoản</p>
-                            <form action="get">
-                                <input
-                                    type="tel"
-                                    placeholder="Nhập số điện thoại"
-                                    onChange={(e) => {
-                                        changeInput(e.target.value);
-                                    }}
-                                ></input>
+                            <form>
+                                {whatnext == null ? (
+                                    <input
+                                        type="tel"
+                                        placeholder="Nhập số điện thoại"
+                                        onChange={(e) => {
+                                            changeInput(e.target.value);
+                                        }}
+                                    ></input>
+                                ) : (
+                                    <>
+                                        {whatnext == true ? (
+                                            <input
+                                                type="tel"
+                                                placeholder="Nhập mật khẩu"
+                                                onChange={(e) => {
+                                                    setpassword(e.target.value);
+                                                }}
+                                            ></input>
+                                        ) : (
+                                            <input
+                                                type="tel"
+                                                placeholder="Nhập mã code"
+                                                onChange={(e) => {
+                                                    setOtp(e.target.value);
+                                                }}
+                                            ></input>
+                                        )}
+                                    </>
+                                )}
+
                                 <div id="recaptcha-container"></div>
+                                <div ref={buttonref} disabled className={cx('btn-next')} onClick={handleButtonLogin}>
+                                    Tiếp tục <FontAwesomeIcon icon={faAngleRight} />
+                                </div>
                             </form>
                         </div>
                         <div className={cx('content2')}>

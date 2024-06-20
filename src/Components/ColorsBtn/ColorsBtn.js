@@ -1,14 +1,30 @@
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './ColorsBtn.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
-function ColorsBtn({ dataColor, imgs }) {
+function ColorsBtn({ dataColor, imgs, idProduct, handleSendData }) {
     const [active, setactive] = useState(null);
-    const arr = ['A01 Đen', 'A01 Trắng', 'A01 Đỏ'];
+    const [colors, setcolors] = useState([]);
     function handle(index) {
         setactive(index);
     }
+    useEffect(() => {
+        if (active != undefined) {
+            handleSendData(active);
+        }
+    }, [active]);
+    useEffect(() => {
+        fetch(`http://localhost:3001/api/v1/getColorsProduct/${idProduct}`)
+            .then((respone) => respone.json())
+            .then((data) => {
+                setcolors(data);
+                setactive(data[0]);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [idProduct]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('displaySize')}>
@@ -16,16 +32,22 @@ function ColorsBtn({ dataColor, imgs }) {
                 <p></p>
             </div>
             {dataColor &&
-                arr.map((item, index) => {
+                colors.map((item, index) => {
                     return (
                         <button
                             key={index}
                             onClick={() => {
-                                handle(index);
+                                handle(item);
                             }}
-                            className={cx(index == active ? 'active' : '')}
+                            className={cx(
+                                active != null
+                                    ? item.attribute_value_id == active.attribute_value_id
+                                        ? 'active'
+                                        : ''
+                                    : '',
+                            )}
                         >
-                            <span className={cx('choseSize')}>{item}</span>
+                            <span className={cx('choseSize')}>{item.value}</span>
                         </button>
                     );
                 })}

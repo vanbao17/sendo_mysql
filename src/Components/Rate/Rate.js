@@ -26,7 +26,7 @@ function Rate({ data, id, normal }) {
         if (selectted.includes(index) == false) {
             setselectted([...selectted, index]);
         } else {
-            setselectted(selectted.filter((num) => num != index));
+            setselectted(selectted.filter((num) => num !== index));
         }
     }
     return (

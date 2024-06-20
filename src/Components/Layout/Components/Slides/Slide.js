@@ -22,7 +22,7 @@ function Slide({ data, ovr, prod, size, normal, width, height, prodNew }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('overflowslide')}>
-                <div className={cx('slides', 'normal')} ref={refSlide}>
+                <div className={cx('slides', 'normal', prod == true ? 'sildeDetail' : '')} ref={refSlide}>
                     {/* normal && */}
                     {normal &&
                         data.map((item, index) => {

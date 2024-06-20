@@ -80,7 +80,7 @@ function Header({ nav }) {
         );
     }
     function HandleCart() {
-        if (Object.keys(user).length != 0) {
+        if (Object.keys(user).length !== 0) {
             setdis(true);
         } else {
             navigate('/gio-hang', { state: { data: user } });
@@ -160,7 +160,7 @@ function Header({ nav }) {
                                 style={{ width: '24px', height: '24px', color: '#fff' }}
                             ></FontAwesomeIcon>
                         </div>
-                        {Object.keys(user).length == 0 ? (
+                        {userSession == null ? (
                             <Buttons
                                 normal
                                 className={cx('btn-login')}
@@ -180,9 +180,9 @@ function Header({ nav }) {
                             >
                                 <div className={cx('inf-user')}>
                                     <div className={cx('image-user')}>
-                                        <img src={userSession.picture} />
+                                        <img src={userSession.imageUser} />
                                     </div>
-                                    <span>{userSession.name}</span>
+                                    <span>{userSession.nameUser}</span>
                                 </div>
                             </TippyHeadless>
                         )}

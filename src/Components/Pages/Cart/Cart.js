@@ -8,22 +8,23 @@ import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
 function Cart() {
     const location = useLocation();
-    const idUser = location.state?.dt;
     const [update, setupdate] = useState(true);
     const [selectAll, setselectAll] = useState(false);
     const [dataCarts, setdataCarts] = useState([]);
+
+    const user = JSON.parse(sessionStorage.getItem('user'));
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/gio-hang/1`)
+        fetch(`http://localhost:3001/api/v1/gio-hang/` + user.idCustomers)
             .then((response) => response.json())
             .then((data) => setdataCarts(data))
             .catch((err) => {
                 console.log(err);
             });
     }, []);
+
     const handleDeleteCart = (data) => {
-        console.log(data);
         const dataToDelete = {
-            idUser: 1,
+            idUser: user.idCustomers,
             idProduct: data,
         };
         const options = {
@@ -35,7 +36,6 @@ function Cart() {
         };
         fetch('http://localhost:3001/api/v1/delete-cart', options)
             .then((response) => {
-                console.log(response.status);
                 if (!response.ok) {
                     throw new Error('Failed to delete item from cart');
                 }

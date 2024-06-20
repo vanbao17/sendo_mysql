@@ -14,7 +14,6 @@ function ItemFilter({ attributeId, title, attribute }) {
     const handleItemFilter = () => {
         setdropDownState(!dropDownState);
     };
-    console.log(indexSliceData);
     useEffect(() => {
         fetch('http://localhost:3001/api/v1/getAttributeValues/' + attributeId)
             .then((response) => response.json())

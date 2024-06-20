@@ -19,11 +19,14 @@ function Detai() {
     const { showGototop, setshowGototop } = useContext(Context);
     const [datadetail, setdatadetail] = useState([]);
     const [quanlity, setquanlity] = useState(1);
-    //const [attribute, setattribute] = useState({});
     const [favoriteProds, setfavoriteProds] = useState([]);
+    const [color, setcolor] = useState();
+    const [size, setsize] = useState();
     const location = useLocation();
     const dataIdProduct = location.state?.dt;
     const route = useNavigate();
+    const nav = useNavigate();
+    const { dis, setdis } = useContext(Context);
     useEffect(() => {
         fetch(`http://localhost:3001/api/v1/detail/${dataIdProduct}`)
             .then((respone) => respone.json())
@@ -50,79 +53,94 @@ function Detai() {
                 console.log(error);
             });
     }, [datadetail]);
-
     const handleAddToCart = (event) => {
-        const dataPost = {
-            idUser: 1,
-            idProd: dataIdProduct,
-            quanlity: quanlity,
-        };
-        const optionsAdd = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataPost),
-        };
-        fetch(`http://localhost:3001/api/v1/check-prods-select/${dataIdProduct}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                if (data.length == 1) {
-                    let dataUpdate = {
-                        idUser: 1,
-                        idProduct: dataIdProduct,
-                        quanlity: quanlity,
-                        oldQuanlity: data[0].quanlityCart,
-                    };
-                    const options = {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(dataUpdate),
-                    };
-                    fetch(`http://localhost:3001/api/v1/update-cart`, options)
-                        .then((response) => {
-                            console.log(response);
-                            if (!response.ok) {
-                                throw new Error('Failed to update item from cart');
-                            }
-                            return response.text();
-                        })
-                        .then((data) => {
-                            route('/gio-hang', { state: { dt: 1 } });
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                } else {
-                    fetch(`http://localhost:3001/api/v1/addtocart`, optionsAdd)
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.text();
-                        })
-                        .then((data) => {
-                            route('/gio-hang', { state: { dt: 1 } });
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        if (user) {
+            const dataPost = {
+                idUser: user.idCustomers,
+                idProd: dataIdProduct,
+                quanlity: quanlity,
+                size: size,
+                color: color,
+            };
+
+            const optionsAdd = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataPost),
+            };
+            fetch(`http://localhost:3001/api/v1/check-prods-select/${dataIdProduct}`)
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data.length == 1) {
+                        let dataUpdate = {
+                            idUser: 1,
+                            idProduct: dataIdProduct,
+                            quanlity: quanlity,
+                            oldQuanlity: data[0].quanlityCart,
+                            size: size,
+                            color: color,
+                        };
+                        const options = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(dataUpdate),
+                        };
+                        fetch(`http://localhost:3001/api/v1/update-cart`, options)
+                            .then((response) => {
+                                console.log(response);
+                                if (!response.ok) {
+                                    throw new Error('Failed to update item from cart');
+                                }
+                                return response.text();
+                            })
+                            .then((data) => {
+                                route('/gio-hang', { state: { dt: 1 } });
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    } else {
+                        fetch(`http://localhost:3001/api/v1/addtocart`, optionsAdd)
+                            .then((response) => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.text();
+                            })
+                            .then((data) => {
+                                route('/gio-hang', { state: { dt: 1 } });
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            setdis(!dis);
+        }
         event.preventDefault();
     };
     const handleSetQuanlity = (q) => {
         setquanlity(q);
+    };
+    const getDataSize = (data) => {
+        setsize(data);
+    };
+    const getDataColor = (data) => {
+        setcolor(data);
     };
     return (
         <div className={cx('wrapper')}>
@@ -140,7 +158,11 @@ function Detai() {
                                 src="https://media3.scdn.vn/img4/2022/02_16/sz4EeQTY9v3EHfkPa3Uv.png"
                             ></img>
 
-                            <img src={`${datadetail.imageProduct}`} alt={`${datadetail.nameProduct}`} />
+                            <img
+                                style={{ height: '500px' }}
+                                src={`${datadetail.imageProduct}`}
+                                alt={`${datadetail.nameProduct}`}
+                            />
 
                             <div className={cx('action')}>
                                 <span className={cx('count-img')}>1/9</span>
@@ -169,9 +191,14 @@ function Detai() {
                             <span>Thương hiệu:</span>
                             <span>{datadetail.trademark}</span>
                         </div>
-                        <div className={cx('price', 'redtext')}>{datadetail.priceSale}đ</div>
+                        <div className={cx('price', 'redtext')}>
+                            {/* {datadetail.priceSale.toLocaleString('vi-VN')}đ */}
+                            {datadetail.priceSale}đ
+                        </div>
                         <div className={cx('reduce')}>
-                            <span className={cx('reduce-price')}>{datadetail.priceDefault}đ</span>
+                            <span className={cx('reduce-price')}>
+                                {datadetail.priceDefault}đ{/* {datadetail.priceDefault.toLocaleString('vi-VN')}đ */}
+                            </span>
                         </div>
                         <div className={cx('code-reduce')}>
                             {/* <span>
@@ -190,8 +217,8 @@ function Detai() {
                             </div>
                         </div>
                         <hr className={cx('main-hr')}></hr>
-                        <ColorsBtn dataColor={true} />
-                        <SizesBtn />
+                        <ColorsBtn handleSendData={getDataColor} idProduct={dataIdProduct} dataColor={true} />
+                        <SizesBtn handleSendData={getDataSize} idProduct={dataIdProduct} />
                         <div className={cx('chose-quantity')}>
                             <span>Chọn số lượng</span>
                             <Count update quanlityFunc={handleSetQuanlity} />

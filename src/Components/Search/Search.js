@@ -20,7 +20,7 @@ function Search() {
         setdataInput(e.target.value);
     };
     useEffect(() => {
-        if (dataInput.length != 0) {
+        if (dataInput.length !== 0) {
             fetch(`http://localhost:3001/api/v1/getProductsLetters?query=${dataInput}`)
                 .then((response) => response.json())
                 .then((data) => setdataSearch(data))
@@ -53,7 +53,7 @@ function Search() {
             </Tippy>
             <div className={cx('containerInput')}>
                 <input type="text" placeholder="Tìm trên Sendo ..." onChange={handleChangeInput}></input>
-                {dataSearch.length != 0 ? (
+                {dataSearch.length !== 0 ? (
                     <ul className={cx('containerResult')}>
                         {dataSearch.map((item, index) => {
                             return (
