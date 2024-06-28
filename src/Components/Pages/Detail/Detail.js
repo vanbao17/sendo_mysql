@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Detail.module.scss';
 import Slide from '../../Layout/Components/Slides/Slide';
@@ -16,6 +16,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../store/Context';
 const cx = classNames.bind(styles);
 function Detai() {
+    const { idProduct } = useParams();
     const { showGototop, setshowGototop } = useContext(Context);
     const [datadetail, setdatadetail] = useState([]);
     const [quanlity, setquanlity] = useState(1);
@@ -28,7 +29,7 @@ function Detai() {
     const nav = useNavigate();
     const { dis, setdis } = useContext(Context);
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/detail/${dataIdProduct}`)
+        fetch(`http://localhost:3001/api/v1/detail/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => setdatadetail(data[0]))
             .catch((error) => {
@@ -58,7 +59,7 @@ function Detai() {
         if (user) {
             const dataPost = {
                 idUser: user.idCustomers,
-                idProd: dataIdProduct,
+                idProd: idProduct,
                 quanlity: quanlity,
                 size: size,
                 color: color,
@@ -71,7 +72,7 @@ function Detai() {
                 },
                 body: JSON.stringify(dataPost),
             };
-            fetch(`http://localhost:3001/api/v1/check-prods-select/${dataIdProduct}`)
+            fetch(`http://localhost:3001/api/v1/check-prods-select/${idProduct}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -82,7 +83,7 @@ function Detai() {
                     if (data.length == 1) {
                         let dataUpdate = {
                             idUser: 1,
-                            idProduct: dataIdProduct,
+                            idProduct: idProduct,
                             quanlity: quanlity,
                             oldQuanlity: data[0].quanlityCart,
                             size: size,
@@ -141,6 +142,31 @@ function Detai() {
     };
     const getDataColor = (data) => {
         setcolor(data);
+    };
+    const handleCheckOut = () => {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        const idCustomer = user.idCustomers;
+        fetch('http://localhost:3001/api/v1/checkAddressCustomer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idCustomer }),
+        })
+            .then((rs) => rs.json())
+            .then((data) => {
+                if (data.length != 0) {
+                    // nav('/thanh-toan');
+                    const encodedIdProduct = encodeURIComponent(idProduct);
+                    const idShop = encodeURIComponent(datadetail.idShop);
+                    window.location.href = `http://localhost:3000/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
+                } else {
+                    nav('/them-dia-chi');
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     return (
         <div className={cx('wrapper')}>
@@ -217,11 +243,11 @@ function Detai() {
                             </div>
                         </div>
                         <hr className={cx('main-hr')}></hr>
-                        <ColorsBtn handleSendData={getDataColor} idProduct={dataIdProduct} dataColor={true} />
-                        <SizesBtn handleSendData={getDataSize} idProduct={dataIdProduct} />
+                        <ColorsBtn handleSendData={getDataColor} idProduct={idProduct} dataColor={true} />
+                        <SizesBtn handleSendData={getDataSize} idProduct={idProduct} />
                         <div className={cx('chose-quantity')}>
                             <span>Chọn số lượng</span>
-                            <Count update quanlityFunc={handleSetQuanlity} />
+                            <Count quanlity={quanlity} update quanlityFunc={handleSetQuanlity} />
                         </div>
                         <div className={cx('btn', 'list-btn')}>
                             <button onClick={handleAddToCart} className={cx('addtocart')}>
@@ -231,7 +257,7 @@ function Detai() {
                                 <p>Trả góp 0%</p>
                                 <span>đơn từ 3.000.000đ</span>
                             </button> */}
-                            <button className={cx('btn', 'buynow')}>
+                            <button className={cx('btn', 'buynow')} onClick={handleCheckOut}>
                                 <span>Mua ngay</span>
                             </button>
                         </div>

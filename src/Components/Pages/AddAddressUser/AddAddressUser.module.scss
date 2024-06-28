@@ -1,0 +1,72 @@
+.wrapper {
+    width: 100%;
+}
+.container {
+    width: 85%;
+    padding: 20px;
+    margin: 0px auto;
+    background-color: #fff;
+}
+.header {
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ee2624;
+}
+.form {
+    width: 40%;
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 24px;
+}
+.container_input {
+    display: flex;
+    align-items: center;
+    span {
+        width: 35%;
+    }
+    input,
+    select {
+        width: 65%;
+        outline: none;
+        padding: 10px 12px;
+        border-radius: 5px;
+        border: 1px solid #aaa;
+    }
+    select option {
+        padding: 10px;
+    }
+}
+.checkboxs {
+    display: flex;
+    width: 65%;
+}
+.item_checkbox {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    span {
+        width: 45%;
+    }
+    input {
+        width: 10%;
+    }
+}
+.button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    button {
+        padding: 10px 12px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 10px;
+        color: #fff;
+        background-color: #ee2624;
+        cursor: pointer;
+    }
+}

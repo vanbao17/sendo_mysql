@@ -9,10 +9,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Context } from '../store/Context';
 const cx = classNames.bind(styles);
 function InforShop({ Shopinfor }) {
-    const newData = 'cong-nghe';
-    const route = useNavigate();
     const [proSale, setproSale] = useState([]);
-    const { idShop, setidShop } = useContext(Context);
     useEffect(() => {
         fetch(`http://localhost:3001/api/v1/prodShop/${Shopinfor.idShop}`)
             .then((respone) => respone.json())
@@ -22,19 +19,19 @@ function InforShop({ Shopinfor }) {
             });
     }, [Shopinfor]);
     const handleShopInfor = () => {
-        route(`/shop/${newData}?`, { state: { dt: Shopinfor } });
+        // route(`/shop/${Shopinfor.idShop}?`, { state: { dt: Shopinfor } });
     };
     // useEffect(() => {
     //     setidShop(Shopinfor);
     // });
-    localStorage.setItem('dataShop', JSON.stringify(Shopinfor));
+    //sessionStorage.setItem('dataShop', JSON.stringify(Shopinfor));
     return (
         <div className={cx('wrapper')}>
             <div className={cx('title')}>
                 <span>Thông tin nhà cung cấp</span>
             </div>
 
-            <a href={`/shop/${newData}`}>
+            <a href={`/shop/${Shopinfor.idShop}`}>
                 <div className={cx('infor')} onClick={handleShopInfor}>
                     <div className={cx('image')}>
                         <img className={cx('imageShop')} src={Shopinfor.imageShop}></img>

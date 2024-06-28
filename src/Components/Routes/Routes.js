@@ -8,6 +8,8 @@ import FindProduct from '../Pages/FindProduct/FindProduct';
 import ShopPage from '../Pages/ShopPage/ShopPage';
 import ShopProd from '../Pages/ShopPage/ShopProds/ShopProds';
 import HomeShopPage from '../Pages/ShopPage/HomeShopPage/HomeShopPage';
+import AddAddressUser from '../Pages/AddAddressUser/AddAddressUser';
+import CheckOut from '../Pages/CheckOut/CheckOut';
 const publicRoutes = [
     {
         path: routes.home,
@@ -39,6 +41,11 @@ const publicRoutes = [
         layout: HeaderNoneCate,
     },
     {
+        path: routes.themdiachi,
+        component: AddAddressUser,
+        layout: HeaderNoneCate,
+    },
+    {
         path: routes.detail,
         component: Detail,
         layout: HeaderNoneCate,
@@ -61,6 +68,11 @@ const publicRoutes = [
     {
         path: routes.findProd,
         component: FindProduct,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.thanhtoan,
+        component: CheckOut,
         layout: HeaderNoneCate,
     },
 ];

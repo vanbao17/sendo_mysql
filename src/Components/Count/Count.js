@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
-function Count({ update, quanlityFunc, index }) {
+function Count({ update, quanlityFunc, index, quanlity }) {
     let [count, setcount] = useState(1);
     const handleClickAdd = () => {
         quanlityFunc(count + 1);
@@ -28,7 +28,7 @@ function Count({ update, quanlityFunc, index }) {
             )}
             {update && (
                 <input
-                    value={index ?? count}
+                    value={quanlity}
                     onChange={(e) => {
                         setcount(e.target.value);
                     }}

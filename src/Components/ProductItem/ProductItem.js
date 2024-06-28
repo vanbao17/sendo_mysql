@@ -12,7 +12,7 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
     });
     const navigate = useNavigate();
     function HandlePath() {
-        navigate(`/detail/${data.nameProduct}`, { state: { dt: data.idProduct } });
+        // navigate(`/detail/${data.nameProduct}`, { state: { dt: data.idProduct } });
     }
     return (
         <div className={classes}>
@@ -41,7 +41,7 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
             )}
             {pdmain && (
                 <div className={cx('item-pdmain')} onClick={() => HandlePath(data.idProduct)}>
-                    <a href={`/detail/${data.nameProduct}`}>
+                    <a href={`/detail/${data.nameProduct}/${data.idProduct}`}>
                         <div className={cx('item')}>
                             <div className={cx('pdmain-content')}>
                                 <div className={cx('image')}>

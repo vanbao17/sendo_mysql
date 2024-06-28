@@ -7,11 +7,12 @@ import Slide from '../../../Layout/Components/Slides/Slide';
 import { genuine } from '../../../../Assets/images/Genuine/Genuine';
 import Pagination from '../../../Pagination/Pagination';
 import { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Context } from '../../../store/Context';
 const cx = classNames.bind(styles);
 const newArray = proSale.splice(0, 9);
 function Home() {
+    const { paramValue } = useParams();
     const [currentPage, setCurrentPage] = useState(0);
     const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
     const { idShop, setidShop } = useContext(Context);

@@ -22,10 +22,14 @@ function CartItem({ update, data, handleDeleteCart }) {
     const [showTippy, setshowTippy] = useState(false);
     const [color, setcolor] = useState();
     const [size, setsize] = useState();
+    const [quanlity, setquanlity] = useState(1);
     // const [listbuys, setlistbuys] = useState([]);
     function renderSizeColor() {
         return <TippyUpdate idProduct={data.idProduct} colorItem={color} sizeItem={size} />;
     }
+    const handleQuanlity = (dt) => {
+        setquanlity(dt);
+    };
     useEffect(() => {
         if (data.length != 0) {
             fetch(`http://localhost:3001/api/v1/getColorSize/` + data.color)
@@ -99,7 +103,12 @@ function CartItem({ update, data, handleDeleteCart }) {
                         <strong>{data.priceSale}đ</strong>
                         <span>{data.priceDefault}đ</span>
                     </div>
-                    <Count update={update} index={data.quanlityCart} />
+                    <Count
+                        quanlity={data.quanlityCart ?? quanlity}
+                        update={update}
+                        index={data.quanlityCart}
+                        quanlityFunc={handleQuanlity}
+                    />
 
                     <div className={cx('action-cart')}>
                         {update && (

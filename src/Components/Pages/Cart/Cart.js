@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
 import { important } from '../../../Assets/images/image/image';
@@ -7,11 +7,12 @@ import { useEffect, useState } from 'react';
 
 const cx = classNames.bind(styles);
 function Cart() {
-    const location = useLocation();
     const [update, setupdate] = useState(true);
     const [selectAll, setselectAll] = useState(false);
     const [dataCarts, setdataCarts] = useState([]);
+    const [total, settotal] = useState(null);
 
+    const nav = useNavigate();
     const user = JSON.parse(sessionStorage.getItem('user'));
     useEffect(() => {
         fetch(`http://localhost:3001/api/v1/gio-hang/` + user.idCustomers)
@@ -21,7 +22,19 @@ function Cart() {
                 console.log(err);
             });
     }, []);
-
+    useEffect(() => {
+        let total = 0;
+        if (dataCarts.length != 0) {
+            dataCarts.forEach((item) => {
+                if (item.priceSale) {
+                    total = total + item.priceSale * item.quanlityCart;
+                } else {
+                    total = total + item.priceDefault * item.quanlityCart;
+                }
+            });
+            settotal(total);
+        }
+    }, [dataCarts]);
     const handleDeleteCart = (data) => {
         const dataToDelete = {
             idUser: user.idCustomers,
@@ -42,6 +55,26 @@ function Cart() {
                 return response.json();
             })
             .then((data) => setdataCarts(data))
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    const handleBuyNow = () => {
+        fetch('http://localhost:3001/api/v1/getAddressCustomer/' + user.idCustomers)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete item from cart');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+                if (data.length == 0) {
+                    nav('/them-dia-chi');
+                } else {
+                    nav('/check-out');
+                }
+            })
             .catch((err) => {
                 console.log(err);
             });
@@ -136,10 +169,10 @@ function Cart() {
                                     <hr></hr>
                                     <div className={cx('resultTotal')}>
                                         <span>Tạm tính: </span>
-                                        <h3>0đ</h3>
+                                        <h3>{total != null ? total.toLocaleString('vi-VN') : 0}đ</h3>
                                     </div>
                                     <div className={cx('btn-buynow')}>
-                                        <button>
+                                        <button onClick={handleBuyNow}>
                                             <span>Mua Ngay</span>
                                         </button>
                                     </div>
