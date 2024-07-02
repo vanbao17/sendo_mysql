@@ -153,10 +153,8 @@ function Detai() {
             },
             body: JSON.stringify({ idCustomer }),
         })
-            .then((rs) => rs.json())
-            .then((data) => {
-                if (data.length != 0) {
-                    // nav('/thanh-toan');
+            .then((rs) => {
+                if (rs.status == 200) {
                     const encodedIdProduct = encodeURIComponent(idProduct);
                     const idShop = encodeURIComponent(datadetail.idShop);
                     window.location.href = `http://localhost:3000/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
