@@ -157,7 +157,7 @@ function Detai() {
                 if (rs.status == 200) {
                     const encodedIdProduct = encodeURIComponent(idProduct);
                     const idShop = encodeURIComponent(datadetail.idShop);
-                    window.location.href = `http://localhost:3000/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
+                    window.location.href = `https://senvb.vercel.app/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
                 } else {
                     nav('/them-dia-chi');
                 }

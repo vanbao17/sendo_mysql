@@ -92,7 +92,7 @@ function AddAddressUser() {
                             <option value="">--Vui lòng chọn tỉnh thành--</option>
                             {tinh.map((item, index) => {
                                 return (
-                                    <option key={index} value={item.name}>
+                                    <option key={index} value={item.id}>
                                         {item.name}
                                     </option>
                                 );
@@ -111,7 +111,7 @@ function AddAddressUser() {
                             {huyen != null ? (
                                 huyen.map((item, index) => {
                                     return (
-                                        <option key={index} value={item.name}>
+                                        <option key={index} value={item.id}>
                                             {item.name}
                                         </option>
                                     );
@@ -133,7 +133,7 @@ function AddAddressUser() {
                             {xa != null ? (
                                 xa.map((item, index) => {
                                     return (
-                                        <option key={index} value={item.name}>
+                                        <option key={index} value={item.id}>
                                             {item.name}
                                         </option>
                                     );

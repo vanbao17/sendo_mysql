@@ -20,12 +20,18 @@ function Home() {
         setCurrentPage(selected);
     };
     useEffect(() => {
+<<<<<<< HEAD
         setidShop(paramValue);
         fetch(`http://localhost:3001/api/v1/prodShop/${paramValue}`)
             .then((respone) => respone.json())
             .then((data) => {
                 localStorage.setItem('dataProdsShop', JSON.stringify(data));
             })
+=======
+        fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${paramValue}`)
+            .then((respone) => respone.json())
+            .then((data) => {localStorage.setItem('dataProdsShop', JSON.stringify(data))})
+>>>>>>> 39ef0fbbf1b5450db50c65c6f329f593d5d2c301
             .catch((error) => {
                 console.log(error);
             });
@@ -33,7 +39,12 @@ function Home() {
 
     const itemsPerPage = 24;
     const startindex = currentPage * itemsPerPage;
+<<<<<<< HEAD
     const sliceData = dataProds.length != 0 ? dataProds.slice(startindex, startindex + itemsPerPage) : [];
+=======
+     const sliceData = dataProds.slice(startindex, startindex + itemsPerPage);
+
+>>>>>>> 39ef0fbbf1b5450db50c65c6f329f593d5d2c301
     return (
         <ShopPage>
             <div className={cx('newProd')}>
