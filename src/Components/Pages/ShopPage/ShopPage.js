@@ -44,7 +44,8 @@ function ShopPage({ children }) {
             <div className={cx('container')}>
                 <div className={cx('infor')}>
                     <div className={cx('bgImageInfor')}>
-                        <img src={data.imageBannerShop == null ? '' : ''}></img>
+                        {data!=null?<img src={data.imageBannerShop }></img>:<></>}
+                        
                     </div>
                     <div className={cx('inforBasicShop')}>
                         <div className={cx('left')}>
