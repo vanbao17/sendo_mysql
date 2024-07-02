@@ -23,7 +23,7 @@ function Home() {
     useEffect(() => {
         fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${paramValue}`)
             .then((respone) => respone.json())
-            .then((data) => localStorage.setItem('dataProdsShop', JSON.stringify(data)))
+            .then((data) => {localStorage.setItem('dataProdsShop', JSON.stringify(data))})
             .catch((error) => {
                 console.log(error);
             });
