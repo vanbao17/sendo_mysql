@@ -19,18 +19,21 @@ function Home() {
     const handleChange = ({ selected }) => {
         setCurrentPage(selected);
     };
-
     useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${idShop.idShop}`)
+        setidShop(paramValue);
+        fetch(`http://localhost:3001/api/v1/prodShop/${paramValue}`)
             .then((respone) => respone.json())
-            .then((data) => localStorage.setItem('dataProdsShop', JSON.stringify(data)))
+            .then((data) => {
+                localStorage.setItem('dataProdsShop', JSON.stringify(data));
+            })
             .catch((error) => {
                 console.log(error);
             });
-    }, []);
+    }, [paramValue]);
+
     const itemsPerPage = 24;
     const startindex = currentPage * itemsPerPage;
-    const sliceData = dataProds.slice(startindex, startindex + itemsPerPage);
+    const sliceData = dataProds.length != 0 ? dataProds.slice(startindex, startindex + itemsPerPage) : [];
     return (
         <ShopPage>
             <div className={cx('newProd')}>

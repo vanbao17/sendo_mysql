@@ -15,7 +15,7 @@ function ListCates() {
         route(`/${data.tendm1}`, { state: { dt: data } });
     };
     useEffect(() => {
-        fetch('https://sdvanbao17.id.vn/api/v1/danhmuc1')
+        fetch('http://localhost:3001/api/v1/danhmuc1')
             .then((res) => res.json())
             .then((data) => setdata(data))
             .catch((rejected) => {

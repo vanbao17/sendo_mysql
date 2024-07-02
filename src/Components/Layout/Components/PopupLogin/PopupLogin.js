@@ -55,7 +55,7 @@ function PopupLogin({ className, style }) {
                 },
                 body: JSON.stringify({ phone_data }),
             };
-            fetch('https://sdvanbao17.id.vn/api/v1/get-customer', options)
+            fetch('http://localhost:3001/api/v1/get-customer', options)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.length !== 0) {

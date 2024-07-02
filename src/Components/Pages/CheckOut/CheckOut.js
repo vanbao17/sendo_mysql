@@ -25,7 +25,7 @@ function CheckOut() {
     const [addressUser, setAddressUser] = useState([]);
     const user = JSON.parse(sessionStorage.getItem('user'));
     useEffect(() => {
-        fetch('https://sdvanbao17.id.vn/api/v1/inforShop/' + idShop)
+        fetch('http://localhost:3001/api/v1/inforShop/' + idShop)
             .then((rs) => rs.json())
             .then((dt) => setShop(dt[0]))
             .catch((err) => {
@@ -33,13 +33,13 @@ function CheckOut() {
                     console.log(err);
                 }
             });
-        fetch(`https://sdvanbao17.id.vn/api/v1/detail/${idProduct}`)
+        fetch(`http://localhost:3001/api/v1/detail/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => setProduct(data[0]))
             .catch((error) => {
                 console.log(error);
             });
-        fetch(`https://sdvanbao17.id.vn/api/v1/getAddressCustomer/` + user.idCustomers)
+        fetch(`http://localhost:3001/api/v1/getAddressCustomer/` + user.idCustomers)
             .then((respone) => respone.json())
             .then((data) => {
                 setAddressUser(data);

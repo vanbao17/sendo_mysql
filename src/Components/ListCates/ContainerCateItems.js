@@ -7,7 +7,7 @@ function ContainerCateItems({ index }) {
     const [dm2, setdm2] = useState([]);
     const [dm3, setdm3] = useState([]);
     useEffect(() => {
-        fetch('https://sdvanbao17.id.vn/api/v1/danhmuc2')
+        fetch('http://localhost:3001/api/v1/danhmuc2')
             .then((res) => res.json())
             .then((data) => setdm2(data))
             .catch((rejected) => {
@@ -15,7 +15,7 @@ function ContainerCateItems({ index }) {
             });
     }, []);
     useEffect(() => {
-        fetch('https://sdvanbao17.id.vn/api/v1/danhmuc3/' + index)
+        fetch('http://localhost:3001/api/v1/danhmuc3/' + index)
             .then((res) => res.json())
             .then((data) => setdm3(data))
             .catch((rejected) => {

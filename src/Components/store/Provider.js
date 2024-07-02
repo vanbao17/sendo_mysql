@@ -6,7 +6,7 @@ function Provider({ children }) {
     const [menufix, setmenufix] = useState(false);
     const [dis, setdis] = useState(false);
     const [user, setuser] = useState({});
-    const [idShop, setidShop] = useState(JSON.parse(localStorage.getItem('dataShop')));
+    const [idShop, setidShop] = useState();
     const [usergg, setusergg] = useState(false);
     const [userfb, setuserfb] = useState(false);
     useEffect(() => {

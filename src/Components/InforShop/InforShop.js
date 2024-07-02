@@ -11,7 +11,7 @@ const cx = classNames.bind(styles);
 function InforShop({ Shopinfor }) {
     const [proSale, setproSale] = useState([]);
     useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${Shopinfor.idShop}`)
+        fetch(`http://localhost:3001/api/v1/prodShop/${Shopinfor.idShop}`)
             .then((respone) => respone.json())
             .then((data) => setproSale(data))
             .catch((error) => {

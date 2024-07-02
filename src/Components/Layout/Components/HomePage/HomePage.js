@@ -19,7 +19,7 @@ function HomePage() {
     const cateRecommendValue = searchParams.get('cate_recommend');
     useEffect(() => {
         if (cateRecommendValue !== null) {
-            fetch(`https://sdvanbao17.id.vn/api/v1/productswithcate/${cateRecommendValue}`)
+            fetch(`http://localhost:3001/api/v1/productswithcate/${cateRecommendValue}`)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data !== null) {
@@ -30,7 +30,7 @@ function HomePage() {
                     console.log(error);
                 });
         } else {
-            fetch(`https://sdvanbao17.id.vn/api/v1/products`)
+            fetch(`http://localhost:3001/api/v1/products`)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data !== null) {

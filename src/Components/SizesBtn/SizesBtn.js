@@ -16,7 +16,7 @@ function SizesBtn({ data, idProduct, handleSendData }) {
         }
     }, [active]);
     useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/getSizesProduct/${idProduct}`)
+        fetch(`http://localhost:3001/api/v1/getSizesProduct/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => {
                 setsizes(data);

@@ -15,7 +15,7 @@ function ColorsBtn({ dataColor, imgs, idProduct, handleSendData }) {
         }
     }, [active]);
     useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/getColorsProduct/${idProduct}`)
+        fetch(`http://localhost:3001/api/v1/getColorsProduct/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => {
                 setcolors(data);

@@ -29,7 +29,7 @@ function Detai() {
     const nav = useNavigate();
     const { dis, setdis } = useContext(Context);
     useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/detail/${idProduct}`)
+        fetch(`http://localhost:3001/api/v1/detail/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => setdatadetail(data[0]))
             .catch((error) => {
@@ -47,7 +47,7 @@ function Detai() {
     ];
     useEffect(() => {
         let idCate = datadetail.madm1 + '' + datadetail.madm2;
-        fetch(`https://sdvanbao17.id.vn/api/v1/favoriteProdShop/${idCate}`)
+        fetch(`http://localhost:3001/api/v1/favoriteProdShop/${idCate}`)
             .then((respone) => respone.json())
             .then((data) => setfavoriteProds(data))
             .catch((error) => {
@@ -72,7 +72,7 @@ function Detai() {
                 },
                 body: JSON.stringify(dataPost),
             };
-            fetch(`https://sdvanbao17.id.vn/api/v1/check-prods-select/${idProduct}`)
+            fetch(`http://localhost:3001/api/v1/check-prods-select/${idProduct}`)
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -96,7 +96,7 @@ function Detai() {
                             },
                             body: JSON.stringify(dataUpdate),
                         };
-                        fetch(`https://sdvanbao17.id.vn/api/v1/update-cart`, options)
+                        fetch(`http://localhost:3001/api/v1/update-cart`, options)
                             .then((response) => {
                                 console.log(response);
                                 if (!response.ok) {
@@ -111,7 +111,7 @@ function Detai() {
                                 console.log(err);
                             });
                     } else {
-                        fetch(`https://sdvanbao17.id.vn/api/v1/addtocart`, optionsAdd)
+                        fetch(`http://localhost:3001/api/v1/addtocart`, optionsAdd)
                             .then((response) => {
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok');
@@ -146,17 +146,15 @@ function Detai() {
     const handleCheckOut = () => {
         const user = JSON.parse(sessionStorage.getItem('user'));
         const idCustomer = user.idCustomers;
-        fetch('https://sdvanbao17.id.vn/api/v1/checkAddressCustomer', {
+        fetch('http://localhost:3001/api/v1/checkAddressCustomer', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ idCustomer }),
         })
-            .then((rs) => rs.json())
-            .then((data) => {
-                if (data.length != 0) {
-                    // nav('/thanh-toan');
+            .then((rs) => {
+                if (rs.status == 200) {
                     const encodedIdProduct = encodeURIComponent(idProduct);
                     const idShop = encodeURIComponent(datadetail.idShop);
                     window.location.href = `http://localhost:3000/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
