@@ -266,6 +266,7 @@
 .infor_product {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     padding: 12px 0px;
     .detail_product p {
@@ -283,6 +284,9 @@
         text-decoration: line-through;
         color: #828282;
         font-style: italic;
+    }
+    img {
+        width: 32px;
     }
 }
 .voucher_shop {

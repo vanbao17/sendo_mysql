@@ -11,8 +11,8 @@ import {
     WalletIcon,
 } from '../../IconSvg/IconSvg';
 import ItemTranformMethod from './ItemTranformMethod';
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { json, useLocation } from 'react-router-dom';
 const cx = classNames.bind(styles);
 function CheckOut() {
     const location = useLocation();
@@ -20,7 +20,34 @@ function CheckOut() {
     const idProduct = searchParams.get('idProduct');
     const idShop = searchParams.get('idShop');
     const [statePayment, setStatePayment] = useState(false);
-    console.log(idProduct, idShop);
+    const [shop, setShop] = useState([]);
+    const [product, setProduct] = useState([]);
+    const [addressUser, setAddressUser] = useState([]);
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    useEffect(() => {
+        fetch('http://localhost:3001/api/v1/inforShop/' + idShop)
+            .then((rs) => rs.json())
+            .then((dt) => setShop(dt[0]))
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        fetch(`http://localhost:3001/api/v1/detail/${idProduct}`)
+            .then((respone) => respone.json())
+            .then((data) => setProduct(data[0]))
+            .catch((error) => {
+                console.log(error);
+            });
+        fetch(`http://localhost:3001/api/v1/getAddressCustomer/` + user.idCustomers)
+            .then((respone) => respone.json())
+            .then((data) => {
+                setAddressUser(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [idProduct, idShop]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -227,7 +254,7 @@ function CheckOut() {
                             <div className={cx('container_item')}>
                                 <div className={cx('infor_shop')}>
                                     <span>
-                                        Bán bởi shop: <strong>Giá lẻ rẻ hơn giá buôn</strong>
+                                        Bán bởi shop: <strong>{shop.tenshop}</strong>
                                     </span>
                                     <img
                                         style={{ width: '44px' }}
@@ -235,12 +262,22 @@ function CheckOut() {
                                     ></img>
                                 </div>
                                 <div className={cx('infor_product')}>
-                                    <img src="https://media3.scdn.vn/img4/2023/11_02/XBoMZmcF9UbejdBpxEpR_simg_02d57e_50x50_maxb.jpg"></img>
+                                    <img src={product.imageProduct}></img>
                                     <div className={cx('detail_product')}>
-                                        <p>Khẩu trang 5d tiến hùng 10 cái chỉ có 1 size duy nhất</p>
+                                        <p>{product.nameProduct}</p>
                                         <div className={cx('price_product')}>
-                                            <span>4.000đ</span>
-                                            <span>8.000đ</span>
+                                            <span>
+                                                {product.priceSale != undefined
+                                                    ? product.priceSale.toLocaleString('vi-VN')
+                                                    : product.priceSale}
+                                                đ
+                                            </span>
+                                            <span>
+                                                {product.priceDefault != undefined
+                                                    ? product.priceDefault.toLocaleString('vi-VN')
+                                                    : product.priceDefault}
+                                                đ
+                                            </span>
                                         </div>
                                     </div>
                                     <span>x1</span>
