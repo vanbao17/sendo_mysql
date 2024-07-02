@@ -30,7 +30,9 @@ function Home() {
     }, []);
     const itemsPerPage = 24;
     const startindex = currentPage * itemsPerPage;
-    const sliceData = dataProds.slice(startindex, startindex + itemsPerPage);
+    // const sliceData = dataProds.slice(startindex, startindex + itemsPerPage);
+    console.log(dataProds)
+    const sliceData = dataProds;
     return (
         <ShopPage>
             <div className={cx('newProd')}>
