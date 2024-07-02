@@ -32,13 +32,13 @@ function CartItem({ update, data, handleDeleteCart }) {
     };
     useEffect(() => {
         if (data.length != 0) {
-            fetch(`http://localhost:3001/api/v1/getColorSize/` + data.color)
+            fetch(`https://sdvanbao17.id.vn/api/v1/getColorSize/` + data.color)
                 .then((response) => response.json())
                 .then((dt) => setcolor(dt[0]))
                 .catch((err) => {
                     console.log(err);
                 });
-            fetch(`http://localhost:3001/api/v1/getColorSize/` + data.size)
+            fetch(`https://sdvanbao17.id.vn/api/v1/getColorSize/` + data.size)
                 .then((response) => response.json())
                 .then((dt) => setsize(dt[0]))
                 .catch((err) => {

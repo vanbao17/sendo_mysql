@@ -13,7 +13,7 @@ function FindProduct() {
     const dataIdCate = location.state?.dt;
     const [prods, setprods] = useState([]);
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/productswithcate/${dataIdCate.madm1}`)
+        fetch(`https://sdvanbao17.id.vn/api/v1/productswithcate/${dataIdCate.madm1}`)
             .then((response) => {
                 return response.json();
             })

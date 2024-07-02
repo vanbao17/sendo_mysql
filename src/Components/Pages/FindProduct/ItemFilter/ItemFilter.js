@@ -15,7 +15,7 @@ function ItemFilter({ attributeId, title, attribute }) {
         setdropDownState(!dropDownState);
     };
     useEffect(() => {
-        fetch('http://localhost:3001/api/v1/getAttributeValues/' + attributeId)
+        fetch('https://sdvanbao17.id.vn/api/v1/getAttributeValues/' + attributeId)
             .then((response) => response.json())
             .then((data) => setdataItemFilters(data))
             .catch((err) => {

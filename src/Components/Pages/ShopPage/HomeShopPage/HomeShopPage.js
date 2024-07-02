@@ -21,7 +21,7 @@ function Home() {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/prodShop/${idShop.idShop}`)
+        fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${idShop.idShop}`)
             .then((respone) => respone.json())
             .then((data) => localStorage.setItem('dataProdsShop', JSON.stringify(data)))
             .catch((error) => {

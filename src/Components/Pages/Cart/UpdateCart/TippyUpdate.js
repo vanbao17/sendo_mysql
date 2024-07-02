@@ -17,7 +17,7 @@ function TippyUpdate({ size = 38, color = 'hehe', data, colorItem, sizeItem, idP
         ],
     };
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/getColorsProduct/${idProduct}`)
+        fetch(`https://sdvanbao17.id.vn/api/v1/getColorsProduct/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => {
                 setcolors(data);
@@ -27,7 +27,7 @@ function TippyUpdate({ size = 38, color = 'hehe', data, colorItem, sizeItem, idP
             });
     }, [idProduct]);
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/getSizesProduct/${idProduct}`)
+        fetch(`https://sdvanbao17.id.vn/api/v1/getSizesProduct/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => {
                 setsizes(data);
