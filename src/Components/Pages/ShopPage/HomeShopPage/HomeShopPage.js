@@ -21,7 +21,7 @@ function Home() {
     };
 
     useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${idShop.idShop}`)
+        fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${paramValue}`)
             .then((respone) => respone.json())
             .then((data) => localStorage.setItem('dataProdsShop', JSON.stringify(data)))
             .catch((error) => {
@@ -30,9 +30,8 @@ function Home() {
     }, []);
     const itemsPerPage = 24;
     const startindex = currentPage * itemsPerPage;
-    // const sliceData = dataProds.slice(startindex, startindex + itemsPerPage);
-    console.log(dataProds)
-    const sliceData = dataProds;
+     const sliceData = dataProds.slice(startindex, startindex + itemsPerPage);
+
     return (
         <ShopPage>
             <div className={cx('newProd')}>
