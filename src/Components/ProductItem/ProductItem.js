@@ -27,9 +27,13 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
                             {data.nameProduct && <div className={cx('name')}>{data.nameProduct}</div>}
                             <div className={cx('price')}>
                                 {!data.nameProduct && <h3>{data.priceDefault}</h3>}
-                                {data.nameProduct && <h3>{data.priceSale}đ</h3>}
+                                {data.nameProduct && (
+                                    <h3>
+                                        {data.priceSale != undefined ? data.priceSale.toLocaleString('vi-VN') : ''}đ
+                                    </h3>
+                                )}
                                 <span className={cx('linethrought')} style={{ fontWeight: 400 }}>
-                                    {data.priceDefault}đ
+                                    {data.priceDefault != undefined ? data.priceDefault.toLocaleString('vi-VN') : ''}đ
                                 </span>
                                 <span className={cx('sale')} style={{ fontWeight: 400 }}>
                                     -{Math.round((data.priceSale / data.priceDefault) * 100)}%
@@ -58,11 +62,17 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
                                     </div>
                                     <div className={cx('price')}>
                                         {data.priceDefault && (
-                                            <span className={cx('linethrought')}>{data.priceDefault}</span>
+                                            <span className={cx('linethrought')}>
+                                                {data.priceDefault != undefined
+                                                    ? data.priceDefault.toLocaleString('vi-VN')
+                                                    : ''}
+                                                đ
+                                            </span>
                                         )}
                                         <span className={cx('sale')}>{data.precent}</span>
-
-                                        <h3>{data.priceSale}</h3>
+                                        <h3>
+                                            {data.priceSale != undefined ? data.priceSale.toLocaleString('vi-VN') : ''}đ
+                                        </h3>
                                     </div>
 
                                     <div className={cx('tag')}>

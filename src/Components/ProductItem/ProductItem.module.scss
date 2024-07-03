@@ -19,7 +19,7 @@ a {
 .img-sale {
     width: 40%;
     height: auto;
-    bottom: -16px;
+    bottom: 0;
     position: absolute;
 }
 .content {
@@ -31,7 +31,7 @@ a {
         color: black;
         font-weight: 400;
         font-size: 14px;
-        height: 36px;
+        height: 30px;
         white-space: nowrap; /* Ngăn ngừa text xuống dòng */
         overflow: hidden; /* Ẩn nội dung vượt quá chiều rộng */
         text-overflow: ellipsis;
@@ -51,6 +51,8 @@ a {
 }
 .img-main {
     width: 100%;
+    height: 150px;
+    object-fit: cover;
     display: block;
 }
 .price {

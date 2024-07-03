@@ -13,19 +13,33 @@ import {
 import ItemTranformMethod from './ItemTranformMethod';
 import { useEffect, useState } from 'react';
 import { json, useLocation } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 const cx = classNames.bind(styles);
 function CheckOut() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const idProduct = searchParams.get('idProduct');
-    const idShop = searchParams.get('idShop');
     const [statePayment, setStatePayment] = useState(false);
     const [shop, setShop] = useState([]);
     const [product, setProduct] = useState([]);
+    const [total, settotal] = useState(0);
     const [addressUser, setAddressUser] = useState([]);
     const user = JSON.parse(sessionStorage.getItem('user'));
+    const secretKey = 'Phamvanbao_0123';
+    const encryptedIdShop = searchParams.get('product');
+    // Giải mã chuỗi
+    const bytes = CryptoJS.AES.decrypt(encryptedIdShop, secretKey);
+    const idShopString = bytes.toString(CryptoJS.enc.Utf8);
+
+    // Kiểm tra nếu giải mã thành công
+    let idShopArray = [];
+    try {
+        idShopArray = JSON.parse(idShopString);
+    } catch (error) {
+        console.error('Failed to parse decrypted data:', error);
+    }
+    console.log(idShopArray);
     useEffect(() => {
-        fetch('https://sdvanbao17.id.vn/api/v1/inforShop/' + idShop)
+        fetch('https://sdvanbao17.id.vn/api/v1/inforShop/' + idShopArray[0].idShop)
             .then((rs) => rs.json())
             .then((dt) => setShop(dt[0]))
             .catch((err) => {
@@ -33,12 +47,19 @@ function CheckOut() {
                     console.log(err);
                 }
             });
-        fetch(`https://sdvanbao17.id.vn/api/v1/detail/${idProduct}`)
-            .then((respone) => respone.json())
-            .then((data) => setProduct(data[0]))
-            .catch((error) => {
-                console.log(error);
-            });
+        idShopArray.forEach((item) => {
+            fetch(`https://sdvanbao17.id.vn/api/v1/check-prods-select/${item.idProduct}`)
+                .then((rs) => rs.json())
+                .then((productsCart) => {
+                    fetch(`https://sdvanbao17.id.vn/api/v1/detail/${item.idProduct}`)
+                        .then((respone) => respone.json())
+                        .then((data) => setProduct([...product, { ...data[0], ...productsCart[0] }]))
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                });
+        });
+
         fetch(`https://sdvanbao17.id.vn/api/v1/getAddressCustomer/` + user.idCustomers)
             .then((respone) => respone.json())
             .then((data) => {
@@ -47,7 +68,23 @@ function CheckOut() {
             .catch((error) => {
                 console.log(error);
             });
-    }, [idProduct, idShop]);
+    }, []);
+
+    useEffect(() => {
+        let total = 0;
+        if (product.length != 0) {
+            product.forEach((item) => {
+                if (item.priceSale) {
+                    total = total + item.priceSale * item.quanlityCart;
+                } else {
+                    total = total + item.priceDefault * item.quanlityCart;
+                }
+            });
+            settotal(total);
+        } else {
+            settotal(0);
+        }
+    }, [product]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -261,27 +298,32 @@ function CheckOut() {
                                         src="https://media3.scdn.vn/img4/2020/07_30/h6fJaiL5WkEbDU2eQRZb.png"
                                     ></img>
                                 </div>
-                                <div className={cx('infor_product')}>
-                                    <img src={product.imageProduct}></img>
-                                    <div className={cx('detail_product')}>
-                                        <p>{product.nameProduct}</p>
-                                        <div className={cx('price_product')}>
-                                            <span>
-                                                {product.priceSale != undefined
-                                                    ? product.priceSale.toLocaleString('vi-VN')
-                                                    : product.priceSale}
-                                                đ
-                                            </span>
-                                            <span>
-                                                {product.priceDefault != undefined
-                                                    ? product.priceDefault.toLocaleString('vi-VN')
-                                                    : product.priceDefault}
-                                                đ
-                                            </span>
+                                {product.map((prod) => {
+                                    return (
+                                        <div className={cx('infor_product')}>
+                                            <img src={prod.imageProduct}></img>
+                                            <div className={cx('detail_product')}>
+                                                <p>{prod.nameProduct}</p>
+                                                <div className={cx('price_product')}>
+                                                    <span>
+                                                        {prod.priceSale != undefined
+                                                            ? prod.priceSale.toLocaleString('vi-VN')
+                                                            : prod.priceSale}
+                                                        đ
+                                                    </span>
+                                                    <span>
+                                                        {prod.priceDefault != undefined
+                                                            ? prod.priceDefault.toLocaleString('vi-VN')
+                                                            : prod.priceDefault}
+                                                        đ
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <span>x{prod.quanlityCart}</span>
                                         </div>
-                                    </div>
-                                    <span>x1</span>
-                                </div>
+                                    );
+                                })}
+
                                 <div className={cx('line_through')}></div>
                                 <div className={cx('voucher_shop')}>
                                     <div className={cx('title_voucher_shop')}>
@@ -316,7 +358,7 @@ function CheckOut() {
                                 <div className={cx('line_through')}></div>
                                 <div className={cx('total_cost')}>
                                     <span>Tổng thanh toán</span>
-                                    <span className={cx('total')}>30.000đ</span>
+                                    <span className={cx('total')}>{total.toLocaleString('vi-VN')}đ</span>
                                 </div>
                                 <button>
                                     <span>Thanh Toán</span>

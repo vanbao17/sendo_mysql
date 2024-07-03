@@ -3,15 +3,17 @@ import classNames from 'classnames/bind';
 import styles from './Cart.module.scss';
 import { important } from '../../../Assets/images/image/image';
 import CartItem from './CartItem';
-import { useEffect, useState } from 'react';
-
+import { useContext, useEffect, useState } from 'react';
+import { Context } from '../../store/Context';
+import CryptoJS from 'crypto-js';
 const cx = classNames.bind(styles);
 function Cart() {
     const [update, setupdate] = useState(true);
     const [selectAll, setselectAll] = useState(false);
     const [dataCarts, setdataCarts] = useState([]);
     const [total, settotal] = useState(null);
-
+    const [totalPayment, setTotalPayment] = useState([]);
+    const { idShop } = useContext(Context);
     const nav = useNavigate();
     const user = JSON.parse(sessionStorage.getItem('user'));
     useEffect(() => {
@@ -24,17 +26,19 @@ function Cart() {
     }, []);
     useEffect(() => {
         let total = 0;
-        if (dataCarts.length != 0) {
-            dataCarts.forEach((item) => {
-                if (item.priceSale) {
-                    total = total + item.priceSale * item.quanlityCart;
+        if (totalPayment.length != 0) {
+            totalPayment.forEach((item) => {
+                if (item.data.priceSale) {
+                    total = total + item.data.priceSale * item.data.quanlityCart;
                 } else {
-                    total = total + item.priceDefault * item.quanlityCart;
+                    total = total + item.data.priceDefault * item.data.quanlityCart;
                 }
             });
             settotal(total);
+        } else {
+            settotal(0);
         }
-    }, [dataCarts]);
+    }, [totalPayment]);
     const handleDeleteCart = (data) => {
         const dataToDelete = {
             idUser: user.idCustomers,
@@ -68,16 +72,27 @@ function Cart() {
                 return response.json();
             })
             .then((data) => {
-                console.log(data);
                 if (data.length == 0) {
                     nav('/them-dia-chi');
                 } else {
-                    nav('/check-out');
+                    const arr = totalPayment.map((item) => item.data);
+                    const secretKey = 'Phamvanbao_0123';
+                    const idShopString = JSON.stringify(arr);
+                    const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
+                    window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
                 }
             })
             .catch((err) => {
                 console.log(err);
             });
+    };
+    const handleSumProduct = (dt) => {
+        if (dt.state == true) {
+            setTotalPayment([...totalPayment, dt]);
+        } else {
+            const filterProduct = totalPayment.filter((item) => item.data.idCart !== dt.data.idCart);
+            setTotalPayment(filterProduct);
+        }
     };
     return (
         <div className={cx('wrapper')}>
@@ -118,6 +133,7 @@ function Cart() {
                                             data={item}
                                             update={update}
                                             select={selectAll}
+                                            handleSendData={handleSumProduct}
                                         />
                                     );
                                 })}

@@ -18,7 +18,7 @@ import TippyUpdate from './UpdateCart/TippyUpdate';
 import Count from '../../Count/Count';
 const cx = classNames.bind(styles);
 
-function CartItem({ update, data, handleDeleteCart }) {
+function CartItem({ update, data, handleDeleteCart, handleSendData }) {
     const [showTippy, setshowTippy] = useState(false);
     const [color, setcolor] = useState();
     const [size, setsize] = useState();
@@ -51,7 +51,8 @@ function CartItem({ update, data, handleDeleteCart }) {
             <div className={cx('infor-shop')}>
                 <div className={cx('image-shop')}>
                     <div className={cx('img')}>
-                        {!update && <input type={'checkbox'} className="checkbox" />}
+                        {!update && <input type={'checkbox'} className={cx('checkbox')} />}
+
                         <img src={data.imageShop} alt=""></img>
                     </div>
                     <span>{data.tenshop}</span>
@@ -65,7 +66,13 @@ function CartItem({ update, data, handleDeleteCart }) {
             </div>
             <div className={cx('infor-product')}>
                 <div className={cx('left')}>
-                    <input type={'checkbox'} className="checkbox" />
+                    <input
+                        type={'checkbox'}
+                        onChange={(e) => {
+                            handleSendData({ state: e.target.checked, data });
+                        }}
+                        className="checkbox"
+                    />
                     <div className={cx('img-name')}>
                         <img src={data.imageProduct} alt=""></img>
 
@@ -100,8 +107,8 @@ function CartItem({ update, data, handleDeleteCart }) {
                 </div>
                 <div className={cx('right')}>
                     <div className={cx('price')}>
-                        <strong>{data.priceSale}đ</strong>
-                        <span>{data.priceDefault}đ</span>
+                        <strong>{data.priceSale !== null ? data.priceSale.toLocaleString('vi-VN') : ''}đ</strong>
+                        <span>{data.priceDefault !== null ? data.priceDefault.toLocaleString('vi-VN') : ''}đ</span>
                     </div>
                     <Count
                         quanlity={data.quanlityCart ?? quanlity}

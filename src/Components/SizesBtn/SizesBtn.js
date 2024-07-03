@@ -19,6 +19,7 @@ function SizesBtn({ data, idProduct, handleSendData }) {
         fetch(`https://sdvanbao17.id.vn/api/v1/getSizesProduct/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => {
+                console.log(data);
                 setsizes(data);
                 setactive(data[0]);
             })
@@ -26,6 +27,7 @@ function SizesBtn({ data, idProduct, handleSendData }) {
                 console.log(error);
             });
     }, [idProduct]);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('displaySize')}>

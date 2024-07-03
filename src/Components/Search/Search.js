@@ -12,6 +12,9 @@ const cx = classNames.bind(styles);
 function Search() {
     const [dataInput, setdataInput] = useState('');
     const [dataSearch, setdataSearch] = useState([]);
+
+    const [stateMouse, setStateMouse] = useState(false);
+    // const [stateMouse,setStateMouse] = useState(false)
     const navigate = useNavigate();
     function renderListCate() {
         return <ListCates />;
@@ -51,6 +54,7 @@ function Search() {
                     </Link>
                 </a>
             </Tippy>
+
             <div className={cx('containerInput')}>
                 <input type="text" placeholder="Tìm trên Sendo ..." onChange={handleChangeInput}></input>
                 {dataSearch.length !== 0 ? (

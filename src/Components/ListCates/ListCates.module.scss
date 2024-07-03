@@ -44,6 +44,18 @@
     }
 }
 .itemBoxTag {
-    width: 33%;
+    width: 30%;
+    height: 180px;
     margin-top: 20px;
+    margin-bottom: 20px;
+}
+.itemBoxTag p {
+    padding: 5px 10px;
+    width: 80%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.25s;
+}
+.itemBoxTag p:hover {
+    background-color: #f2f3f4;
 }

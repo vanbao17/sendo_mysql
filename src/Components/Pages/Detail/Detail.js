@@ -14,6 +14,7 @@ import Products from '../../Products/Products';
 import { BinIcon, ChatIcon, ShopIcon } from '../../IconSvg';
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../store/Context';
+import CryptoJS from 'crypto-js';
 const cx = classNames.bind(styles);
 function Detai() {
     const { idProduct } = useParams();
@@ -54,7 +55,8 @@ function Detai() {
                 console.log(error);
             });
     }, [datadetail]);
-    const handleAddToCart = (event) => {
+    const handleAddToCart = (s) => {
+        console.log(s);
         const user = JSON.parse(sessionStorage.getItem('user'));
         if (user) {
             const dataPost = {
@@ -64,7 +66,6 @@ function Detai() {
                 size: size,
                 color: color,
             };
-
             const optionsAdd = {
                 method: 'POST',
                 headers: {
@@ -105,7 +106,14 @@ function Detai() {
                                 return response.text();
                             })
                             .then((data) => {
-                                route('/gio-hang', { state: { dt: 1 } });
+                                if (s == true) {
+                                    route('/gio-hang', { state: { dt: 1 } });
+                                } else {
+                                    const secretKey = 'Phamvanbao_0123';
+                                    const idShopString = JSON.stringify([datadetail]);
+                                    const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
+                                    window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
+                                }
                             })
                             .catch((err) => {
                                 console.log(err);
@@ -119,7 +127,14 @@ function Detai() {
                                 return response.text();
                             })
                             .then((data) => {
-                                route('/gio-hang', { state: { dt: 1 } });
+                                if (s == true) {
+                                    route('/gio-hang', { state: { dt: 1 } });
+                                } else {
+                                    const secretKey = 'Phamvanbao_0123';
+                                    const idShopString = JSON.stringify([datadetail]);
+                                    const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
+                                    window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
+                                }
                             })
                             .catch((error) => {
                                 console.log(error);
@@ -132,7 +147,6 @@ function Detai() {
         } else {
             setdis(!dis);
         }
-        event.preventDefault();
     };
     const handleSetQuanlity = (q) => {
         setquanlity(q);
@@ -153,11 +167,17 @@ function Detai() {
             },
             body: JSON.stringify({ idCustomer }),
         })
-            .then((rs) => {
+            .then(async (rs) => {
                 if (rs.status == 200) {
-                    const encodedIdProduct = encodeURIComponent(idProduct);
-                    const idShop = encodeURIComponent(datadetail.idShop);
-                    window.location.href = `https://senvb.vercel.app/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
+                    try {
+                        await handleAddToCart(false);
+                    } catch (error) {
+                        console.log(error);
+                    }
+
+                    // const encodedIdProduct = encodeURIComponent(idProduct);
+                    // const idShop = encodeURIComponent(datadetail.idShop);
+                    // window.location.href = `https://senvb.vercel.app/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
                 } else {
                     nav('/them-dia-chi');
                 }
@@ -183,7 +203,7 @@ function Detai() {
                             ></img>
 
                             <img
-                                style={{ height: '500px' }}
+                                style={{ height: '500px', objectFit: 'cover' }}
                                 src={`${datadetail.imageProduct}`}
                                 alt={`${datadetail.nameProduct}`}
                             />
@@ -216,12 +236,14 @@ function Detai() {
                             <span>{datadetail.trademark}</span>
                         </div>
                         <div className={cx('price', 'redtext')}>
-                            {/* {datadetail.priceSale.toLocaleString('vi-VN')}đ */}
-                            {datadetail.priceSale}đ
+                            {datadetail.priceSale != undefined ? datadetail.priceSale.toLocaleString('vi-VN') : ''}đ
                         </div>
                         <div className={cx('reduce')}>
                             <span className={cx('reduce-price')}>
-                                {datadetail.priceDefault}đ{/* {datadetail.priceDefault.toLocaleString('vi-VN')}đ */}
+                                {datadetail.priceDefault != undefined
+                                    ? datadetail.priceDefault.toLocaleString('vi-VN')
+                                    : ''}
+                                đ
                             </span>
                         </div>
                         <div className={cx('code-reduce')}>
@@ -248,7 +270,12 @@ function Detai() {
                             <Count quanlity={quanlity} update quanlityFunc={handleSetQuanlity} />
                         </div>
                         <div className={cx('btn', 'list-btn')}>
-                            <button onClick={handleAddToCart} className={cx('addtocart')}>
+                            <button
+                                onClick={() => {
+                                    handleAddToCart(true);
+                                }}
+                                className={cx('addtocart')}
+                            >
                                 <span>Thêm vào giỏ</span>
                             </button>
                             {/* <button className={cx('installment')}>
@@ -312,7 +339,7 @@ function Detai() {
                 <div className={cx('container')}>
                     <div className={cx('left')}>
                         <div className={cx('imageProd')}>
-                            <img src={datadetail.imageProduct}></img>
+                            <img style={{ width: '100%', objectFit: 'cover' }} src={datadetail.imageProduct}></img>
                         </div>
                         <div className={cx('inforProd')}>
                             <div className={cx('nameProd')}>
@@ -321,7 +348,12 @@ function Detai() {
                             </div>
                             <div className={cx('priceProd')}>
                                 <p>Mặc định | x1</p>
-                                <span>{datadetail.priceSale}đ</span>
+                                <span>
+                                    {datadetail.priceSale != undefined
+                                        ? datadetail.priceSale.toLocaleString('vi-VN')
+                                        : ''}
+                                    đ
+                                </span>
                             </div>
                         </div>
                     </div>

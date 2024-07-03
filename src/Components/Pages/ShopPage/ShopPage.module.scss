@@ -16,6 +16,7 @@
 .bgImageInfor {
     overflow: hidden;
     width: 100%;
+    height: 300px;
     img {
         height: auto;
     }
@@ -40,8 +41,15 @@
         gap: 8px;
     }
     .nameShop .imageShop {
+        border-radius: 50%;
+        overflow: hidden;
         width: 72px;
         height: 72px;
+    }
+    .nameShop .imageShop img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
     }
     .nameShop .imageShop img {
         width: 100%;

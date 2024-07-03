@@ -54,6 +54,9 @@ function Header({ nav }) {
             usergg == true ? setusergg(false) : setuserfb(false);
 
             googleLogout();
+            sessionStorage.clear();
+            localStorage.clear();
+            navigate('/');
         } catch (error) {
             alert('Không ổn rồi fen ơi :))');
         }
