@@ -15,7 +15,7 @@ function Cart() {
     const nav = useNavigate();
     const user = JSON.parse(sessionStorage.getItem('user'));
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/gio-hang/` + user.idCustomers)
+        fetch(`https://sdvanbao17.id.vn/api/v1/gio-hang/` + user.idCustomers)
             .then((response) => response.json())
             .then((data) => setdataCarts(data))
             .catch((err) => {
@@ -47,7 +47,7 @@ function Cart() {
             },
             body: JSON.stringify(dataToDelete),
         };
-        fetch('http://localhost:3001/api/v1/delete-cart', options)
+        fetch('https://sdvanbao17.id.vn/api/v1/delete-cart', options)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to delete item from cart');
@@ -60,7 +60,7 @@ function Cart() {
             });
     };
     const handleBuyNow = () => {
-        fetch('http://localhost:3001/api/v1/getAddressCustomer/' + user.idCustomers)
+        fetch('https://sdvanbao17.id.vn/api/v1/getAddressCustomer/' + user.idCustomers)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to delete item from cart');

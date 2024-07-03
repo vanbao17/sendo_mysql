@@ -15,57 +15,60 @@ const cx = classNames.bind(styles);
 function ShopPage({ children }) {
     // const location = useLocation();
     const { idShop, setidShop } = useContext(Context);
-    const [data, setdata] = useState();
+    const [shop, setshop] = useState();
+
     useEffect(() => {
-        fetch('http://localhost:3001/api/v1/inforShop/' + idShop)
+        setidShop(idShop);
+        fetch('https://sdvanbao17.id.vn/api/v1/inforShop/' + idShop)
             .then((rs) => rs.json())
-            .then((dt) => setdata(dt[0]))
+            .then((dt) => {
+                setshop(dt[0]);
+            })
             .catch((err) => {
                 console.log(err);
             });
     }, [idShop]);
-    const dataCates = [
+    console.log(shop);
+    const shopCates = [
         {
             name: 'Trang chủ',
-            path: '/shop/cong-nghe',
+            path: '/shop/' + idShop,
         },
         {
             name: 'Sản Phẩm',
-            path: '/shop/cong-nghe/san-pham',
+            path: `/shop/${idShop}/san-pham`,
         },
         {
             name: 'Bộ sưu tập ',
-            path: '/shop/cong-nghe/bo-suu-tap',
+            path: `/shop/${idShop}/bo-suu-tap`,
         },
         {
             name: 'Gía tốt hôm nay',
-            path: '/shop/cong-nghe/gia-tot-hom-nay',
+            path: `/shop/${idShop}/gia-tot-hom-nay`,
         },
         {
             name: 'Thông tin shop',
-            path: '/shop/thong-tin-shop',
+            path: `/shop/${idShop}/thong-tin-shop`,
         },
     ];
-    console.log(data);
     return (
         <div className={cx('wrapper')}>
-            <Header />
+            {/* <Header /> */}
             <div className={cx('container')}>
                 <div className={cx('infor')}>
                     <div className={cx('bgImageInfor')}>
-                        {data != null ? <img src={data.imageBannerShop}></img> : <></>}
+                        {shop != null ? <img src={shop.imageBannerShop}></img> : <></>}
                     </div>
                     <div className={cx('inforBasicShop')}>
                         <div className={cx('left')}>
                             <div className={cx('nameShop')}>
                                 <div className={cx('imageShop')}>
-                                    {data != null ? <img src={data.imageShop}></img> : <></>}
-                                    {data != null ? <img src={data.imageShop}></img> : <></>}
+                                    {shop != null ? <img src={shop.imageShop}></img> : <></>}
                                 </div>
                                 <div className={cx('name')}>
-                                    {data != null ? (
+                                    {shop != null ? (
                                         <p>
-                                            {data.tenshop} <img className={cx('tag')} src={ig.shoptag}></img>
+                                            {shop.tenshop} <img className={cx('tag')} src={ig.shoptag}></img>
                                         </p>
                                     ) : (
                                         <></>
@@ -73,8 +76,8 @@ function ShopPage({ children }) {
 
                                     <div className={cx('rateAndFollow')}>
                                         <span className={cx('rate')}>4.9/5</span>|
-                                        {data != null ? (
-                                            <span className={cx('follow')}>{data.userFollow} người theo dõi</span>
+                                        {shop != null ? (
+                                            <span className={cx('follow')}>{shop.userFollow} người theo dõi</span>
                                         ) : (
                                             <></>
                                         )}
@@ -115,7 +118,7 @@ function ShopPage({ children }) {
                         </div>
                     </div>
                     <div className={cx('navShop')}>
-                        {dataCates.map((cateItem, index) => {
+                        {shopCates.map((cateItem, index) => {
                             return (
                                 <NavLink
                                     key={index}
@@ -130,7 +133,7 @@ function ShopPage({ children }) {
                 </div>
                 {children}
             </div>
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 }

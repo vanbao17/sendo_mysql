@@ -50,7 +50,7 @@ function AddAddressUser() {
         const loaidiachi = type;
         const address = refAddress.current.value;
         const idCustomers = user.idCustomers;
-        fetch('http://localhost:3001/api/v1/addAddressCustomers', {
+        fetch('https://sdvanbao17.id.vn/api/v1/addAddressCustomers', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -35,11 +35,11 @@ function App() {
                                         </Layout>
                                     }
                                 ></Route>
-                                <Route path={'/shop/:paramValue'} element={<HomeShopPage />}></Route>
+                                {/* <Route path={'/shop/:paramValue'} element={<HomeShopPage />}></Route>
                                 <Route path={'/shop/:paramValue/san-pham'} element={<ShopProds />}></Route>
                                 <Route path={'/shop/:paramValue/bo-suu-tap'} element={<ShopCollection />}></Route>
-                                <Route path={'/shop/:paramValue/gia-tot-hom-nay'} element={<ShopBestPrice />}></Route>
-                                <Route path={'/shop/:paramValue/thong-tin-shop'} element={<InforS />}></Route>
+                                <Route path={'/shop/:paramValue/gia-tot-hom-nay'} element={<ShopCollection />}></Route>
+                                <Route path={'/shop/:paramValue/thong-tin-shop'} element={<InforS />}></Route> */}
                             </Route>
                         );
                     })}

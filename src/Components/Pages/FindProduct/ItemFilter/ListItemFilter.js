@@ -25,7 +25,7 @@ function ListItemFilter({ madm1 }) {
     //     setfilter2State(!filter2State);
     // };
     useEffect(() => {
-        fetch(`http://localhost:3001/api/v1/tim-kiem/${madm1}`)
+        fetch(`https://sdvanbao17.id.vn/api/v1/tim-kiem/${madm1}`)
             .then((response) => response.json())
             .then((data) => setdataFilters(data))
             .catch((err) => {

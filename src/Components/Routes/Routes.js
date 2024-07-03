@@ -10,6 +10,9 @@ import ShopProd from '../Pages/ShopPage/ShopProds/ShopProds';
 import HomeShopPage from '../Pages/ShopPage/HomeShopPage/HomeShopPage';
 import AddAddressUser from '../Pages/AddAddressUser/AddAddressUser';
 import CheckOut from '../Pages/CheckOut/CheckOut';
+import ShopProds from '../Pages/ShopPage/ShopProds/ShopProds';
+import ShopCollection from '../Pages/ShopPage/ShopCollection/ShopCollection';
+import InforS from '../Pages/ShopPage/InforS/InforS';
 const publicRoutes = [
     {
         path: routes.home,
@@ -73,6 +76,26 @@ const publicRoutes = [
     {
         path: routes.thanhtoan,
         component: CheckOut,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.shopSanpham,
+        component: ShopProds,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.shopBoSuuTap,
+        component: ShopCollection,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.shopGiaTot,
+        component: ShopCollection,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.shopThongTin,
+        component: InforS,
         layout: HeaderNoneCate,
     },
 ];

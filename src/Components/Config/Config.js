@@ -12,6 +12,10 @@ const routes = {
     detail: '/detail/:paramValue/:idProduct',
     sitemap: '/sitemap',
     shopPage: `/shop/:paramValue`,
+    shopSanpham: `/shop/:paramValue/san-pham`,
+    shopBoSuuTap: `/shop/:paramValue/bo-suu-tap`,
+    shopGiaTot: `/shop/:paramValue/gia-tot-hom-nay`,
+    shopThongTin: `/shop/:paramValue/thong-tin-shop`,
     findProd: `/:paramValue`,
     shopPageProduct: `/shop/:paramValue/san-pham`,
 };

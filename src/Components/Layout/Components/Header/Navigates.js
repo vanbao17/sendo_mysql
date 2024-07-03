@@ -11,7 +11,7 @@ function Navigates() {
     const [dataCate, setdataCate] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/v1/danhmuc2rand5')
+        fetch('https://sdvanbao17.id.vn/api/v1/danhmuc2rand5')
             .then((response) => response.json())
             .then((data) => {
                 const dataArray = JSON.stringify(data);
@@ -32,7 +32,7 @@ function Navigates() {
             </NavLink>
             {dataCate.map((item, index, history) => (
                 <NavLink
-                    to={`http://localhost:3001?cate_recommend=${item.madm1}`}
+                    to={`https://sdvanbao17.id.vn?cate_recommend=${item.madm1}`}
                     className={(nav) => cx('menu-item', { active: nav.isActive })}
                     key={index}
                     onClick={() => {

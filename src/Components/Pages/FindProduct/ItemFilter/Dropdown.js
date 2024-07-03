@@ -12,7 +12,7 @@ function Dropdown({ itemdm2, dm1Id }) {
         setfilter2State(!filter2State);
     };
     useEffect(() => {
-        fetch('http://localhost:3001/api/v1/danhmuc3/' + dm1Id)
+        fetch('https://sdvanbao17.id.vn/api/v1/danhmuc3/' + dm1Id)
             .then((res) => res.json())
             .then((data) => setdm3(data))
             .catch((rejected) => {

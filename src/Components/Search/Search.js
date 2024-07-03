@@ -21,7 +21,7 @@ function Search() {
     };
     useEffect(() => {
         if (dataInput.length !== 0) {
-            fetch(`http://localhost:3001/api/v1/getProductsLetters?query=${dataInput}`)
+            fetch(`https://sdvanbao17.id.vn/api/v1/getProductsLetters?query=${dataInput}`)
                 .then((response) => response.json())
                 .then((data) => setdataSearch(data))
                 .catch((err) => {
