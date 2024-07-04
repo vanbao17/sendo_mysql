@@ -18,5 +18,6 @@ const routes = {
     shopThongTin: `/shop/:paramValue/thong-tin-shop`,
     findProd: `/:paramValue`,
     shopPageProduct: `/shop/:paramValue/san-pham`,
+    thanhtoanthanhcong: '/thanh-toan-thanh-cong',
 };
 export default routes;

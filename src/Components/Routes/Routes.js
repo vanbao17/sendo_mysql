@@ -10,6 +10,7 @@ import ShopProd from '../Pages/ShopPage/ShopProds/ShopProds';
 import HomeShopPage from '../Pages/ShopPage/HomeShopPage/HomeShopPage';
 import AddAddressUser from '../Pages/AddAddressUser/AddAddressUser';
 import CheckOut from '../Pages/CheckOut/CheckOut';
+import OrderSuccess from '../Pages/OrderSuccess/OrderSuccess';
 import ShopProds from '../Pages/ShopPage/ShopProds/ShopProds';
 import ShopCollection from '../Pages/ShopPage/ShopCollection/ShopCollection';
 import InforS from '../Pages/ShopPage/InforS/InforS';
@@ -96,6 +97,11 @@ const publicRoutes = [
     {
         path: routes.shopThongTin,
         component: InforS,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.thanhtoanthanhcong,
+        component: OrderSuccess,
         layout: HeaderNoneCate,
     },
 ];

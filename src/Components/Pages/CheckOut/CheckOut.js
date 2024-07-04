@@ -11,14 +11,15 @@ import {
     WalletIcon,
 } from '../../IconSvg/IconSvg';
 import ItemTranformMethod from './ItemTranformMethod';
-import { useEffect, useState } from 'react';
-import { json, useLocation } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { json, useLocation, useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 const cx = classNames.bind(styles);
 function CheckOut() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
-    const [statePayment, setStatePayment] = useState(false);
+
+    const [statePayment, setStatePayment] = useState(1);
     const [transformCate, settransformCate] = useState([]);
     const [shop, setShop] = useState([]);
     const [product, setProduct] = useState([]);
@@ -27,7 +28,13 @@ function CheckOut() {
     const [trasnformMethod, setTrasnformMethod] = useState([]);
     const [trasnformMethodOption, settrasnformMethodOption] = useState([]);
     const [attributeVl, setattributeVl] = useState([]);
-    const [state, setstate] = useState(false);
+    const [catePayment, setcatePayment] = useState([]);
+    const [PaymentOptions, setPaymentOptions] = useState([]);
+    const [indexTransformOptions, setindexTransformOptions] = useState();
+    const [indexPaymentOptions, setindexPaymentOptions] = useState();
+    const [indexTransformMethod, setindexTransformMethod] = useState();
+    const nav = useNavigate();
+    const refStatus = useRef();
 
     const user = JSON.parse(sessionStorage.getItem('user'));
     const secretKey = 'Phamvanbao_0123';
@@ -61,7 +68,7 @@ function CheckOut() {
                     console.log(error);
                 });
         }
-    }, []);
+    }, [product]);
     useEffect(() => {
         fetch('https://sdvanbao17.id.vn/api/v1/inforShop/' + idShopArray[0].idShop)
             .then((rs) => rs.json())
@@ -71,7 +78,16 @@ function CheckOut() {
                     console.log(err);
                 }
             });
-
+        fetch('https://sdvanbao17.id.vn/api/v1/getCatePayment')
+            .then((rs) => rs.json())
+            .then((dt) => {
+                if (dt.length != 0) {
+                    setcatePayment(dt);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         async function fetchData() {
             try {
                 const promises = idShopArray.map(async (item) => {
@@ -106,7 +122,6 @@ function CheckOut() {
 
         fetchData();
     }, []);
-
     useEffect(() => {
         let total = 0;
         if (product.length != 0) {
@@ -121,7 +136,7 @@ function CheckOut() {
         } else {
             settotal(0);
         }
-    }, []);
+    }, [product]);
     useEffect(() => {
         if (transformCate.length != 0) {
             transformCate.filter((cate) => {
@@ -146,7 +161,61 @@ function CheckOut() {
                 }
             });
         }
-    }, [transformCate]);
+    }, [transformCate, attributeVl]);
+    useEffect(() => {
+        const category_id = statePayment;
+        fetch('https://sdvanbao17.id.vn/api/v1/getPaymentWithCate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ category_id }),
+        })
+            .then((rs) => rs.json())
+            .then((dt) => {
+                setPaymentOptions(dt);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [statePayment]);
+    const handleOrderProduct = async () => {
+        const idCustomers = user.idCustomers;
+        const total_price = (total - (trasnformMethod.percent * total) / 10).toLocaleString('vi-VN');
+        const status = refStatus.current.value;
+        const payment_method_id = indexPaymentOptions;
+        const address_id = addressUser[0].id;
+        const transform_method_id = trasnformMethod.id;
+        const transform_option_id = indexTransformOptions;
+        const order_item = [];
+        await product.forEach((pd) => {
+            order_item.push({ idProduct: pd.idProduct, quantity: pd.quanlityCart, price: pd.priceSale });
+        });
+        fetch('https://sdvanbao17.id.vn/api/v1/addOderProduct', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idCustomers,
+                total_price,
+                status,
+                payment_method_id,
+                address_id,
+                transform_method_id,
+                transform_option_id,
+                order_item,
+            }),
+        })
+            .then((rs) => rs.json())
+            .then((dt) => {
+                const encryptedIdShop = CryptoJS.AES.encrypt(JSON.stringify(dt), secretKey).toString();
+                window.location.href = `/thanh-toan-thanh-cong?order=${encodeURIComponent(encryptedIdShop)}`;
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -172,12 +241,19 @@ function CheckOut() {
                         >
                             <div className={cx('container_item')}>
                                 <div className={cx('infor')}>
-                                    <span>Phạm Văn Bảo</span>|<p>0904973022</p>
+                                    <span>{user.nameUser}</span>|<p>{user.phoneNumber}</p>
                                 </div>
                                 <div className={cx('address')}>
-                                    <span>Nhà riêng</span>
-                                    tổ 4 kp xuyên đông na phước duy xuyên quảng nam, Thị trấn Nam Phước, Huyện Duy
-                                    Xuyên, Quảng Nam
+                                    <span> {addressUser.loaidiachi == 0 ? 'Nhà riêng' : 'Cơ quan'}</span>
+                                    {addressUser.length !== 0
+                                        ? addressUser[0].address +
+                                          ', ' +
+                                          addressUser[0].px +
+                                          ', ' +
+                                          addressUser[0].qh +
+                                          ', ' +
+                                          addressUser[0].tt
+                                        : ''}
                                 </div>
                             </div>
                         </ItemContainerCheckOut>
@@ -198,14 +274,27 @@ function CheckOut() {
                                     desc={trasnformMethod.description + ' ' + trasnformMethod.estimated_delivery_time}
                                     titleRight={
                                         <>
-                                            <span>{(trasnformMethod.percent * total).toLocaleString('vi-VN')}đ</span>
+                                            <span>
+                                                {((trasnformMethod.percent * total) / 10).toLocaleString('vi-VN')}đ
+                                            </span>
                                             <InforIcon width="16px" height="16px" className={cx('icon_infor')} />
                                         </>
                                     }
                                 />
                                 <div className={cx('list_chose_method')}>
-                                    {trasnformMethodOption.map((it) => {
-                                        return <ItemTranformMethod title={it.option_name} desc={it.description} />;
+                                    {trasnformMethodOption.map((it, index) => {
+                                        return (
+                                            <ItemTranformMethod
+                                                key={index}
+                                                idTransform={it.id}
+                                                checked={indexTransformOptions == it.id ? true : false}
+                                                title={it.option_name}
+                                                desc={it.description}
+                                                handleIndex={(data) => {
+                                                    setindexTransformOptions(data.data);
+                                                }}
+                                            />
+                                        );
                                     })}
                                 </div>
                             </div>
@@ -221,101 +310,49 @@ function CheckOut() {
                         >
                             <div className={cx('container_item')}>
                                 <div className={cx('nav_checkout_container')}>
-                                    <span
-                                        className={cx(statePayment == false ? 'active' : '')}
-                                        onClick={() => {
-                                            setStatePayment(!statePayment);
-                                        }}
-                                    >
-                                        Sendo gợi ý
-                                    </span>
-                                    <span
-                                        onClick={() => {
-                                            setStatePayment(!statePayment);
-                                        }}
-                                        className={cx(statePayment == true ? 'active' : '')}
-                                    >
-                                        Mua trước trả sau{' '}
-                                    </span>
+                                    {catePayment.length !== 0
+                                        ? catePayment.map((item) => {
+                                              return (
+                                                  <span
+                                                      key={item.id}
+                                                      className={cx(statePayment == item.id ? 'active' : '')}
+                                                      onClick={() => {
+                                                          setStatePayment(item.id);
+                                                      }}
+                                                  >
+                                                      {item.category_name}
+                                                  </span>
+                                              );
+                                          })
+                                        : ''}
                                 </div>
                                 <div className={cx('checkout_container')}>
                                     <div className={cx('list_method_pay')}>
-                                        {statePayment == false ? (
-                                            <>
+                                        {PaymentOptions.map((item, index) => {
+                                            return (
                                                 <ItemTranformMethod
-                                                    classNames={['payment', 'method_pay']}
-                                                    title={'Ví MoMo'}
-                                                    desc={'Nhớ kiểm tra số dư trước khi thanh toán bạn nhé.'}
+                                                    key={index}
+                                                    classNames={[
+                                                        'payment',
+                                                        'method_pay',
+                                                        item.state == 0 ? 'point' : '',
+                                                    ]}
+                                                    checked={indexPaymentOptions == item.id ? true : false}
+                                                    title={item.method_name}
+                                                    desc={item.description}
                                                     titleRight={
                                                         <img
                                                             style={{ width: '24px', height: '24px' }}
-                                                            src="https://media3.scdn.vn/img4/2021/06_08/TgFdj5SXwtFP3STJ6mfk.png"
+                                                            src={item.image}
                                                         ></img>
                                                     }
+                                                    idTransform={item.id}
+                                                    handleIndex={(data) => {
+                                                        setindexPaymentOptions(data.data);
+                                                    }}
                                                 />
-                                                <ItemTranformMethod
-                                                    classNames={['payment', 'method_pay']}
-                                                    title={'Tiền mặt (COD)'}
-                                                    desc={'Phí thu hộ: Miễn Phí'}
-                                                    titleRight={
-                                                        <img
-                                                            style={{ width: '24px', height: '24px' }}
-                                                            src="https://media3.scdn.vn/img4/2021/03_31/fMfdU81WB18wSe2LKOWW.png"
-                                                        ></img>
-                                                    }
-                                                />
-                                                <ItemTranformMethod
-                                                    classNames={['payment', 'method_pay', 'point']}
-                                                    title={'Ví SenPay'}
-                                                    desc={'Số dư: 0đ'}
-                                                    titleRight={
-                                                        <img
-                                                            style={{ width: '24px', height: '24px' }}
-                                                            src="https://media3.scdn.vn/img4/2021/05_14/oposINBx6SyQhflKKhUX.png"
-                                                        ></img>
-                                                    }
-                                                />
-                                                <ItemTranformMethod
-                                                    classNames={['payment', 'method_pay', 'point']}
-                                                    title={'Thanh toán kết hợp'}
-                                                    desc={'Số dư trong Ví SenPay phải có ít nhất 1.000đ để thanh toán.'}
-                                                    titleRight={
-                                                        <img
-                                                            style={{ width: '24px', height: '24px' }}
-                                                            src="https://media3.scdn.vn/img4/2021/05_17/3TrUQZxPPqe9RqgEJ0D4.png"
-                                                        ></img>
-                                                    }
-                                                />
-                                                <div className={cx('button_add_method')}>
-                                                    <button>
-                                                        <span>Thêm phương thức khác</span>
-                                                    </button>
-                                                </div>
-                                                <div className={cx('list_image_bank')}>
-                                                    <img src="https://media3.scdn.vn/img4/2021/08_09/qIIWONXoKSmIyMqi1x0p.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2021/08_09/ZLcKkkyD3cfygVcrfI9R.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2021/08_09/ZLcKkkyD3cfygVcrfI9R.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2021/08_09/b1FgApo9krOeImlPAHJq.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2021/08_09/ACZZo7BchIz2wW3mYiBq.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2021/08_09/gt2XsOs28xo0GXzi8xYG.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2021/08_09/8ZTe1mKibhY4nT4VCC5F.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2021/11_01/9h9J2A887ybJNDVdMI5y.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2022/05_23/Bi78sj9Rf960TB34S6wE.png"></img>
-                                                    <img src="https://media3.scdn.vn/img4/2023/08_28/CTuWw5fcgedY3zdIcVPT.png"></img>
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <ItemTranformMethod
-                                                    classNames={['payment', 'method_pay', 'point']}
-                                                    title={'Muadee'}
-                                                    desc={'Áp dụng cho tổng thanh toán từ 200.000đ trở lên.'}
-                                                    image={
-                                                        'https://media3.scdn.vn/img4/2022/12_23/KwKYYua9Mcu9cCakmLwI.png'
-                                                    }
-                                                />
-                                            </>
-                                        )}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
@@ -352,9 +389,9 @@ function CheckOut() {
                                         src="https://media3.scdn.vn/img4/2020/07_30/h6fJaiL5WkEbDU2eQRZb.png"
                                     ></img>
                                 </div>
-                                {product.map((prod) => {
+                                {product.map((prod, index) => {
                                     return (
-                                        <div className={cx('infor_product')}>
+                                        <div key={index} className={cx('infor_product')}>
                                             <img src={prod.imageProduct}></img>
                                             <div className={cx('detail_product')}>
                                                 <p>{prod.nameProduct}</p>
@@ -392,6 +429,7 @@ function CheckOut() {
                                     <div className={cx('line_through')}></div>
                                     <div className={cx('text_voucher_shop')}>
                                         <textarea
+                                            ref={refStatus}
                                             placeholder="Ghi chú cho shop"
                                             className={cx('textare_voucher')}
                                         ></textarea>
@@ -403,18 +441,24 @@ function CheckOut() {
                             <div className={cx('container_total')}>
                                 <div className={cx('total_price_product')}>
                                     <span>Tiền hàng</span>
-                                    <strong>4.000đ</strong>
+                                    <strong>{total.toLocaleString('vi-VN')}đ</strong>
                                 </div>
                                 <div className={cx('total_price_ship')}>
                                     <span>Phí giao hàng</span>
-                                    <strong>4.000đ</strong>
+                                    <strong>{((trasnformMethod.percent * total) / 10).toLocaleString('vi-VN')}đ</strong>
                                 </div>
                                 <div className={cx('line_through')}></div>
                                 <div className={cx('total_cost')}>
                                     <span>Tổng thanh toán</span>
-                                    <span className={cx('total')}>{total.toLocaleString('vi-VN')}đ</span>
+                                    <span className={cx('total')}>
+                                        {(total - (trasnformMethod.percent * total) / 10).toLocaleString('vi-VN')}đ
+                                    </span>
                                 </div>
-                                <button>
+                                <button
+                                    onClick={() => {
+                                        handleOrderProduct();
+                                    }}
+                                >
                                     <span>Thanh Toán</span>
                                 </button>
                             </div>

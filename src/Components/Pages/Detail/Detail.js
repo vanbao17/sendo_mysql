@@ -56,7 +56,6 @@ function Detai() {
             });
     }, [datadetail]);
     const handleAddToCart = (s) => {
-        console.log(s);
         const user = JSON.parse(sessionStorage.getItem('user'));
         if (user) {
             const dataPost = {
@@ -159,32 +158,36 @@ function Detai() {
     };
     const handleCheckOut = () => {
         const user = JSON.parse(sessionStorage.getItem('user'));
-        const idCustomer = user.idCustomers;
-        fetch('https://sdvanbao17.id.vn/api/v1/checkAddressCustomer', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ idCustomer }),
-        })
-            .then(async (rs) => {
-                if (rs.status == 200) {
-                    try {
-                        await handleAddToCart(false);
-                    } catch (error) {
-                        console.log(error);
-                    }
-
-                    // const encodedIdProduct = encodeURIComponent(idProduct);
-                    // const idShop = encodeURIComponent(datadetail.idShop);
-                    // window.location.href = `https://senvb.vercel.app/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
-                } else {
-                    nav('/them-dia-chi');
-                }
+        if (user) {
+            const idCustomer = user.idCustomers;
+            fetch('https://sdvanbao17.id.vn/api/v1/checkAddressCustomer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idCustomer }),
             })
-            .catch((err) => {
-                console.log(err);
-            });
+                .then(async (rs) => {
+                    if (rs.status == 200) {
+                        try {
+                            await handleAddToCart(false);
+                        } catch (error) {
+                            console.log(error);
+                        }
+
+                        // const encodedIdProduct = encodeURIComponent(idProduct);
+                        // const idShop = encodeURIComponent(datadetail.idShop);
+                        // window.location.href = `https://senvb.vercel.app/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
+                    } else {
+                        nav('/them-dia-chi');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            setdis(!dis);
+        }
     };
     return (
         <div className={cx('wrapper')}>

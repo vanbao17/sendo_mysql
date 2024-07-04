@@ -3,24 +3,25 @@ import styles from './CheckOut.module.scss';
 import { CheckboxActiveIcon, CheckboxIcon, InforIcon } from '../../IconSvg/IconSvg';
 import { useEffect, useRef, useState } from 'react';
 const cx = classNames.bind(styles);
-function ItemTranformMethod({ classNames = [], checked, title, image, desc, titleRight }) {
+function ItemTranformMethod({ classNames = [], checked, title, image, desc, titleRight, handleIndex, idTransform }) {
     const [stateActive, setStateActive] = useState(checked);
     return (
         <div
             className={cx(
                 'wrapper_item_method',
                 [...classNames],
-                stateActive == true && classNames.length != 0 ? 'active' : '',
+                checked == true && classNames.length != 0 ? 'active' : '',
             )}
         >
             <div className={cx('left')}>
                 <div
                     className={cx('icon_input')}
                     onClick={() => {
+                        handleIndex({ state: !stateActive, data: idTransform });
                         setStateActive(!stateActive);
                     }}
                 >
-                    {stateActive == true ? (
+                    {checked == true ? (
                         <CheckboxActiveIcon className={cx('icon')} />
                     ) : (
                         <CheckboxIcon className={cx('icon')} />
