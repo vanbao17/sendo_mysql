@@ -669,3 +669,29 @@ export const CheckboxIcon = ({ width = '24px', height = '24px', className }) => 
         ></path>
     </svg>
 );
+export const CircleRouteIcon = ({ width = '24px', height = '24px', className }) => (
+    <svg width={width} height={height} className={className} viewBox="0 0 24 24" version="1.1">
+        <g
+            id="24-/-duotone-/-active-/-icon24_uploading_quarter_duotone_active"
+            stroke="none"
+            strokeWidth="1"
+            fill="none"
+            fillRule="nonzero"
+        >
+            <path
+                d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"
+                id="Highlight"
+                fill="#FBCBCB"
+            ></path>
+            <path d="M12 2c5.523 0 10 4.477 10 10h-2a8 8 0 0 0-8-8V2Z" id="Combined-Shape" fill="#EE2624"></path>
+        </g>
+    </svg>
+);
+export const SendoIcon = ({ width = '24px', height = '24px', className }) => (
+    <svg width={width} height={height} className={className} viewBox="0 0 24 24" version="1.1">
+        <path
+            fill="#EE2624"
+            d="M6.461 26.39c1.52 0 2.755 1.256 2.755 2.804C9.216 30.744 7.98 32 6.46 32c-1.522 0-2.757-1.256-2.757-2.806 0-1.548 1.235-2.803 2.757-2.803zm13.08 0c1.522 0 2.755 1.256 2.755 2.804 0 1.55-1.233 2.806-2.756 2.806-1.52 0-2.754-1.256-2.754-2.806 0-1.548 1.234-2.803 2.754-2.803zM21.36.037s1.282-.234 4.129.489l-1.675 3.86c-.197-.064-1.362-.217-2.259-.215-2.251 0-3.346 2.174-3.346 3.356 0 1.333 1.375 2.153 3.292 3.247 2.752 1.47 4.499 3.35 4.499 6.084 0 4.772-3.612 7.41-8.173 7.752l-.136.008-15.548.036a2 2 0 0 1-.318 0l-.199.004.005-.019c-.08-.014-.158-.02-.238-.043-.965-.274-1.568-1.128-1.347-1.926l2.041-7.387c.23-.445.761-.892 2.047-.892h9.868l-1.358 3.48H5.216l-.77 2.623 13.25-.1.13-.013c1.648-.159 3.035-1.04 3.035-2.668 0-1.3-.973-2.154-3.053-3.248-2.418-1.332-4.702-3.11-4.702-6.117 0-4.279 3.837-8.143 8.254-8.311z"
+        ></path>
+    </svg>
+);

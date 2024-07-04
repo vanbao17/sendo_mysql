@@ -19,13 +19,20 @@ function CheckOut() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const [statePayment, setStatePayment] = useState(false);
+    const [transformCate, settransformCate] = useState([]);
     const [shop, setShop] = useState([]);
     const [product, setProduct] = useState([]);
     const [total, settotal] = useState(0);
     const [addressUser, setAddressUser] = useState([]);
+    const [trasnformMethod, setTrasnformMethod] = useState([]);
+    const [trasnformMethodOption, settrasnformMethodOption] = useState([]);
+    const [attributeVl, setattributeVl] = useState([]);
+    const [state, setstate] = useState(false);
+
     const user = JSON.parse(sessionStorage.getItem('user'));
     const secretKey = 'Phamvanbao_0123';
     const encryptedIdShop = searchParams.get('product');
+
     // Giải mã chuỗi
     const bytes = CryptoJS.AES.decrypt(encryptedIdShop, secretKey);
     const idShopString = bytes.toString(CryptoJS.enc.Utf8);
@@ -37,7 +44,24 @@ function CheckOut() {
     } catch (error) {
         console.error('Failed to parse decrypted data:', error);
     }
-    console.log(idShopArray);
+    useEffect(() => {
+        if (product.length !== 0) {
+            fetch(`https://sdvanbao17.id.vn/api/v1/getAttrVaulueProduct`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idProduct: product[product.length - 1].idProduct }),
+            })
+                .then((respone) => respone.json())
+                .then((data) => {
+                    setattributeVl(data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, []);
     useEffect(() => {
         fetch('https://sdvanbao17.id.vn/api/v1/inforShop/' + idShopArray[0].idShop)
             .then((rs) => rs.json())
@@ -47,27 +71,40 @@ function CheckOut() {
                     console.log(err);
                 }
             });
-        idShopArray.forEach((item) => {
-            fetch(`https://sdvanbao17.id.vn/api/v1/check-prods-select/${item.idProduct}`)
-                .then((rs) => rs.json())
-                .then((productsCart) => {
-                    fetch(`https://sdvanbao17.id.vn/api/v1/detail/${item.idProduct}`)
-                        .then((respone) => respone.json())
-                        .then((data) => setProduct([...product, { ...data[0], ...productsCart[0] }]))
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                });
-        });
 
-        fetch(`https://sdvanbao17.id.vn/api/v1/getAddressCustomer/` + user.idCustomers)
-            .then((respone) => respone.json())
-            .then((data) => {
-                setAddressUser(data);
-            })
-            .catch((error) => {
+        async function fetchData() {
+            try {
+                const promises = idShopArray.map(async (item) => {
+                    const productsCartResponse = await fetch(
+                        `https://sdvanbao17.id.vn/api/v1/check-prods-select/${item.idProduct}`,
+                    );
+                    const productsCart = await productsCartResponse.json();
+
+                    const dataResponse = await fetch(`https://sdvanbao17.id.vn/api/v1/detail/${item.idProduct}`);
+                    const data = await dataResponse.json();
+
+                    return { ...data[0], ...productsCart[0] };
+                });
+
+                const newData = await Promise.all(promises);
+                setProduct([...product, ...newData]);
+            } catch (error) {
                 console.log(error);
-            });
+            }
+            const getTransformCateResponse = await fetch(`https://sdvanbao17.id.vn/api/v1/getTransformCate`);
+            const getTransformCate = await getTransformCateResponse.json();
+            settransformCate(getTransformCate);
+            fetch(`https://sdvanbao17.id.vn/api/v1/getAddressCustomer/` + user.idCustomers)
+                .then((respone) => respone.json())
+                .then((data) => {
+                    setAddressUser(data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -84,7 +121,32 @@ function CheckOut() {
         } else {
             settotal(0);
         }
-    }, [product]);
+    }, []);
+    useEffect(() => {
+        if (transformCate.length != 0) {
+            transformCate.filter((cate) => {
+                const check = attributeVl.some((item) => item.attribute_value_id === cate.id);
+                if (check == true) {
+                    setTrasnformMethod(cate);
+                    const delivery_method_id = cate.id;
+                    fetch('https://sdvanbao17.id.vn/api/v1/getTransformOptions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ delivery_method_id }),
+                    })
+                        .then((rs) => rs.json())
+                        .then((dt) => {
+                            settrasnformMethodOption(dt);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            });
+        }
+    }, [transformCate]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -131,28 +193,20 @@ function CheckOut() {
                             <div className={cx('container_item')}>
                                 <ItemTranformMethod
                                     checked={true}
-                                    title={'Giao Tiêu chuẩn'}
-                                    image={'https://media3.scdn.vn/img3/2019/8_12/hrrOd1.png'}
-                                    desc={'Dự kiến thứ 2, 1/7'}
+                                    title={trasnformMethod.method_name}
+                                    image={trasnformMethod.image}
+                                    desc={trasnformMethod.description + ' ' + trasnformMethod.estimated_delivery_time}
                                     titleRight={
                                         <>
-                                            <span>26.000đ</span>
+                                            <span>{(trasnformMethod.percent * total).toLocaleString('vi-VN')}đ</span>
                                             <InforIcon width="16px" height="16px" className={cx('icon_infor')} />
                                         </>
                                     }
                                 />
                                 <div className={cx('list_chose_method')}>
-                                    <ItemTranformMethod
-                                        title={'Từ thứ 2 - thứ 6 (8-18h)'}
-                                        desc={'Phù hợp với địa chỉ văn phòng/cơ quan. '}
-                                    />
-                                    <ItemTranformMethod
-                                        checked={true}
-                                        title={'Cả tuần (trừ CN & ngày lễ)'}
-                                        desc={
-                                            'Phù hợp với địa chỉ nhà riêng, luôn có người nhận. Giao hàng từ 8:00 - 18:00'
-                                        }
-                                    />
+                                    {trasnformMethodOption.map((it) => {
+                                        return <ItemTranformMethod title={it.option_name} desc={it.description} />;
+                                    })}
                                 </div>
                             </div>
                         </ItemContainerCheckOut>

@@ -53,7 +53,11 @@ function TippyUpdate({ size = 38, color = 'hehe', data, colorItem, sizeItem, idP
                                 key={index}
                                 className={cx(
                                     'item',
-                                    sizeItem.attribute_value_id == item.attribute_value_id ? 'active' : '',
+                                    sizeItem !== undefined
+                                        ? sizeItem.attribute_value_id == item.attribute_value_id
+                                            ? 'active'
+                                            : ''
+                                        : '',
                                 )}
                                 onClick={() => {
                                     setactive(index);
@@ -77,7 +81,11 @@ function TippyUpdate({ size = 38, color = 'hehe', data, colorItem, sizeItem, idP
                                 key={index}
                                 className={cx(
                                     'item-img',
-                                    colorItem.attribute_value_id == item.attribute_value_id ? 'active' : '',
+                                    colorItem !== undefined
+                                        ? colorItem.attribute_value_id == item.attribute_value_id
+                                            ? 'active'
+                                            : ''
+                                        : '',
                                 )}
                                 onClick={() => {
                                     setactive1(index);
