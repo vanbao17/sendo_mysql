@@ -14,21 +14,18 @@ const newArray = proSale.splice(0, 9);
 function Home() {
     const { paramValue } = useParams();
     const [currentPage, setCurrentPage] = useState(0);
-    const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
+    const [dataProds, setdataProds] = useState([]);
     const { idShop, setidShop } = useContext(Context);
     const handleChange = ({ selected }) => {
         setCurrentPage(selected);
     };
+    console.log(paramValue);
     useEffect(() => {
         setidShop(paramValue);
         fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${paramValue}`)
             .then((respone) => respone.json())
             .then((data) => {
-                localStorage.setItem('dataProdsShop', JSON.stringify(data));
-            });
-        fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${paramValue}`)
-            .then((respone) => respone.json())
-            .then((data) => {
+                setdataProds(data);
                 localStorage.setItem('dataProdsShop', JSON.stringify(data));
             })
             .catch((error) => {
@@ -38,7 +35,7 @@ function Home() {
 
     const itemsPerPage = 24;
     const startindex = currentPage * itemsPerPage;
-    const sliceData = dataProds.length != 0 ? dataProds.slice(startindex, startindex + itemsPerPage) : [];
+    const sliceData = dataProds != undefined ? dataProds.slice(startindex, startindex + itemsPerPage) : [];
     return (
         <ShopPage>
             <div className={cx('newProd')}>

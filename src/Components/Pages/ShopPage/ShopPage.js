@@ -28,7 +28,6 @@ function ShopPage({ children }) {
                 console.log(err);
             });
     }, [idShop]);
-    console.log(shop);
     const shopCates = [
         {
             name: 'Trang chủ',

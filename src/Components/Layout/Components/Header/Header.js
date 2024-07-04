@@ -83,7 +83,8 @@ function Header({ nav }) {
         );
     }
     function HandleCart() {
-        if (Object.keys(user).length !== 0) {
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        if (user == null) {
             setdis(true);
         } else {
             navigate('/gio-hang', { state: { data: user } });
@@ -156,7 +157,12 @@ function Header({ nav }) {
                     </Link>
                     <Search></Search>
                     <div className={cx('action-user')}>
-                        <div className={cx('cart-icon')} onClick={HandleCart}>
+                        <div
+                            className={cx('cart-icon')}
+                            onClick={() => {
+                                HandleCart();
+                            }}
+                        >
                             <FontAwesomeIcon
                                 className={cx('cart')}
                                 icon={faCartShopping}
