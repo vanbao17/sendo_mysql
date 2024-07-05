@@ -14,6 +14,8 @@ import OrderSuccess from '../Pages/OrderSuccess/OrderSuccess';
 import ShopProds from '../Pages/ShopPage/ShopProds/ShopProds';
 import ShopCollection from '../Pages/ShopPage/ShopCollection/ShopCollection';
 import InforS from '../Pages/ShopPage/InforS/InforS';
+import Order from '../Pages/Order/Order';
+import OrderDetail from '../Pages/OrderDetail/OrderDetail';
 const publicRoutes = [
     {
         path: routes.home,
@@ -102,6 +104,16 @@ const publicRoutes = [
     {
         path: routes.thanhtoanthanhcong,
         component: OrderSuccess,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.donhang,
+        component: Order,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.chitietdonhang,
+        component: OrderDetail,
         layout: HeaderNoneCate,
     },
 ];

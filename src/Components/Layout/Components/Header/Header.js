@@ -25,21 +25,27 @@ function Header({ nav }) {
     const OptionUser = [
         {
             label: 'Thông tin tài khoản',
+            path: '/thong-tin-tai-khoan',
         },
         {
             label: 'Ưu đãi của tôi',
+            path: '/thong-tin-tai-khoan',
         },
         {
             label: 'Sản phẩm yêu thích',
+            path: '/thong-tin-tai-khoan',
         },
         {
             label: 'Shop yêu thích',
+            path: '/thong-tin-tai-khoan',
         },
         {
             label: 'Theo dõi đơn hàng',
+            path: '/don-hang',
         },
         {
             label: 'Đơn hàng dịch vụ tiện ích',
+            path: '/thong-tin-tai-khoan',
         },
     ];
     const navigate = useNavigate();
@@ -66,7 +72,7 @@ function Header({ nav }) {
             <div className={cx('options')}>
                 {OptionUser.map((item, index) => {
                     return (
-                        <a key={index} className={cx('item')} href="#">
+                        <a key={index} className={cx('item')} href={item.path}>
                             {item.label}
                         </a>
                     );

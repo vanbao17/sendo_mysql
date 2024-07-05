@@ -16,7 +16,9 @@ const routes = {
     shopBoSuuTap: `/shop/:paramValue/bo-suu-tap`,
     shopGiaTot: `/shop/:paramValue/gia-tot-hom-nay`,
     shopThongTin: `/shop/:paramValue/thong-tin-shop`,
-    findProd: `/:paramValue`,
+    //findProd: `/:paramValue`,
+    donhang: '/don-hang',
+    chitietdonhang: '/chi-tiet-don-hang/:paramValue',
     shopPageProduct: `/shop/:paramValue/san-pham`,
     thanhtoanthanhcong: '/thanh-toan-thanh-cong',
 };

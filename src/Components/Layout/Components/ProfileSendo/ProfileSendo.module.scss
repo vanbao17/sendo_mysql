@@ -1,0 +1,20 @@
+.wrapper {
+    width: 100%;
+}
+.container {
+    width: 85%;
+    margin: 0px auto;
+}
+.container_content {
+    width: 100%;
+    background-color: #fafafa;
+    .content {
+        width: 85%;
+        margin: 0px auto;
+        display: flex;
+    }
+}
+.address_nav {
+    padding: 12px 0px;
+    font-size: 14px;
+}
