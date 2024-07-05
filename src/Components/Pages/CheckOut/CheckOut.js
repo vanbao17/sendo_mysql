@@ -191,6 +191,7 @@ function CheckOut() {
         await product.forEach((pd) => {
             order_item.push({ idProduct: pd.idProduct, quantity: pd.quanlityCart, price: pd.priceSale });
         });
+        const idShop = product[0].idShop;
         fetch('https://sdvanbao17.id.vn/api/v1/addOderProduct', {
             method: 'POST',
             headers: {
@@ -204,6 +205,7 @@ function CheckOut() {
                 address_id,
                 transform_method_id,
                 transform_option_id,
+                idShop,
                 order_item,
             }),
         })

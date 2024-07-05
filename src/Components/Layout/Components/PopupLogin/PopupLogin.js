@@ -144,7 +144,7 @@ function PopupLogin({ className, style }) {
                                     <>
                                         {whatnext == true ? (
                                             <input
-                                                type="tel"
+                                                type="password"
                                                 placeholder="Nhập mật khẩu"
                                                 onChange={(e) => {
                                                     setpassword(e.target.value);
