@@ -1,9 +1,29 @@
 import classNames from 'classnames/bind';
 import styles from './Order.module.scss';
 import { Choxacnhan, Dagiaohang, Dangvanchuyen, Daxacnhan, PhoneIcon, ShopIcon } from '../../IconSvg';
+import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
 function OrderItem({ data }) {
     const user = JSON.parse(sessionStorage.getItem('user'));
+    const [orderItem, setOrderItem] = useState([]);
+    useEffect(() => {
+        const order_id = data.id;
+        fetch('https://sdvanbao17.id.vn/api/v1/getOrderIdOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ order_id }),
+        })
+            .then((rs) => rs.json())
+            .then((dt) => {
+                setOrderItem(dt);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [data]);
+    console.log(orderItem);
     const formatDate = (isoString) => {
         const date = new Date(isoString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -28,6 +48,7 @@ function OrderItem({ data }) {
 
         return `${newDay}/${newMonth}/${newYear}`;
     };
+    console.log(orderItem);
     return (
         <div className={cx('list_order')}>
             <div className={cx('infor_order')}>
@@ -36,11 +57,11 @@ function OrderItem({ data }) {
                         <span>Mã đơn hàng: </span>
                         <a href={`/chi-tiet-don-hang/${data.order_id}`} className={cx('blue_text')}>
                             {' '}
-                            #{data.order_id} | Chi tiết
+                            #{data != undefined ? data.id : ''} | Chi tiết
                         </a>
                     </div>
                     <div>
-                        <span>Đặt ngày: {formatDate(data.created_at)}</span>
+                        <span>Đặt ngày: {orderItem.length > 0 ? formatDate(orderItem[0].created_at) : ''}</span>
                     </div>
                 </div>
                 <div className={cx('infor_customer')}>
@@ -49,28 +70,38 @@ function OrderItem({ data }) {
                 </div>
                 <div className={cx('price_product')}>
                     <span>Tổng tiền:</span>
-                    <span>{(data.total_price * 1000).toLocaleString('vi-VN')}đ</span>
+                    <span>{(data.total_price * 1000000).toLocaleString('vi-VN')}đ</span>
                 </div>
             </div>
             <div className={cx('state_order')}>
                 <div className={cx('state_left')}>
-                    <img style={{ objectFit: 'cover' }} src={data.imageProduct}></img>
-                    <div className={cx('infor_product')}>
-                        <span className={cx('nameProduct')}>{data.nameProduct}</span>
-                        <span className={cx('shop')}>
-                            Shop:
-                            <a href="#" className={cx('blue_text')}>
-                                {data.tenshop}
-                            </a>
-                        </span>
-                        <span className={cx('state')}>
-                            {data.state == 1
-                                ? 'Đang chờ shop xác nhận'
-                                : data.state == 5
-                                ? 'Đã hủy - Không muốn mua nữa'
-                                : 'Ngày giao dự kiên - ' + addDays(formatDate(data.created_at), 6)}
-                        </span>
-                    </div>
+                    {orderItem != undefined ? (
+                        orderItem.map((it) => {
+                            return (
+                                <div className={cx('item_product')}>
+                                    <img style={{ objectFit: 'cover' }} src={it.imageProduct}></img>
+                                    <div className={cx('infor_product')}>
+                                        <span className={cx('nameProduct')}>{it.nameProduct}</span>
+                                        <span className={cx('shop')}>
+                                            Shop:
+                                            <a href="#" className={cx('blue_text')}>
+                                                {it.tenshop}
+                                            </a>
+                                        </span>
+                                        <span className={cx('state')}>
+                                            {it.state == 1
+                                                ? 'Đang chờ shop xác nhận'
+                                                : it.state == 5
+                                                ? 'Đã hủy - Không muốn mua nữa'
+                                                : 'Ngày giao dự kiên - ' + addDays(formatDate(it.created_at), 6)}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <></>
+                    )}
                 </div>
                 <div className={cx('state_right')}>
                     <div className={cx('item_state')}>
@@ -99,17 +130,17 @@ function OrderItem({ data }) {
             </div>
             <div className={cx('action_order')}>
                 <div className={cx('infor_shop')}>
-                    <a href="#" className={cx('href_shop')}>
+                    <a href={orderItem.length > 0 ? `/shop/${orderItem[0].idShop}` : '#'} className={cx('href_shop')}>
                         <ShopIcon width="20px" />
                         <span>Vào shop</span>
                     </a>
                     <a href="#" className={cx('href_phone')}>
                         <PhoneIcon width="20px" />
-                        <span>{formatPhoneNumber(data.phone)}</span>
+                        <span>{orderItem.length > 0 ? formatPhoneNumber(orderItem[0].phone) : ''}</span>
                     </a>
                 </div>
                 <div className={cx('follow_order')}>
-                    <a href={`/chi-tiet-don-hang/${data.order_id}`}>
+                    <a href={`/chi-tiet-don-hang/${orderItem.length > 0 ? orderItem[0].order_id : ''}`}>
                         <button>
                             <span>Theo dõi đơn hàng</span>
                         </button>

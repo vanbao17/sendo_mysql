@@ -10,6 +10,8 @@ function Order() {
     const [selectedOption, setSelectedOption] = useState('');
     const [active, setactive] = useState(1);
     const [orders, seOrders] = useState([]);
+    const [addressCustomer, setAddressCustomer] = useState([]);
+    const [productOrderItem, setProductOrderItem] = useState([]);
     const user = JSON.parse(sessionStorage.getItem('user'));
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
@@ -55,6 +57,28 @@ function Order() {
                 console.log(err);
             });
     }, [active]);
+    useEffect(() => {
+        if (orders.length > 0) {
+            const idCustomer = orders[0].idCustomers;
+            fetch('https://sdvanbao17.id.vn/api/v1/getAddressCustomer/' + idCustomer)
+                .then((rs) => rs.json())
+                .then((dt) => {
+                    setAddressCustomer(dt[0]);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            // fetch('https://sdvanbao17.id.vn/api/v1/inforShop/' + orders[0].idShop)
+            //     .then((rs) => rs.json())
+            //     .then((dt) => {
+            //         setShop(dt[0]);
+            //     })
+            //     .catch((err) => {
+            //         console.log(err);
+            //     });
+        }
+    }, [orders]);
+    console.log(addressCustomer);
     return (
         <ProfileSendo>
             <div className={cx('wrapper')}>
@@ -92,7 +116,8 @@ function Order() {
                         <hr></hr>
                         {orders.map((item, index) => {
                             if (item.state == active) {
-                                return <OrderItem data={item} key={index} />;
+                                return <OrderItem Order={orders} data={item} key={index} />;
+                                return <span>123</span>;
                             }
                         })}
                     </div>

@@ -57,7 +57,6 @@
     }
     .state_left {
         width: 50%;
-        display: flex;
         margin-right: 50px;
         gap: 10px;
         padding: 12px;
@@ -157,4 +156,11 @@
 }
 .blue_text {
     color: #0066ff !important;
+}
+.item_product {
+    width: 100%;
+    display: flex;
+    margin-right: 50px;
+    gap: 10px;
+    padding: 12px;
 }

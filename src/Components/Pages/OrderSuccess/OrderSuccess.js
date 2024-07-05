@@ -88,7 +88,7 @@ function OrderSuccess() {
                         <a href="/">
                             <span>Tiếp tục mua sắm</span>
                         </a>
-                        <a href="/">
+                        <a href="/don-hang">
                             <span>Xem chi tiết đơn hàng</span>
                         </a>
                     </div>
