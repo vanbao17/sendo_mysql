@@ -139,7 +139,6 @@ function PopupLogin({ className, style }) {
             }
         }
     };
-    console.log(inforuser);
     const ValidateOtp = () => {
         if (otp === null) return;
 
