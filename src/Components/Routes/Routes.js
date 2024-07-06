@@ -16,6 +16,7 @@ import ShopCollection from '../Pages/ShopPage/ShopCollection/ShopCollection';
 import InforS from '../Pages/ShopPage/InforS/InforS';
 import Order from '../Pages/Order/Order';
 import OrderDetail from '../Pages/OrderDetail/OrderDetail';
+import AccountUser from '../Pages/AccountUser/AccountUser';
 const publicRoutes = [
     {
         path: routes.home,
@@ -114,6 +115,11 @@ const publicRoutes = [
     {
         path: routes.chitietdonhang,
         component: OrderDetail,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.taikhoan,
+        component: AccountUser,
         layout: HeaderNoneCate,
     },
 ];

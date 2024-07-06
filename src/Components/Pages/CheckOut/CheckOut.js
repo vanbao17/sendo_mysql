@@ -243,7 +243,7 @@ function CheckOut() {
                         >
                             <div className={cx('container_item')}>
                                 <div className={cx('infor')}>
-                                    <span>{user.nameUser}</span>|<p>{user.phoneNumber}</p>
+                                    <span>{user.nameCustomers}</span>|<p>{user.phoneNumber}</p>
                                 </div>
                                 <div className={cx('address')}>
                                     <span> {addressUser.loaidiachi == 0 ? 'Nhà riêng' : 'Cơ quan'}</span>

@@ -72,13 +72,13 @@ function Cart() {
                 return response.json();
             })
             .then((data) => {
+                const arr = totalPayment.map((item) => item.data);
+                const secretKey = 'Phamvanbao_0123';
+                const idShopString = JSON.stringify(arr);
+                const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
                 if (data.length == 0) {
-                    nav('/them-dia-chi');
+                    window.location.href = `/them-dia-chi?product=${encodeURIComponent(encryptedIdShop)}`;
                 } else {
-                    const arr = totalPayment.map((item) => item.data);
-                    const secretKey = 'Phamvanbao_0123';
-                    const idShopString = JSON.stringify(arr);
-                    const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
                     window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
                 }
             })

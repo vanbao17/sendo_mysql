@@ -55,7 +55,7 @@ function OrderItem({ data }) {
                 <div className={cx('infor_product')}>
                     <div>
                         <span>Mã đơn hàng: </span>
-                        <a href={`/chi-tiet-don-hang/${data.order_id}`} className={cx('blue_text')}>
+                        <a href={`/chi-tiet-don-hang/${data != undefined ? data.id : ''}`} className={cx('blue_text')}>
                             {' '}
                             #{data != undefined ? data.id : ''} | Chi tiết
                         </a>

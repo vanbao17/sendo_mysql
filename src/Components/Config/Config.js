@@ -4,6 +4,7 @@ const routes = {
     timkiem: '/tim-kiem',
     themdiachi: '/them-dia-chi',
     thanhtoan: '/thanh-toan',
+    taikhoan: '/tai-khoan',
     maymoc: '/maymoc',
     tuixach: '/tuixach',
     phukien: '/phukien',

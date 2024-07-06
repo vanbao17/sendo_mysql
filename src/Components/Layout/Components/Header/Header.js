@@ -25,7 +25,7 @@ function Header({ nav }) {
     const OptionUser = [
         {
             label: 'Thông tin tài khoản',
-            path: '/thong-tin-tai-khoan',
+            path: '/tai-khoan',
         },
         {
             label: 'Ưu đãi của tôi',
@@ -203,7 +203,9 @@ function Header({ nav }) {
                                             }
                                         />
                                     </div>
-                                    <span>{userSession.nameUser != null ? userSession.nameUser : 'Chưa có tên'}</span>
+                                    <span>
+                                        {userSession.nameCustomers != null ? userSession.nameCustomers : 'Chưa có tên'}
+                                    </span>
                                 </div>
                             </TippyHeadless>
                         )}

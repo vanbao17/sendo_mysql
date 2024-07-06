@@ -1,7 +1,8 @@
 import classNames from 'classnames/bind';
 import styles from './AddAddressUser.module.scss';
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
+import { useLocation, useNavigate } from 'react-router-dom';
 const cx = classNames.bind(styles);
 function AddAddressUser() {
     const [idtinh, setidtinh] = useState(null);
@@ -13,7 +14,22 @@ function AddAddressUser() {
     const [type, settype] = useState();
     const refAddress = useRef();
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const nav = useNavigate();
+    const secretKey = 'Phamvanbao_0123';
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const encryptedIdShop = searchParams.get('product');
+
+    // Giải mã chuỗi
+    const bytes = CryptoJS.AES.decrypt(encryptedIdShop, secretKey);
+    const idShopString = bytes.toString(CryptoJS.enc.Utf8);
+
+    // Kiểm tra nếu giải mã thành công
+    let idShopArray = [];
+    try {
+        idShopArray = JSON.parse(idShopString);
+    } catch (error) {
+        console.error('Failed to parse decrypted data:', error);
+    }
     useEffect(() => {
         fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
             .then((rs) => rs.json())
@@ -44,9 +60,9 @@ function AddAddressUser() {
         }
     }, [idquan]);
     const handleAddAddress = () => {
-        const tt = idtinh;
-        const qh = idquan;
-        const px = idxa;
+        const tt = tinh.filter((t) => t.id == idtinh)[0].name;
+        const qh = huyen.filter((t) => t.id == idquan)[0].name;
+        const px = xa.filter((t) => t.id == idxa)[0].name;
         const loaidiachi = type;
         const address = refAddress.current.value;
         const idCustomers = user.idCustomers;
@@ -59,7 +75,9 @@ function AddAddressUser() {
         })
             .then((rs) => {
                 if (rs.status == 200) {
-                    nav('/thanh-toan');
+                    const test = JSON.stringify(idShopArray);
+                    const a = CryptoJS.AES.encrypt(test, secretKey).toString();
+                    window.location.href = `/thanh-toan?product=${encodeURIComponent(a)}`;
                 }
             })
             .catch((err) => {
