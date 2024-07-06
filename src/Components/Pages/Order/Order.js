@@ -78,7 +78,6 @@ function Order() {
             //     });
         }
     }, [orders]);
-    console.log(addressCustomer);
     return (
         <ProfileSendo>
             <div className={cx('wrapper')}>

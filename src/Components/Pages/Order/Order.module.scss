@@ -146,6 +146,11 @@
         font-size: 14px;
         color: black;
     }
+    .follow_order {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
     .follow_order a button {
         padding: 8px 12px;
         background-color: #e5101d;

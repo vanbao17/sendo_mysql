@@ -23,7 +23,6 @@ function OrderItem({ data }) {
                 console.log(err);
             });
     }, [data]);
-    console.log(orderItem);
     const formatDate = (isoString) => {
         const date = new Date(isoString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -48,7 +47,24 @@ function OrderItem({ data }) {
 
         return `${newDay}/${newMonth}/${newYear}`;
     };
-    console.log(orderItem);
+    const handleDeleteOrder = () => {
+        const order_id = data.id;
+        fetch('https://sdvanbao17.id.vn/api/v1/deleteOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ order_id }),
+        })
+            .then((rs) => {
+                if (rs.status == 200) {
+                    window.location.href = '/don-hang';
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <div className={cx('list_order')}>
             <div className={cx('infor_order')}>
@@ -140,6 +156,16 @@ function OrderItem({ data }) {
                     </a>
                 </div>
                 <div className={cx('follow_order')}>
+                    {data.state == 1 ? (
+                        <a onClick={handleDeleteOrder}>
+                            <button>
+                                <span>Hủy</span>
+                            </button>
+                        </a>
+                    ) : (
+                        <></>
+                    )}
+
                     <a href={`/chi-tiet-don-hang/${orderItem.length > 0 ? orderItem[0].order_id : ''}`}>
                         <button>
                             <span>Theo dõi đơn hàng</span>

@@ -5,7 +5,7 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 const cx = classNames.bind(styles);
 function ItemNavProfile({ title, list_nav }) {
-    const [state, setstate] = useState(true);
+    const [state, setstate] = useState(false);
     return (
         <div className={cx('nav')}>
             <div
