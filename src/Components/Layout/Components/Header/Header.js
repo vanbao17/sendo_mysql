@@ -195,9 +195,15 @@ function Header({ nav }) {
                             >
                                 <div className={cx('inf-user')}>
                                     <div className={cx('image-user')}>
-                                        <img src={userSession.imageUser} />
+                                        <img
+                                            src={
+                                                userSession.imageUser != null
+                                                    ? userSession.imageUser
+                                                    : 'https://s3v2.interdata.vn:9000/s3-586-15343-storage/dienthoaigiakho/wp-content/uploads/2024/01/16101022/trend-avatar-vo-danh-1.jpg'
+                                            }
+                                        />
                                     </div>
-                                    <span>{userSession.nameUser}</span>
+                                    <span>{userSession.nameUser != null ? userSession.nameUser : 'Chưa có tên'}</span>
                                 </div>
                             </TippyHeadless>
                         )}

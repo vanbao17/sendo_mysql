@@ -7,7 +7,7 @@ import { Context } from '../../../store/Context';
 import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { gapi } from 'gapi-script';
 import jwt_decode from 'jwt-decode';
-
+import firebase from '../../../Config/firebase';
 const cx = classNames.bind(styles);
 const id = '927153163763-liqf9jmc15drk1dfep7mrpn78mk9hg4e.apps.googleusercontent.com';
 function PopupLogin({ className, style }) {
@@ -44,10 +44,47 @@ function PopupLogin({ className, style }) {
             buttonref.current.style.cursor = 'not-allowed';
         }
     }
+    //
+    const setupRecaptcha = () => {
+        window.recaptchaVerfier = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+            size: 'invisible',
+            defaultCountry: 'VN',
+        });
+    };
+    useEffect(() => {
+        setupRecaptcha();
+    }, []);
+    const handleSendOTP = async () => {
+        const phone_data = '+84' + phoneNumber.slice(1);
+        const appVerify = window.recaptchaVerfier;
+        await firebase
+            .auth()
+            .signInWithPhoneNumber(phone_data, appVerify)
+            .then((confirmationResult) => {
+                window.confirmationResult = confirmationResult;
+                alert('Đã gửi OTP');
+            })
+            .catch((err) => {
+                console.log(err);
+                alert('Gửi OTP thất bại');
+            });
+    };
+    const handleVerifyOTP = () => {
+        window.confirmationResult
+            .confirm(otp)
+            .then(() => {
+                setStep('VERIFY_SUCCESS');
+                setwhatnext(true);
+            })
+            .catch((err) => {
+                console.log(err);
+                alert('Xác thực thất bại');
+            });
+    };
+    //
     const handleButtonLogin = () => {
         if (whatnext == null) {
             const phone_data = '+84' + phoneNumber.slice(1);
-            console.log(phone_data);
             const options = {
                 method: 'POST',
                 headers: {
@@ -63,6 +100,7 @@ function PopupLogin({ className, style }) {
                         setinforuser(data[0]);
                     } else {
                         setwhatnext(false);
+                        handleSendOTP();
                     }
                 })
                 .catch((err) => {
@@ -70,14 +108,38 @@ function PopupLogin({ className, style }) {
                 });
         } else {
             if (whatnext == true) {
-                if (password == inforuser.password) {
-                    setdis(!dis);
+                if (inforuser != null) {
+                    if (password == inforuser.password) {
+                        setdis(!dis);
+                    } else {
+                        alert('Sai mật khẩu rồi fen');
+                    }
+                } else {
+                    const phone = phoneNumber;
+                    fetch('https://sdvanbao17.id.vn/api/v1/signIn', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ phone, password }),
+                    })
+                        .then((rs) => rs.json())
+                        .then((dt) => {
+                            setinforuser(dt[0]);
+                            setdis(!dis);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
                 }
             } else {
-                ValidateOtp();
+                // handleSendOTP();
+                // ValidateOtp();
+                handleVerifyOTP();
             }
         }
     };
+    console.log(inforuser);
     const ValidateOtp = () => {
         if (otp === null) return;
 
@@ -115,6 +177,7 @@ function PopupLogin({ className, style }) {
                     setdis(false);
                 }}
             ></div>
+            <div id="sign-in-button"></div>
             <div className={cx('container')}>
                 <div className={cx('form-login')}>
                     <div className={cx('close')}>
@@ -146,6 +209,7 @@ function PopupLogin({ className, style }) {
                                             <input
                                                 type="password"
                                                 placeholder="Nhập mật khẩu"
+                                                value={password}
                                                 onChange={(e) => {
                                                     setpassword(e.target.value);
                                                 }}
