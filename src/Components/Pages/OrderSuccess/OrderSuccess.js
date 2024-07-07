@@ -3,6 +3,7 @@ import styles from './OrderSuccess.module.scss';
 import CryptoJS from 'crypto-js';
 import { json, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { ig } from '../../../Assets/images';
 const cx = classNames.bind(styles);
 function OrderSuccess() {
     const location = useLocation();
@@ -60,7 +61,9 @@ function OrderSuccess() {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
-                <div className={cx('container_left')}></div>
+                <div className={cx('container_left')}>
+                    <img className={cx('icon_success')} src={ig.successOrder}></img>
+                </div>
                 <div className={cx('container_right')}>
                     <span className={cx('title')}>Đặt hàng thành công</span>
                     <span className={cx('thank')}>Cảm ơn bạn đã mua hàng tại sendo</span>
