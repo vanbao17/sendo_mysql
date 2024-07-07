@@ -6,6 +6,7 @@ const cx = classNames.bind(styles);
 function OrderItem({ data }) {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const [orderItem, setOrderItem] = useState([]);
+    const [orderItemFilter, setorderItemFilter] = useState([]);
     useEffect(() => {
         const order_id = data.id;
         fetch('https://sdvanbao17.id.vn/api/v1/getOrderIdOrder', {
@@ -23,6 +24,12 @@ function OrderItem({ data }) {
                 console.log(err);
             });
     }, [data]);
+    console.log(orderItem);
+    useEffect(() => {
+        const filterData = orderItem.filter((odi) => odi.idCustomers == user.idCustomers);
+        setorderItemFilter(filterData);
+    }, [orderItem]);
+
     const formatDate = (isoString) => {
         const date = new Date(isoString);
         const day = String(date.getDate()).padStart(2, '0');
@@ -91,8 +98,8 @@ function OrderItem({ data }) {
             </div>
             <div className={cx('state_order')}>
                 <div className={cx('state_left')}>
-                    {orderItem != undefined ? (
-                        orderItem.map((it) => {
+                    {orderItemFilter != undefined ? (
+                        orderItemFilter.map((it) => {
                             return (
                                 <div className={cx('item_product')}>
                                     <img style={{ objectFit: 'cover' }} src={it.imageProduct}></img>
