@@ -4,6 +4,7 @@ import styles from './SideBarProfileUser.module.scss';
 import ItemNavProfile from './ItemNavProfile';
 const cx = classNames.bind(styles);
 function SideBarProfileUser() {
+    const user = JSON.parse(sessionStorage.getItem('user'));
     const list_nav = [
         {
             title: 'Tài khoản',
@@ -36,8 +37,15 @@ function SideBarProfileUser() {
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
                 <div className={cx('thumb_user')}>
-                    <img src="https://media3.scdn.vn/img4/2024/06_20/zgTqeGo7jMnn4iWBNdoz.jpg"></img>
-                    <strong>Phạm Văn Bảo</strong>
+                    <img
+                        src={
+                            user.imageUser != null
+                                ? user.imageUser
+                                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpwxCN33LtdMLbWdhafc4HxabqpaU0qVbDxQ&s'
+                        }
+                    ></img>
+
+                    <strong>{user.nameCustomers != null ? user.nameCustomers : 'Chưa có tên'}</strong>
                 </div>
                 <div className={cx('navigates')}>
                     {list_nav.map((nav, index) => {

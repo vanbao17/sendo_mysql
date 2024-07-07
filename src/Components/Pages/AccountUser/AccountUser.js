@@ -117,7 +117,16 @@ function AccountUser() {
                     <div className={cx('container_infor')}>
                         <div className={cx('thumb_user')}>
                             <div className={cx('thumb')}>
-                                <img src={preview != null ? preview : us.imageUser}></img>
+                                {/* <img src={preview != null ? preview : us.imageUser}></img> */}
+                                <img
+                                    src={
+                                        us.imageUser != null
+                                            ? preview != null
+                                                ? preview
+                                                : us.imageUser
+                                            : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpwxCN33LtdMLbWdhafc4HxabqpaU0qVbDxQ&s'
+                                    }
+                                ></img>
                             </div>
                             <button onClick={handleButtonClick}>Upload File</button>
                             <input

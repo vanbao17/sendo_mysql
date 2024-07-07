@@ -24,7 +24,6 @@ function OrderItem({ data }) {
                 console.log(err);
             });
     }, [data]);
-    console.log(orderItem);
     useEffect(() => {
         const filterData = orderItem.filter((odi) => odi.idCustomers == user.idCustomers);
         setorderItemFilter(filterData);
