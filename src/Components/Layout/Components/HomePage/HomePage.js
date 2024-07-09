@@ -6,6 +6,7 @@ import Banner from '../Banner/Banner';
 import ContainerIntro from '../../../ContainerIntro/ContainerIntro';
 import Slide from '../Slides/Slide';
 import { proSale } from '../../../../Assets/images/sale';
+import { dataFlashSale } from '../../../../DataStolen';
 import { cateExtention } from '../../../../Assets/images/extentions/extention';
 import { genuine } from '../../../../Assets/images/Genuine/Genuine';
 import Products from '../../../Products/Products';
@@ -47,7 +48,7 @@ function HomePage() {
             <Catetorys data={home.catetorys} mini />
             <Banner img={home.banner} />
             <ContainerIntro>
-                <Slide data={proSale} ovr={7} size={144} prod={true} />
+                <Slide data={dataFlashSale} ovr={7} size={144} prod={true} />
             </ContainerIntro>
             <ContainerIntro title="Thương hiệu chính hãng" icon={important.tickxanh}>
                 <Banner img={important.bannerGenuine} />

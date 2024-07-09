@@ -26,7 +26,11 @@ function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd
                             </div>
                             {data.nameProduct && <div className={cx('name')}>{data.nameProduct}</div>}
                             <div className={cx('price')}>
-                                {!data.nameProduct && <h3>{data.priceDefault}</h3>}
+                                {!data.nameProduct && (
+                                    <h3 style={{ marginTop: '10px' }}>
+                                        {data.priceSale != undefined ? data.priceSale.toLocaleString('vi-VN') : ''}đ
+                                    </h3>
+                                )}
                                 {data.nameProduct && (
                                     <h3>
                                         {data.priceSale != undefined ? data.priceSale.toLocaleString('vi-VN') : ''}đ
