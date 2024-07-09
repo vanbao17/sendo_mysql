@@ -49,7 +49,7 @@ function Search() {
                 render={renderListCate}
             >
                 <a className={cx('listcate')}>
-                    <Link to="/sitemap">
+                    <Link to="/site-map">
                         <ListCate width="24px" height="24px "></ListCate>
                     </Link>
                 </a>

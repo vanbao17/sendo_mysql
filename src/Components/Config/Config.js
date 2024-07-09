@@ -11,7 +11,7 @@ const routes = {
     dodung: '/dodung',
     cart: '/gio-hang',
     detail: '/detail/:paramValue/:idProduct',
-    sitemap: '/sitemap',
+    sitemap: '/site-map',
     shopPage: `/shop/:paramValue`,
     shopSanpham: `/shop/:paramValue/san-pham`,
     shopBoSuuTap: `/shop/:paramValue/bo-suu-tap`,

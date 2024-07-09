@@ -15,6 +15,7 @@ import ShopProds from '../Pages/ShopPage/ShopProds/ShopProds';
 import ShopCollection from '../Pages/ShopPage/ShopCollection/ShopCollection';
 import InforS from '../Pages/ShopPage/InforS/InforS';
 import Order from '../Pages/Order/Order';
+import Sitemap from '../Pages/Sitemap/Sitemap';
 import OrderDetail from '../Pages/OrderDetail/OrderDetail';
 import AccountUser from '../Pages/AccountUser/AccountUser';
 const publicRoutes = [
@@ -120,6 +121,11 @@ const publicRoutes = [
     {
         path: routes.taikhoan,
         component: AccountUser,
+        layout: HeaderNoneCate,
+    },
+    {
+        path: routes.sitemap,
+        component: Sitemap,
         layout: HeaderNoneCate,
     },
 ];
