@@ -46,13 +46,12 @@ function FindProduct() {
                 })
                 .then(async (data) => {
                     if (data !== undefined) {
-                        const filterdata = await data.filter((prod) =>
-                            prod.nameProduct
-                                .toLowerCase()
-                                .trim()
-                                .split(' ')
-                                .includes(searchTerm.toLowerCase().trim().normalize('NFC')),
-                        );
+                        const filterdata = await data.filter((prod) => {
+                            const product_name = prod.nameProduct.toLowerCase().trim().normalize('NFC').split(' ');
+                            const search = searchTerm.toLowerCase().trim().normalize('NFC');
+                            console.log(product_name[0].length, search.length);
+                            return product_name.includes(search);
+                        });
                         setprods(filterdata);
                     }
                 })
