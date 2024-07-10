@@ -23,7 +23,6 @@ function ItemFilter({ attributeId, title, attribute }) {
             });
     }, [attributeId]);
     const sliceData = dataItemFilters.slice(0, indexSliceData);
-
     return (
         <div className={cx('wrapperItem')}>
             <div className={cx('item')}>
@@ -34,46 +33,46 @@ function ItemFilter({ attributeId, title, attribute }) {
             </div>
             <hr></hr>
 
-            {dropDownState == true && attribute == 'checkBox' ? (
-                <>
-                    {sliceData.map((item, index) => {
-                        return (
-                            <div className={cx('containerCheckbox')}>
-                                <div className={cx('checkBox')}>
-                                    <div className={cx('filter1')}>
-                                        <div className={cx('titleFilter')}>
-                                            <input type="checkbox" />
-                                            <span>{item.value}</span>
-                                        </div>
+            {/* {dropDownState == true && attribute == 'checkBox' ? ( */}
+            <>
+                {sliceData.map((item, index) => {
+                    return (
+                        <div className={cx('containerCheckbox')}>
+                            <div className={cx('checkBox')}>
+                                <div className={cx('filter1')}>
+                                    <div className={cx('titleFilter')}>
+                                        <input type="checkbox" />
+                                        <span>{item.value}</span>
                                     </div>
                                 </div>
                             </div>
-                        );
-                    })}
-                    {dataItemFilters.length >= 5 ? (
-                        <button
-                            className={cx('seeMore')}
-                            onClick={() => {
-                                setstateButton(!stateButton);
-                                if (stateButton == false) {
-                                    setindexSliceData(dataItemFilters.length);
-                                } else {
-                                    setindexSliceData(5);
-                                }
-                            }}
-                        >
-                            <span>
-                                <FontAwesomeIcon icon={faAdd} />
-                                Xem thêm
-                            </span>
-                        </button>
-                    ) : (
-                        <></>
-                    )}
-                </>
-            ) : (
+                        </div>
+                    );
+                })}
+                {dataItemFilters.length >= 5 ? (
+                    <button
+                        className={cx('seeMore')}
+                        onClick={() => {
+                            setstateButton(!stateButton);
+                            if (stateButton == false) {
+                                setindexSliceData(dataItemFilters.length);
+                            } else {
+                                setindexSliceData(5);
+                            }
+                        }}
+                    >
+                        <span>
+                            <FontAwesomeIcon icon={faAdd} />
+                            Xem thêm
+                        </span>
+                    </button>
+                ) : (
+                    <></>
+                )}
+            </>
+            {/* ) : (
                 <></>
-            )}
+            )} */}
             {dropDownState == true && attribute == 'inputFilter' ? (
                 <div className={cx('containerInput')}>
                     <form className={cx('input_Form_Price')}>

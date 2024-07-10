@@ -6,12 +6,14 @@ import { faAdd, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dropdown from './Dropdown';
 const cx = classNames.bind(styles);
-function ListItemFilter({ madm1 }) {
+function ListItemFilter({ madm1 = null }) {
     const [dataFilters, setdataFilters] = useState([]);
     const [dropDownState, setdropDownState] = useState(true);
     const [filter1State, setfilter1State] = useState(true);
     const [filter2State, setfilter2State] = useState(false);
+    const [dm2, setdm2] = useState([]);
     const [dm1, setdm1] = useState([]);
+    const [attrs, setAttrs] = useState([]);
     // useEffect(()=>{
     //     fetch('')
     // },[attributeId])
@@ -31,21 +33,43 @@ function ListItemFilter({ madm1 }) {
             .catch((err) => {
                 if (err) throw err;
             });
+        fetch('https://sdvanbao17.id.vn/api/v1/danhmuc2')
+            .then((res) => res.json())
+            .then((data) => setdm2(data))
+            .catch((rejected) => {
+                console.log(rejected);
+            });
+        fetch(`https://sdvanbao17.id.vn/api/v1/getAllAttribute`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data !== undefined) {
+                    setAttrs(data.slice(0, 5));
+                }
+            })
+            .catch((rejected) => {
+                console.log(rejected);
+            });
     }, []);
     const danhmuc1 = JSON.parse(localStorage.getItem('danhmuc1'));
-    const listdanhmuc2 = JSON.parse(localStorage.getItem('danhmuc2'));
     return (
         <div className={cx('listItem')}>
             <div className={cx('wrapperItem')}>
-                <div className={cx('item')}>
-                    <span>Danh mục</span>
-                    <span className={cx('icon')} onClick={handleItemFilter}>
-                        <FontAwesomeIcon icon={dropDownState == true ? faChevronUp : faChevronDown} />
-                    </span>
-                </div>
+                {madm1 != null ? (
+                    <div className={cx('item')}>
+                        <span>Danh mục</span>
+                        <span className={cx('icon')} onClick={handleItemFilter}>
+                            <FontAwesomeIcon icon={dropDownState == true ? faChevronUp : faChevronDown} />
+                        </span>
+                    </div>
+                ) : (
+                    <></>
+                )}
+
                 <hr></hr>
 
-                {dropDownState == true ? (
+                {dropDownState == true && madm1 != null ? (
                     <div className={cx('dropdown')}>
                         <a href="#">Về tất cả các danh mục</a>
                         <div className={cx('filter1')}>
@@ -63,11 +87,15 @@ function ListItemFilter({ madm1 }) {
                             </div>
                             {filter1State == true ? (
                                 <div className={cx('filter2')}>
-                                    {listdanhmuc2.map((itemdm2, index) => {
-                                        if (itemdm2.madm1 == madm1) {
-                                            return <Dropdown itemdm2={itemdm2} dm1Id={madm1} />;
-                                        }
-                                    })}
+                                    {dm2.length != 0 ? (
+                                        dm2.map((itemdm2, index) => {
+                                            if (itemdm2.madm1 == madm1) {
+                                                return <Dropdown itemdm2={itemdm2} dm1Id={madm1} />;
+                                            }
+                                        })
+                                    ) : (
+                                        <></>
+                                    )}
                                 </div>
                             ) : (
                                 <></>
@@ -79,7 +107,7 @@ function ListItemFilter({ madm1 }) {
                 )}
             </div>
 
-            {dataFilters.map((itemFilter, index) => {
+            {attrs.map((itemFilter, index) => {
                 return (
                     <ItemFilter
                         key={index}

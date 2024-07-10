@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
 
-function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd }) {
-    const classes = cx('wrapper', {
+function ProductItem({ pdnormal, pdmain, className, data, width, height, newProd, cls }) {
+    const classes = cx('wrapper', cls, {
         [className]: className,
     });
     const navigate = useNavigate();

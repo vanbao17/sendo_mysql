@@ -7,7 +7,7 @@ import Pagination from '../Pagination/Pagination';
 import { useLocation } from 'react-router-dom';
 const cx = classNames.bind(styles);
 
-function Products({ data, notbutton }) {
+function Products({ data, notbutton, find }) {
     const [currentPage, setCurrentPage] = useState(0);
     const [countpage, setcountpage] = useState(24);
     const handlePageChange = ({ selected }) => {
@@ -20,7 +20,16 @@ function Products({ data, notbutton }) {
     return (
         <div className={cx('wrapper')}>
             {slicedData.map((item, index) => {
-                return <ProductItem className={cx('prmain')} key={index} pdmain newProd={true} data={item} />;
+                return (
+                    <ProductItem
+                        className={cx('prmain')}
+                        cls={find && 'large'}
+                        key={index}
+                        pdmain
+                        newProd={true}
+                        data={item}
+                    />
+                );
             })}
             <div className={cx('seemore')}>
                 <div className={cx('container')}>

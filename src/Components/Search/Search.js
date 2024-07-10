@@ -35,8 +35,15 @@ function Search() {
         }
     }, [dataInput]);
     function HandlePath(product) {
-        navigate(`/detail/${product.nameProduct}`, { state: { dt: product.idProduct } });
+        window.location.href = `/tim-kiem?q=${product.nameProduct}`;
     }
+    const HandleSearchEnter = (e) => {
+        if (e.key == 'Enter') {
+            if (e.target.value != '') {
+                window.location.href = `/tim-kiem?q=${e.target.value}`;
+            }
+        }
+    };
     return (
         <div className={cx('wrapper')}>
             <Tippy
@@ -56,7 +63,12 @@ function Search() {
             </Tippy>
 
             <div className={cx('containerInput')}>
-                <input type="text" placeholder="Tìm trên Sendo ..." onChange={handleChangeInput}></input>
+                <input
+                    onKeyDown={HandleSearchEnter}
+                    type="text"
+                    placeholder="Tìm trên Sendo ..."
+                    onChange={handleChangeInput}
+                ></input>
                 {dataSearch.length !== 0 ? (
                     <ul className={cx('containerResult')}>
                         {dataSearch.map((item, index) => {
