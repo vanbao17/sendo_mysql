@@ -37,7 +37,7 @@ function ItemFilter({ attributeId, title, attribute }) {
             <>
                 {sliceData.map((item, index) => {
                     return (
-                        <div className={cx('containerCheckbox')}>
+                        <div key={index} className={cx('containerCheckbox')}>
                             <div className={cx('checkBox')}>
                                 <div className={cx('filter1')}>
                                     <div className={cx('titleFilter')}>

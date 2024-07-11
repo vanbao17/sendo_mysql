@@ -5,14 +5,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import ContainerCateItems from './ContainerCateItems';
 import { json, useNavigate } from 'react-router-dom';
+import slugify from 'slugify';
 const cx = classNames.bind(styles);
 
 function ListCates() {
     const [index, setindex] = useState();
     const [data, setdata] = useState([]);
     const route = useNavigate();
+    const convertToSlug = (text) => {
+        return slugify(text, {
+            lower: true,
+            remove: /[*+~.()'"!:@]/g,
+            locale: 'vi',
+        });
+    };
     const handleRoute = (data) => {
-        route(`/${data.tendm1}`, { state: { dt: data } });
+        window.location.href = `/${convertToSlug(data.tendm1)}`;
     };
     useEffect(() => {
         fetch('https://sdvanbao17.id.vn/api/v1/danhmuc1')

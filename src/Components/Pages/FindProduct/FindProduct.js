@@ -6,34 +6,75 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faTicket } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import Products from '../../Products/Products';
-import { useLocation } from 'react-router-dom';
-import Fuse from 'fuse.js';
+import { useLocation, useParams } from 'react-router-dom';
+import slugify from 'slugify';
 const cx = classNames.bind(styles);
-const optionsFuse = {
-    keys: ['tendm2'], // Các trường để tìm kiếm
-    includeScore: true,
-    threshold: 0.4,
-};
 function FindProduct() {
     const location = useLocation();
     const dataIdCate = location.state?.dt;
     const [prods, setprods] = useState([]);
     const [dm2, setdm2] = useState([]);
+    const [dm, setdm] = useState([]);
     const [results, setResults] = useState([]);
     function useQuery() {
         return new URLSearchParams(useLocation().search);
     }
     const query = useQuery();
+    const { cateName } = useParams();
     const searchTerm = query.get('q');
+    const convertToSlug = (text) => {
+        return slugify(text, {
+            lower: true, // Chuyển tất cả ký tự thành chữ thường
+            remove: /[*+~.()'"!:@,]/g, // Loại bỏ các ký tự đặc biệt bao gồm dấu phẩy
+            locale: 'vi', // Hỗ trợ ngôn ngữ tiếng Việt
+        });
+    };
     useEffect(() => {
-        if (dataIdCate != undefined) {
-            fetch(`https://sdvanbao17.id.vn/api/v1/productswithcate/${dataIdCate.madm1}`)
+        if (cateName != undefined) {
+            fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc1`)
                 .then((response) => {
                     return response.json();
                 })
-                .then((data) => {
-                    if (data !== undefined) {
-                        setprods(data);
+                .then((listdm1) => {
+                    if (listdm1 !== undefined) {
+                        const filterDanhmuc1 = listdm1.filter((dm1) => convertToSlug(dm1.tendm1) === cateName);
+                        if (filterDanhmuc1.length != 0) {
+                            setdm(filterDanhmuc1);
+                        } else {
+                            fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc2`)
+                                .then((response) => {
+                                    return response.json();
+                                })
+                                .then((listdm2) => {
+                                    if (listdm2.length != 0) {
+                                        const filterDanhmuc2 = listdm2.filter(
+                                            (dm2) => convertToSlug(dm2.tendm2) == cateName,
+                                        );
+                                        if (filterDanhmuc2.length != 0) {
+                                            setdm(filterDanhmuc2);
+                                        } else {
+                                            fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc3`)
+                                                .then((response) => {
+                                                    return response.json();
+                                                })
+                                                .then((listdm3) => {
+                                                    if (listdm3.length != 0) {
+                                                        const filterDanhmuc3 = listdm3.filter(
+                                                            (dm3) => convertToSlug(dm3.tendm3) == cateName,
+                                                        );
+                                                        setdm(filterDanhmuc3);
+                                                    }
+                                                })
+                                                .catch((rejected) => {
+                                                    console.log(rejected);
+                                                });
+                                        }
+                                    }
+                                })
+                                .catch((rejected) => {
+                                    console.log(rejected);
+                                });
+                        }
                     }
                 })
                 .catch((rejected) => {
@@ -49,7 +90,6 @@ function FindProduct() {
                         const filterdata = await data.filter((prod) => {
                             const product_name = prod.nameProduct.toLowerCase().trim().normalize('NFC').split(' ');
                             const search = searchTerm.toLowerCase().trim().normalize('NFC');
-                            console.log(product_name[0].length, search.length);
                             return product_name.includes(search);
                         });
                         setprods(filterdata);
@@ -59,7 +99,7 @@ function FindProduct() {
                     console.log(rejected);
                 });
         }
-    }, [dataIdCate]);
+    }, [cateName]);
     useEffect(() => {
         fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc2`)
             .then((response) => {
@@ -74,8 +114,56 @@ function FindProduct() {
                 console.log(rejected);
             });
     }, [searchTerm]);
-    console.log(prods);
+    useEffect(() => {
+        const danhmuc = dm[0];
+        console.log(danhmuc);
+        if (danhmuc != undefined) {
+            if (danhmuc.madm1 != undefined && danhmuc.madm2 == undefined) {
+                fetch(`https://sdvanbao17.id.vn/api/v1/productswithcate/` + danhmuc.madm1)
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data !== undefined) {
+                            setprods(data);
+                        }
+                    })
+                    .catch((rejected) => {
+                        console.log(rejected);
+                    });
+            }
+            if (danhmuc.madm1 != undefined && danhmuc.madm2 != undefined) {
+                fetch(`https://sdvanbao17.id.vn/api/v1/getProductsCateDanhmuc2/` + danhmuc.madm2)
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data !== undefined) {
+                            setprods(data);
+                        }
+                    })
+                    .catch((rejected) => {
+                        console.log(rejected);
+                    });
+            }
+            if (danhmuc.madm1 != undefined && danhmuc.madm2 != undefined && danhmuc.madm3 != undefined) {
+                fetch(`https://sdvanbao17.id.vn/api/v1/getProductsCateDanhmuc3/` + danhmuc.madm3)
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data !== undefined) {
+                            setprods(data);
+                        }
+                    })
+                    .catch((rejected) => {
+                        console.log(rejected);
+                    });
+            }
+        }
+    }, [dm]);
     //const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
+    console.log(prods);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('titlePage')}>
@@ -93,7 +181,7 @@ function FindProduct() {
             </div>
             <div className={cx('contentPage')}>
                 <div className={cx('contentLeft')}>
-                    {dataIdCate != undefined ? <ListItemFilter madm1={dataIdCate.madm1} /> : <ListItemFilter />}
+                    {dm.length != 0 ? <ListItemFilter danhmuc={dm} /> : <ListItemFilter />}
                 </div>
                 <div className={cx('contentRight')}>
                     <div className={cx('sort')}>
@@ -121,7 +209,11 @@ function FindProduct() {
                             </div>
                         </Popup>
                     </div>
-                    <Products data={prods} find notbutton width={'18.748031% !important'} />
+                    {prods.length != 0 ? (
+                        <Products data={prods} find notbutton width={'18.748031% !important'} />
+                    ) : (
+                        <h1>Đcm đéo có hàng</h1>
+                    )}
                 </div>
             </div>
         </div>
