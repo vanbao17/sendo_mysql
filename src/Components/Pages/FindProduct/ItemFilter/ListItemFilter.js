@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dropdown from './Dropdown';
 const cx = classNames.bind(styles);
 function ListItemFilter({ madm1 = null, danhmuc = null }) {
+    console.log(danhmuc);
     const [dataFilters, setdataFilters] = useState([]);
     const [dropDownState, setdropDownState] = useState(true);
     const [filter1State, setfilter1State] = useState(true);
@@ -81,8 +82,14 @@ function ListItemFilter({ madm1 = null, danhmuc = null }) {
         }
     }, [danhmuc]);
     const danhmuc1 = JSON.parse(localStorage.getItem('danhmuc1'));
+    const list_dm2 = dm2.filter((item) => {
+        if (danhmuc != null) {
+            return item.madm1 === danhmuc[0].madm1;
+        }
+    });
+
     const sliceData = dm2.slice(0, indexSliceData);
-    console.log(dm2);
+    console.log(danhmuc);
     return (
         <div className={cx('listItem')}>
             <div className={cx('wrapperItem')}>
