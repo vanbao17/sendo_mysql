@@ -118,6 +118,9 @@ menu .menu-item {
     font-size: 14px;
     line-height: 1.8;
     border-bottom: 5px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     &:hover {
         background-color: #f2f3f44c;
     }

@@ -6,13 +6,19 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format, parse } from 'date-fns';
 import { Context } from '../../store/Context';
+import Popup from '../../Popup/Popup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { EyeactiveIcon, EyeaNonActiveIcon } from '../../IconSvg/IconSvg';
 const cx = classNames.bind(styles);
 function AccountUser() {
     // const [dob, setdob] = useState(null);
     // const [name, setname] = useState(null);
     // const [phone, setphone] = useState(null);
     // const [email, setemail] = useState(null);
-    // const [image, seimage] = useState(null);
+    const [statePopupUpdatePass, setstatePopupUpdatePass] = useState(false);
+    const [seePassword, setseePassword] = useState(false);
+    const [seePassword1, setseePassword1] = useState(false);
     const [preview, setPreview] = useState(null);
     const user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -26,6 +32,8 @@ function AccountUser() {
     });
     const [sex, setsex] = useState(null);
     const fileInputRef = useRef(null);
+    const password_new = useRef(null);
+    const password_new_confirm = useRef(null);
     const { dis, setdis } = useContext(Context);
     const [fileupload, setfileUpload] = useState();
     useEffect(() => {
@@ -105,6 +113,32 @@ function AccountUser() {
         let day = String(string.getDate()).padStart(2, '0');
         let formattedDate = `${year}-${month}-${day}`;
         return formattedDate;
+    };
+    const handleUpdatePassword = () => {
+        const idCustomers = user.idCustomers;
+        const password = password_new.current.value;
+        const password_confirm = password_new_confirm.current.value;
+        if (password.trim() === password_confirm.trim()) {
+            fetch('https://sdvanbao17.id.vn/api/v1/updatePassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idCustomers, password }),
+            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        setstatePopupUpdatePass(!statePopupUpdatePass);
+                    } else {
+                        alert('Lỗi cm gì rồi, đợi tau fix đã :))');
+                    }
+                })
+                .catch((err) => {
+                    if (err) throw err;
+                });
+        } else {
+            alert('Mật khẩu xác nhận chưa trùng khớp');
+        }
     };
     return (
         <ProfileUser>
@@ -215,10 +249,105 @@ function AccountUser() {
                         <button onClick={handleUpdateInfor}>
                             <span>Cập nhật</span>
                         </button>
-                        <a href="#">Tạo / đổi mật khẩu </a>
+                        <a
+                            onClick={() => {
+                                setstatePopupUpdatePass(!statePopupUpdatePass);
+                            }}
+                        >
+                            Tạo / đổi mật khẩu{' '}
+                        </a>
                     </div>
                 </div>
             </div>
+            {statePopupUpdatePass == true ? (
+                <Popup>
+                    <div className={cx('container_update_passs')}>
+                        <div className={cx('action_close')}>
+                            <div className={cx('close_popup')}>
+                                <button
+                                    onClick={() => {
+                                        setstatePopupUpdatePass(!statePopupUpdatePass);
+                                    }}
+                                >
+                                    <span>Thoát</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div className={cx('title')}>
+                            <span>Tạo mật khẩu mới</span>
+                        </div>
+                        <div className={cx('password_new', 'input_container')}>
+                            <label for="password_new">Nhập mật khẩu mới </label>
+                            <div className={cx('input')}>
+                                <input
+                                    ref={password_new}
+                                    type={seePassword == true ? 'text' : 'password'}
+                                    id="password_new"
+                                    name="password_new"
+                                    placeholder="Nhập mật khẩu mới"
+                                ></input>
+                                {seePassword == true ? (
+                                    <div
+                                        className={cx('icon')}
+                                        onClick={() => {
+                                            setseePassword(!seePassword);
+                                        }}
+                                    >
+                                        <EyeactiveIcon />
+                                    </div>
+                                ) : (
+                                    <div
+                                        className={cx('icon')}
+                                        onClick={() => {
+                                            setseePassword(!seePassword);
+                                        }}
+                                    >
+                                        <EyeaNonActiveIcon />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className={cx('password_new_confirm', 'input_container')}>
+                            <label for="password_new_confirm">Xác nhận mật khẩu mới </label>
+                            <div className={cx('input')}>
+                                <input
+                                    ref={password_new_confirm}
+                                    type={seePassword1 == true ? 'text' : 'password'}
+                                    id="password_new_confirm"
+                                    name="password_new_confirm"
+                                    placeholder="Xác nhận mật khẩu mới"
+                                ></input>
+                                {seePassword1 == true ? (
+                                    <div
+                                        className={cx('icon')}
+                                        onClick={() => {
+                                            setseePassword1(!seePassword1);
+                                        }}
+                                    >
+                                        <EyeactiveIcon />
+                                    </div>
+                                ) : (
+                                    <div
+                                        className={cx('icon')}
+                                        onClick={() => {
+                                            setseePassword1(!seePassword1);
+                                        }}
+                                    >
+                                        <EyeaNonActiveIcon />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className={cx('button_submit')}>
+                            <button onClick={handleUpdatePassword}>
+                                <span>Hoàn tất</span>
+                            </button>
+                        </div>
+                    </div>
+                </Popup>
+            ) : (
+                <></>
+            )}
         </ProfileUser>
     );
 }

@@ -114,6 +114,25 @@ function PopupLogin({ className, style }) {
                     } else {
                         alert('Sai mật khẩu rồi fen');
                     }
+                    // const phone = phoneNumber;
+                    // fetch('https://sdvanbao17.id.vn/api/v1/logIn', {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //     },
+                    //     body: JSON.stringify({ phone, password }),
+                    // })
+                    //     .then((rs) => {
+                    //         return rs.json();
+                    //     })
+                    //     .then(async (dt) => {
+                    //         await localStorage.setItem('token', dt.token);
+                    //         setinforuser(dt[0]);
+                    //         setdis(!dis);
+                    //     })
+                    //     .catch((err) => {
+                    //         console.log(err);
+                    //     });
                 } else {
                     const phone = phoneNumber;
                     fetch('https://sdvanbao17.id.vn/api/v1/signIn', {

@@ -104,4 +104,98 @@
     font-size: 14px;
     color: #3f81fe;
     margin-top: 12px;
+    cursor: pointer;
+}
+.container_update_passs {
+    width: 100%;
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    .action_close {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 24px;
+    }
+    .action_close button {
+        padding: 6px 16px;
+        background-color: transparent;
+        transition: 0.25s;
+        border-radius: 5px;
+    }
+    .action_close button:hover {
+        background-color: #f2f3f4;
+    }
+    .title {
+        width: 100%;
+    }
+    .title span {
+        font-size: 20px;
+        font-weight: 700;
+        color: #0f1e29;
+    }
+    .password_new {
+        margin-top: 20px;
+    }
+    .input_container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .input_container .input {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border: 1px solid #cfd2d4;
+        color: #3f4b53;
+        position: relative;
+        transition: 0.25s;
+    }
+    .input_container .input:hover {
+        border: 1px solid #3f81fe;
+    }
+    .input_container .input:focus {
+        border: 1px solid #3f81fe;
+        box-shadow: 0 0 0 1px #3f81fe;
+    }
+    .input_container .icon {
+        position: absolute;
+        right: 0;
+        background-color: #fff;
+        padding: 0px 16px;
+        cursor: pointer;
+    }
+    .input_container input {
+        width: 100%;
+        outline: none;
+        border: none;
+        padding: 12px 0px 12px 16px;
+    }
+    .password_new_confirm {
+        margin-top: 20px;
+    }
+    .button_submit {
+        width: 100%;
+        margin-top: 200px;
+        margin-bottom: 10px;
+    }
+    .button_submit button {
+        width: 100%;
+        background-color: #ee2624;
+        border: 1px solid #ee2624;
+        border-radius: 5px;
+        padding: 12px 16px;
+        transition: 0.25s;
+    }
+    .button_submit button:hover {
+        opacity: 0.8;
+    }
+    .button_submit button span {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+    }
 }

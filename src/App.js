@@ -3,13 +3,25 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import publicRoutes from './Components/Routes/Routes';
 import BtnGototop from './Components/Layout/Components/BtnGototop/BtnGototop';
 import BtnChat from './Components/Layout/Components/BtnChat/BtnChat';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import ShopProds from './Components/Pages/ShopPage/ShopProds/ShopProds';
 import HomeShopPage from './Components/Pages/ShopPage/HomeShopPage/HomeShopPage';
 import ShopCollection from './Components/Pages/ShopPage/ShopCollection/ShopCollection';
 import ShopBestPrice from './Components/Pages/ShopPage/ShopBestPrice/ShopBestPrice';
 import InforS from './Components/Pages/ShopPage/InforS/InforS';
 function App() {
+    // function generateUniqueId() {
+    //     return 'xxxx-xxxx-xxxx-2110'.replace(/[x]/g, () => {
+    //         return Math.floor(Math.random() * 16).toString(16);
+    //     });
+    // }
+    // useEffect(() => {
+    //     const sessionId = localStorage.getItem('sessionId');
+    //     if (!sessionId) {
+    //         const newSessionId = generateUniqueId();
+    //         localStorage.setItem('sessionId', newSessionId);
+    //     }
+    // }, []);
     return (
         <Router>
             <div className="App" style={{ position: 'relative' }}>
