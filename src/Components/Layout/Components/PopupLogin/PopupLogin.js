@@ -153,7 +153,6 @@ function PopupLogin({ className, style }) {
             });
     };
     const responseFacebook = (response) => {
-        console.log(response.credential);
         setuser(response);
         setdis(false);
         setuserfb(true);

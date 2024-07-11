@@ -102,12 +102,7 @@ function TippyUpdate({ size = 38, color = 'hehe', data, colorItem, sizeItem, idP
             <span className={cx('price')}>
                 Đơn giá :<strong>23.000đ</strong>
             </span>
-            <button
-                className={cx('btn-update')}
-                onClick={() => {
-                    console.log(dtupdate);
-                }}
-            >
+            <button className={cx('btn-update')} onClick={() => {}}>
                 <span>Cập nhật</span>
             </button>
         </div>

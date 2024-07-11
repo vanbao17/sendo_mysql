@@ -19,7 +19,6 @@ function Home() {
     const handleChange = ({ selected }) => {
         setCurrentPage(selected);
     };
-    console.log(paramValue);
     useEffect(() => {
         setidShop(paramValue);
         fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${paramValue}`)

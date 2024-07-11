@@ -1,13 +1,20 @@
 import classNames from 'classnames/bind';
 import styles from './ContainerCateSiteMap.module.scss';
 import { useState, useEffect } from 'react';
+import slugify from 'slugify';
 
 const cx = classNames.bind(styles);
 
 function ItemSiteMap({ data }) {
     const [state, setState] = useState(null);
     const [danhmuc3, setDanhmuc3] = useState([]);
-
+    const convertToSlug = (text) => {
+        return slugify(text, {
+            lower: true, // Chuyển tất cả ký tự thành chữ thường
+            remove: /[*+~.()'"!:@,]/g, // Loại bỏ các ký tự đặc biệt bao gồm dấu phẩy
+            locale: 'vi', // Hỗ trợ ngôn ngữ tiếng Việt
+        });
+    };
     useEffect(() => {
         if (state !== null) {
             fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc3withdm2/${state}`)
@@ -18,7 +25,9 @@ function ItemSiteMap({ data }) {
                 });
         }
     }, [state]);
-
+    const handleUrl = (string) => {
+        window.location.href = `/${convertToSlug(string)}`;
+    };
     return (
         <div className={cx('wrapper_item')}>
             <div className={cx('list_item')}>
@@ -41,7 +50,12 @@ function ItemSiteMap({ data }) {
             <ul className={cx(danhmuc3.length !== 0 ? 'drop_box' : '')}>
                 {danhmuc3.length !== 0 ? (
                     danhmuc3.map((it) => (
-                        <li key={it.madm3}>
+                        <li
+                            key={it.madm3}
+                            onClick={() => {
+                                handleUrl(it.tendm3);
+                            }}
+                        >
                             {' '}
                             {/* Thêm key cho các phần tử lặp lại */}
                             <a href="#"> {it.tendm3}</a>

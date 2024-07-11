@@ -14,8 +14,11 @@ function FindProduct() {
     const dataIdCate = location.state?.dt;
     const [prods, setprods] = useState([]);
     const [dm2, setdm2] = useState([]);
+    const [dm1, setdm1] = useState([]);
     const [dm, setdm] = useState([]);
     const [results, setResults] = useState([]);
+    const [attrsDm1, setattrsDm1] = useState([]);
+    const [attrs, setAttrs] = useState([]);
     function useQuery() {
         return new URLSearchParams(useLocation().search);
     }
@@ -29,13 +32,39 @@ function FindProduct() {
             locale: 'vi', // Hỗ trợ ngôn ngữ tiếng Việt
         });
     };
+
     useEffect(() => {
+        fetch(`https://sdvanbao17.id.vn/api/v1/getAllAttribute`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data !== undefined) {
+                    setAttrs(data);
+                }
+            })
+            .catch((rejected) => {
+                console.log(rejected);
+            });
+        fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc1`)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if (data !== undefined) {
+                    setdm1(data);
+                }
+            })
+            .catch((rejected) => {
+                console.log(rejected);
+            });
         if (cateName != undefined) {
             fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc1`)
                 .then((response) => {
                     return response.json();
                 })
                 .then((listdm1) => {
+                    setdm1(listdm1);
                     if (listdm1 !== undefined) {
                         const filterDanhmuc1 = listdm1.filter((dm1) => convertToSlug(dm1.tendm1) === cateName);
                         if (filterDanhmuc1.length != 0) {
@@ -85,13 +114,14 @@ function FindProduct() {
                 .then((response) => {
                     return response.json();
                 })
-                .then(async (data) => {
+                .then((data) => {
                     if (data !== undefined) {
-                        const filterdata = await data.filter((prod) => {
+                        const filterdata = data.filter((prod) => {
                             const product_name = prod.nameProduct.toLowerCase().trim().normalize('NFC').split(' ');
                             const search = searchTerm.toLowerCase().trim().normalize('NFC');
                             return product_name.includes(search);
                         });
+
                         setprods(filterdata);
                     }
                 })
@@ -99,7 +129,7 @@ function FindProduct() {
                     console.log(rejected);
                 });
         }
-    }, [cateName]);
+    }, []);
     useEffect(() => {
         fetch(`https://sdvanbao17.id.vn/api/v1/danhmuc2`)
             .then((response) => {
@@ -113,10 +143,9 @@ function FindProduct() {
             .catch((rejected) => {
                 console.log(rejected);
             });
-    }, [searchTerm]);
+    }, [searchTerm, prods, dm1]);
     useEffect(() => {
         const danhmuc = dm[0];
-        console.log(danhmuc);
         if (danhmuc != undefined) {
             if (danhmuc.madm1 != undefined && danhmuc.madm2 == undefined) {
                 fetch(`https://sdvanbao17.id.vn/api/v1/productswithcate/` + danhmuc.madm1)
@@ -162,8 +191,24 @@ function FindProduct() {
             }
         }
     }, [dm]);
+    useEffect(() => {
+        const prodmadm2 = prods.map((prod) => prod.madm2);
+        const prodmadm1 = prods.map((prod) => prod.madm1);
+        const list_dm2 = [...new Set(prodmadm2)];
+        const list_dm1 = [...new Set(prodmadm1)];
+        const filter_dm2 = dm2.filter((dm) => list_dm2.includes(dm.madm2));
+        const filter_dm1 = dm1.filter((dm) => list_dm1.includes(dm.madm1));
+        if (filter_dm1.length != 0) {
+            const format_string = filter_dm1[0].string_attributes.split('/');
+            const filter_string = format_string.filter((str) => str != '');
+            const filter_int = filter_string.map((str) => parseInt(str));
+            const list_attr_id = [...new Set(filter_int)];
+            const newAttrBute = attrs.filter((att) => list_attr_id.includes(att.attribute_id));
+            setattrsDm1(newAttrBute);
+        }
+        setResults(filter_dm2);
+    }, [prods]);
     //const [dataProds, setdataProds] = useState(JSON.parse(localStorage.getItem('dataProdsShop')));
-    console.log(prods);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('titlePage')}>
@@ -181,7 +226,11 @@ function FindProduct() {
             </div>
             <div className={cx('contentPage')}>
                 <div className={cx('contentLeft')}>
-                    {dm.length != 0 ? <ListItemFilter danhmuc={dm} /> : <ListItemFilter />}
+                    {dm.length != 0 ? (
+                        <ListItemFilter attrsDm1={attrsDm1} danhmuc={dm} string_attr={results} />
+                    ) : (
+                        <ListItemFilter />
+                    )}
                 </div>
                 <div className={cx('contentRight')}>
                     <div className={cx('sort')}>

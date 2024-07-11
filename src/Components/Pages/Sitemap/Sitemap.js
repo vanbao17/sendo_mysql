@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import styles from './Sitemap.module.scss';
 import ContainerCateSiteMap from '../../Layout/Components/ContainerCateSiteMap/ContainerCateSiteMap';
 import { useEffect, useState } from 'react';
+import slugify from 'slugify';
 const cx = classNames.bind(styles);
 
 function Sitemap() {
@@ -21,6 +22,7 @@ function Sitemap() {
                 console.log(err);
             });
     }, []);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>

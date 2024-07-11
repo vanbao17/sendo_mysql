@@ -85,7 +85,6 @@ function AccountUser() {
                         .then((response) => response.json())
                         .then((data) => {
                             if (data.length !== 0) {
-                                console.log(data[0]);
                                 sessionStorage.clear();
                                 sessionStorage.setItem('user', JSON.stringify(data[0]));
                                 window.location.href = '/tai-khoan';

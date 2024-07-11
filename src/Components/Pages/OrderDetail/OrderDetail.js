@@ -73,7 +73,6 @@ function OrderDetail() {
             });
     }, [paramValue]);
     const st = lis_nav.filter((it) => it.index == orderDetail.state)[0];
-    console.log(orderDetail);
     return (
         <ProfileSendo>
             <div className={cx('wrapper')}>

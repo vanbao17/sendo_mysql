@@ -6,12 +6,10 @@ import { faAdd, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Dropdown from './Dropdown';
 const cx = classNames.bind(styles);
-function ListItemFilter({ madm1 = null, danhmuc = null }) {
-    console.log(danhmuc);
+function ListItemFilter({ madm1 = null, danhmuc = null, string_attr, attrsDm1 }) {
     const [dataFilters, setdataFilters] = useState([]);
     const [dropDownState, setdropDownState] = useState(true);
     const [filter1State, setfilter1State] = useState(true);
-    const [filter2State, setfilter2State] = useState(false);
     const [indexSliceData, setindexSliceData] = useState(5);
     const [stateButton, setstateButton] = useState(false);
     const [dm2, setdm2] = useState([]);
@@ -61,6 +59,7 @@ function ListItemFilter({ madm1 = null, danhmuc = null }) {
                 console.log(rejected);
             });
     }, []);
+
     useEffect(() => {
         if (danhmuc != null) {
             //định dạng lại cate
@@ -81,15 +80,30 @@ function ListItemFilter({ madm1 = null, danhmuc = null }) {
             }
         }
     }, [danhmuc]);
+    useEffect(() => {
+        let string = '';
+        if (danhmuc != null) {
+            danhmuc.forEach((dm) => {
+                string = string + dm.string_attributes + '/';
+            });
+            string_attr.forEach((dm) => {
+                string = string + dm.string_attributes + '/';
+            });
+        }
+        const format_string = string.split('/');
+        const filter_string = format_string.filter((str) => str != '');
+        const filter_int = filter_string.map((str) => parseInt(str));
+        const list_attr_id = [...new Set(filter_int)];
+        const newAttrBute = attrs.filter((att) => list_attr_id.includes(att.attribute_id));
+        setAttrs(newAttrBute);
+    }, [string_attr]);
     const danhmuc1 = JSON.parse(localStorage.getItem('danhmuc1'));
     const list_dm2 = dm2.filter((item) => {
         if (danhmuc != null) {
             return item.madm1 === danhmuc[0].madm1;
         }
     });
-
     const sliceData = dm2.slice(0, indexSliceData);
-    console.log(danhmuc);
     return (
         <div className={cx('listItem')}>
             <div className={cx('wrapperItem')}>
@@ -163,7 +177,20 @@ function ListItemFilter({ madm1 = null, danhmuc = null }) {
                     <></>
                 )}
             </div>
-
+            {attrsDm1 != undefined ? (
+                attrsDm1.map((itemFilter, index) => {
+                    return (
+                        <ItemFilter
+                            key={index}
+                            attributeId={itemFilter.attribute_id}
+                            title={itemFilter.attribute_name}
+                            attribute={itemFilter.type_name}
+                        ></ItemFilter>
+                    );
+                })
+            ) : (
+                <></>
+            )}
             {attrs.map((itemFilter, index) => {
                 return (
                     <ItemFilter
