@@ -53,33 +53,36 @@ function ListItemFilter({ madm1 = null, danhmuc = null }) {
             .catch((rejected) => {
                 console.log(rejected);
             });
+        fetch('https://sdvanbao17.id.vn/api/v1/danhmuc2')
+            .then((res) => res.json())
+            .then((data) => setdm2(data))
+            .catch((rejected) => {
+                console.log(rejected);
+            });
     }, []);
     useEffect(() => {
         if (danhmuc != null) {
             //định dạng lại cate
             const cate = danhmuc[0];
-            const list_dm = cate.string_attributes.split('/');
-            const list_dm_filter = list_dm.filter((dm) => dm != '');
-            const list_dm_int = list_dm_filter.map((dm) => parseInt(dm));
-            //lọc attribute
-            const filter_attr = attrs.filter((attr) => list_dm_int.includes(attr.attribute_id));
-            setAttrs(filter_attr);
-            fetch(`https://sdvanbao17.id.vn/api/v1/tim-kiem/${danhmuc[0].madm1}`)
-                .then((response) => response.json())
-                .then((data) => setdataFilters(data))
-                .catch((err) => {
-                    if (err) throw err;
-                });
-            fetch('https://sdvanbao17.id.vn/api/v1/danhmuc2')
-                .then((res) => res.json())
-                .then((data) => setdm2(data))
-                .catch((rejected) => {
-                    console.log(rejected);
-                });
+            if (cate.string_attributes != undefined) {
+                const list_dm = cate.string_attributes.split('/');
+                const list_dm_filter = list_dm.filter((dm) => dm != '');
+                const list_dm_int = list_dm_filter.map((dm) => parseInt(dm));
+                //lọc attribute
+                const filter_attr = attrs.filter((attr) => list_dm_int.includes(attr.attribute_id));
+                setAttrs(filter_attr);
+                fetch(`https://sdvanbao17.id.vn/api/v1/tim-kiem/${danhmuc[0].madm1}`)
+                    .then((response) => response.json())
+                    .then((data) => setdataFilters(data))
+                    .catch((err) => {
+                        if (err) throw err;
+                    });
+            }
         }
     }, [danhmuc]);
     const danhmuc1 = JSON.parse(localStorage.getItem('danhmuc1'));
     const sliceData = dm2.slice(0, indexSliceData);
+    console.log(dm2);
     return (
         <div className={cx('listItem')}>
             <div className={cx('wrapperItem')}>
@@ -98,7 +101,7 @@ function ListItemFilter({ madm1 = null, danhmuc = null }) {
 
                 {dropDownState == true && danhmuc != null ? (
                     <div className={cx('dropdown')}>
-                        <a href="#">Về tất cả các danh mục</a>
+                        <a href="/site-map">Về tất cả các danh mục</a>
                         <div className={cx('filter1')}>
                             <div className={cx('titleFilter')}>
                                 <FontAwesomeIcon
