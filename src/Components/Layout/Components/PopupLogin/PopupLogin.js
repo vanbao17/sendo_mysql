@@ -27,6 +27,7 @@ function PopupLogin({ className, style }) {
     const [otp, setOtp] = useState('');
     const [step, setStep] = useState('INPUT_PHONE_NUMBER');
     const [result, setResult] = useState('');
+    const { loadding, setloadding } = useContext(Context);
     function changeInput(e) {
         setPhoneNumber(e);
         if (e.length >= 1) {
@@ -83,6 +84,7 @@ function PopupLogin({ className, style }) {
     };
     //
     const handleButtonLogin = () => {
+        setloadding(true);
         if (whatnext == null) {
             const phone_data = '+84' + phoneNumber.slice(1);
             const options = {
@@ -98,6 +100,7 @@ function PopupLogin({ className, style }) {
                     if (data.length !== 0) {
                         setwhatnext(true);
                         setinforuser(data[0]);
+                        setloadding(false);
                     } else {
                         setwhatnext(false);
                         handleSendOTP();
@@ -111,6 +114,7 @@ function PopupLogin({ className, style }) {
                 if (inforuser != null) {
                     if (password == inforuser.password) {
                         setdis(!dis);
+                        sessionStorage.setItem('user', JSON.stringify(inforuser));
                     } else {
                         alert('Sai mật khẩu rồi fen');
                     }
@@ -183,9 +187,7 @@ function PopupLogin({ className, style }) {
         setusergg(true);
         setdis(false);
     };
-    useEffect(() => {
-        sessionStorage.setItem('user', JSON.stringify(inforuser));
-    }, [inforuser]);
+
     return (
         <div className={classes} style={style}>
             <div

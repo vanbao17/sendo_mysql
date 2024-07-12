@@ -16,10 +16,16 @@ function Cart() {
     const { idShop } = useContext(Context);
     const nav = useNavigate();
     const user = JSON.parse(sessionStorage.getItem('user'));
+    const { loadding, setloadding } = useContext(Context);
+
     useEffect(() => {
+        setloadding(true);
         fetch(`https://sdvanbao17.id.vn/api/v1/gio-hang/` + user.idCustomers)
             .then((response) => response.json())
-            .then((data) => setdataCarts(data))
+            .then((data) => {
+                setdataCarts(data);
+                setloadding(false);
+            })
             .catch((err) => {
                 console.log(err);
             });
@@ -51,6 +57,7 @@ function Cart() {
             },
             body: JSON.stringify(dataToDelete),
         };
+        setloadding(true);
         fetch('https://sdvanbao17.id.vn/api/v1/delete-cart', options)
             .then((response) => {
                 if (!response.ok) {
@@ -58,7 +65,10 @@ function Cart() {
                 }
                 return response.json();
             })
-            .then((data) => setdataCarts(data))
+            .then((data) => {
+                setdataCarts(data);
+                setloadding(false);
+            })
             .catch((err) => {
                 console.log(err);
             });
@@ -76,10 +86,14 @@ function Cart() {
                 const secretKey = 'Phamvanbao_0123';
                 const idShopString = JSON.stringify(arr);
                 const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
-                if (data.length == 0) {
-                    window.location.href = `/them-dia-chi?product=${encodeURIComponent(encryptedIdShop)}`;
+                if (totalPayment.length != 0) {
+                    if (data.length == 0) {
+                        window.location.href = `/them-dia-chi?product=${encodeURIComponent(encryptedIdShop)}`;
+                    } else {
+                        window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
+                    }
                 } else {
-                    window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
+                    alert('Vui lòng chọn mặt hàng bạn muốn thanh toán !!');
                 }
             })
             .catch((err) => {

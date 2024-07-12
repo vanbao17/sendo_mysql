@@ -58,11 +58,10 @@ function Header({ nav }) {
     function handleUser() {
         try {
             usergg == true ? setusergg(false) : setuserfb(false);
-
             googleLogout();
             sessionStorage.clear();
             localStorage.clear();
-            navigate('/');
+            window.location.href = '/';
         } catch (error) {
             alert('Không ổn rồi fen ơi :))');
         }
