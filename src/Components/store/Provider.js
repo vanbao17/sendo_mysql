@@ -10,6 +10,7 @@ function Provider({ children }) {
     const [usergg, setusergg] = useState(false);
     const [userfb, setuserfb] = useState(false);
     const [loadding, setloadding] = useState(false);
+    const [chatBox, setchatBox] = useState(false);
     useEffect(() => {
         const totop = () => {
             if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
@@ -53,6 +54,8 @@ function Provider({ children }) {
                 setidShop,
                 loadding,
                 setloadding,
+                chatBox,
+                setchatBox,
             }}
         >
             {children}

@@ -847,3 +847,25 @@ export const EyeaNonActiveIcon = ({ width = '24px', height = '24px', className }
         </g>
     </svg>
 );
+export const SendImageIcon = ({ width = '24px', height = '24px', className }) => (
+    <svg width={width} height={height} className={className} viewBox="0 0 24 24" version="1.1">
+        <path
+            fill="#000"
+            fill-opacity=".4"
+            fill-rule="nonzero"
+            transform="translate(3 2)"
+            d="M16 5v2.99s-1.99.01-2 0V5h-3s.01-1.99 0-2h3V0h2v3h3v2h-3zm-3 4V6h-3V3H2C.9 3 0 3.9 0 5v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V9h-3zM2 17l3-4 2 3 3-4 4 5H2z"
+        ></path>
+    </svg>
+);
+export const SendProductIcon = ({ width = '24px', height = '24px', className }) => (
+    <svg width={width} height={height} className={className} viewBox="0 0 1024 1024" class="productIcon_eoUS">
+        <path
+            fill="#000"
+            fill-opacity=".4"
+            fill-rule="nonzero"
+            transform="translate(3 2)"
+            d="M714.098 412.956L544.199 158.52c-7.396-10.894-19.797-16.299-32.199-16.299s-24.832 5.404-32.199 16.668L309.902 412.955H124.131c-21.333 0-38.798 17.465-38.798 38.798 0 3.499.398 6.969 1.564 10.468L185.4 821.759c9.284 32.93 39.057 56.661 74.373 56.661h504.358c35.403-.062 65.264-23.719 74.7-56.082l.138-.551 98.56-359.566 1.166-10.468c0-21.333-17.465-38.798-38.798-38.798H714.126zm-318.464 0L512 242.289l116.338 170.667H395.662zM512 723.285c-42.798-.129-77.455-34.797-77.568-77.586v-.011c0-42.667 34.901-77.568 77.568-77.568s77.568 34.901 77.568 77.568c0 42.667-34.901 77.568-77.568 77.568z"
+        ></path>
+    </svg>
+);

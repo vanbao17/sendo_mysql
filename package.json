@@ -30,7 +30,9 @@
     "reactjs-popup": "^2.0.5",
     "sass": "^1.62.1",
     "slugify": "^1.6.6",
-    "web-vitals": "^2.1.4"
+    "socket.io": "^4.7.5",
+    "web-vitals": "^2.1.4",
+    "socket.io-client": "^3.0.4"
   },
   "scripts": {
     "start": "react-scripts start",

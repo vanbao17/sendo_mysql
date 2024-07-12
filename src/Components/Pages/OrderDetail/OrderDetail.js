@@ -66,13 +66,17 @@ function OrderDetail() {
         })
             .then((rs) => rs.json())
             .then((dt) => {
-                setOrderDetail(dt[0]);
+                const filterData = dt.filter((odi) => odi.idCustomers == user.idCustomers);
+                console.log(filterData);
+                setOrderDetail(filterData);
             })
             .catch((err) => {
                 console.log(err);
             });
     }, [paramValue]);
     const st = lis_nav.filter((it) => it.index == orderDetail.state)[0];
+    const totalValue = orderDetail.reduce((total, item) => total + item.priceSale * item.quantity, 0);
+    const totalValueCoast = orderDetail.length != 0 ? orderDetail[0].percent * totalValue : 0;
     return (
         <ProfileSendo>
             <div className={cx('wrapper')}>
@@ -85,30 +89,86 @@ function OrderDetail() {
                         <p>
                             Mã đơn hàng: <span className={cx('blue_text')}>#{paramValue}</span>
                         </p>
-                        <p>Đặt hàng: {formatDate(orderDetail != undefined ? orderDetail.created_at : '')}</p>
+                        <p>Đặt hàng: {formatDate(orderDetail.length != 0 ? orderDetail[0].created_at : '')}</p>
                     </div>
                     <div className={cx('state_right')}>
                         <div className={cx('item_state')}>
                             <div>
-                                <Choxacnhan className={cx(orderDetail.state_payment >= 1 ? 'active' : '', 'icon')} />
+                                <Choxacnhan
+                                    className={cx(
+                                        orderDetail.length != 0
+                                            ? orderDetail[0].state_payment >= 1
+                                                ? 'active'
+                                                : ''
+                                            : '',
+                                        'icon',
+                                    )}
+                                />
                             </div>
-                            <span className={cx(orderDetail.state_payment >= 1 ? 'active' : '')}>Chờ xác nhận</span>
+                            <span
+                                className={cx(
+                                    orderDetail.length != 0 ? (orderDetail[0].state_payment >= 1 ? 'active' : '') : '',
+                                )}
+                            >
+                                Chờ xác nhận
+                            </span>
                         </div>
                         <div className={cx('item_state')}>
                             <div>
-                                <Daxacnhan className={cx(orderDetail.state_payment >= 2 ? 'active' : '', 'icon')} />
+                                <Daxacnhan
+                                    className={cx(
+                                        orderDetail.length != 0
+                                            ? orderDetail[0].state_payment >= 2
+                                                ? 'active'
+                                                : ''
+                                            : '',
+                                        'icon',
+                                    )}
+                                />
                             </div>
-                            <span className={cx(orderDetail.state_payment >= 2 ? 'active' : '')}>Đã xác nhận</span>
+                            <span
+                                className={cx(
+                                    orderDetail.length != 0 ? (orderDetail[0].state_payment >= 2 ? 'active' : '') : '',
+                                )}
+                            >
+                                Đã xác nhận
+                            </span>
                         </div>
                         <div className={cx('item_state')}>
                             <div>
-                                <Dangvanchuyen className={cx(orderDetail.state_payment >= 3 ? 'active' : '', 'icon')} />
+                                <Dangvanchuyen
+                                    className={cx(
+                                        orderDetail.length != 0
+                                            ? orderDetail[0].state_payment >= 3
+                                                ? 'active'
+                                                : ''
+                                            : '',
+                                        'icon',
+                                    )}
+                                />
                             </div>
-                            <span className={cx(orderDetail.state_payment >= 3 ? 'active' : '')}>Đang vận chuyển</span>
+                            <span
+                                className={cx(
+                                    orderDetail.length != 0 ? (orderDetail[0].state_payment >= 3 ? 'active' : '') : '',
+                                )}
+                            >
+                                Đang vận chuyển
+                            </span>
                         </div>
                         <div className={cx('item_state')}>
-                            <Dagiaohang className={cx(orderDetail.state_payment >= 4 ? 'active' : '', 'icon')} />
-                            <span className={cx(orderDetail.state_payment >= 4 ? 'active' : '')}>Đã giao hàng</span>
+                            <Dagiaohang
+                                className={cx(
+                                    orderDetail.length != 0 ? (orderDetail[0].state_payment >= 4 ? 'active' : '') : '',
+                                    'icon',
+                                )}
+                            />
+                            <span
+                                className={cx(
+                                    orderDetail.length != 0 ? (orderDetail[0].state_payment >= 4 ? 'active' : '') : '',
+                                )}
+                            >
+                                Đã giao hàng
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -117,7 +177,8 @@ function OrderDetail() {
                         <div className={cx('title_state')}>
                             <h3>TÌNH TRẠNG VẬN CHUYỂN</h3>
                             <span>
-                                Nhà vận chuyển: <strong>{orderDetail.method_name}</strong>
+                                Nhà vận chuyển:{' '}
+                                <strong>{orderDetail.length != 0 ? orderDetail[0].method_name : ''}</strong>
                             </span>
                             <span>
                                 Tình trạng: <strong>{st != undefined ? st.name : ''}</strong>
@@ -128,116 +189,126 @@ function OrderDetail() {
                     <div className={cx('state_getOder')}>
                         <h3>THÔNG TIN NHẬN HÀNG</h3>
                         <span>
-                            <strong>{user.nameUser}</strong> - {user.phoneNumber}
+                            <strong>{user.nameCustomers}</strong> - {user.phoneNumber}
                         </span>
                         <span>
-                            {orderDetail.address}- {orderDetail.px} - {orderDetail.qh} -{orderDetail.tt}
+                            {orderDetail.length != 0 ? (
+                                orderDetail[0].address +
+                                '-' +
+                                orderDetail[0].px +
+                                '-' +
+                                orderDetail[0].qh +
+                                '-' +
+                                orderDetail[0].tt
+                            ) : (
+                                <></>
+                            )}
                         </span>
                     </div>
                 </div>
-                <div className={cx('infor_detail')}>
-                    <div className={cx('detail_title')}>
-                        <div>
-                            Shop: <span className={cx('blue_text')}>{orderDetail.tenshop}</span>
-                        </div>
-                        |
-                        <div>
-                            Hình thức thanh toán:
-                            <strong>
-                                <img src={orderDetail.payment_image}></img> {orderDetail.payment_method_name}
-                            </strong>
-                        </div>
-                        |
-                        <div>
-                            <span>Trạng thái thanh toán:</span>
-                            <span className={cx('black_text')}> Chưa thanh toán</span>
-                        </div>
-                    </div>
-                    <div className={cx('detail_product')}>
-                        <div className={cx('title_table')}>
+                {orderDetail.length != 0 ? (
+                    <div className={cx('infor_detail')}>
+                        <div className={cx('detail_title')}>
                             <div>
-                                <strong>Sản phẩm</strong>
+                                Shop: <span className={cx('blue_text')}>{orderDetail[0].tenshop}</span>
                             </div>
+                            |
                             <div>
-                                <strong>Đơn giá</strong>
-                            </div>
-                            <div>
-                                <strong>Số lượng</strong>
-                            </div>
-                            <div>
-                                <strong>Thành tiền</strong>
-                            </div>
-                        </div>
-                        <div className={cx('product')}>
-                            <div>
-                                <img style={{ objectFit: 'cover' }} src={orderDetail.imageProduct}></img>
-                                <strong>{orderDetail.nameProduct}</strong>
-                            </div>
-                            <div>
-                                <span>{orderDetail.priceSale}</span>
-                            </div>
-                            <div>
-                                <strong>{orderDetail.quantity}</strong>
-                            </div>
-                            <div>
+                                Hình thức thanh toán:
                                 <strong>
-                                    {(orderDetail.priceSale * orderDetail.quantity).toLocaleString('vi-VN')}đ
+                                    <img src={orderDetail[0].payment_image}></img> {orderDetail[0].payment_method_name}
                                 </strong>
                             </div>
+                            |
+                            <div>
+                                <span>Trạng thái thanh toán:</span>
+                                <span className={cx('black_text')}> Chưa thanh toán</span>
+                            </div>
                         </div>
-                        <div className={cx('action_price')}>
-                            <div className={cx('action')}>
-                                <div className={cx('buttons')}>
-                                    <a href={`/shop/${orderDetail.idShop}`} className={cx('button_shop')}>
-                                        <button>
-                                            <ShopIcon width="24px" />
-                                            <span>Vào shop</span>
-                                        </button>
-                                    </a>
-                                    <a className={cx('button_phone')}>
-                                        <button>
-                                            <PhoneIcon width="24px" />
-                                            <span>
-                                                {orderDetail.phone != undefined
-                                                    ? formatPhoneNumber(orderDetail.phone)
-                                                    : ''}
-                                            </span>
-                                        </button>
-                                    </a>
+                        <div className={cx('detail_product')}>
+                            <div className={cx('title_table')}>
+                                <div>
+                                    <strong>Sản phẩm</strong>
+                                </div>
+                                <div>
+                                    <strong>Đơn giá</strong>
+                                </div>
+                                <div>
+                                    <strong>Số lượng</strong>
+                                </div>
+                                <div>
+                                    <strong>Thành tiền</strong>
                                 </div>
                             </div>
-                            <div className={cx('price')}>
-                                <div className={cx('total_price')}>
-                                    <span>Tổng tiền:</span>
-                                    <span>
-                                        {(orderDetail.priceSale * orderDetail.quantity).toLocaleString('vi-VN')}
-                                    </span>
+                            {orderDetail.length != 0 ? (
+                                orderDetail.map((item) => {
+                                    return (
+                                        <div className={cx('product')}>
+                                            <div>
+                                                <img style={{ objectFit: 'cover' }} src={item.imageProduct}></img>
+                                                <strong>{item.nameProduct}</strong>
+                                            </div>
+                                            <div>
+                                                <span>{item.priceSale}</span>
+                                            </div>
+                                            <div>
+                                                <strong>{item.quantity}</strong>
+                                            </div>
+                                            <div>
+                                                <strong>
+                                                    {(item.priceSale * item.quantity).toLocaleString('vi-VN')}đ
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <></>
+                            )}
+
+                            <div className={cx('action_price')}>
+                                <div className={cx('action')}>
+                                    <div className={cx('buttons')}>
+                                        <a href={`/shop/${orderDetail.idShop}`} className={cx('button_shop')}>
+                                            <button>
+                                                <ShopIcon width="24px" />
+                                                <span>Vào shop</span>
+                                            </button>
+                                        </a>
+                                        <a className={cx('button_phone')}>
+                                            <button>
+                                                <PhoneIcon width="24px" />
+                                                <span>
+                                                    {orderDetail.phone != undefined
+                                                        ? formatPhoneNumber(orderDetail.phone)
+                                                        : ''}
+                                                </span>
+                                            </button>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div className={cx('cost_transform')}>
-                                    <span>Phí vận chuyển:</span>
-                                    <span>
-                                        {(
-                                            orderDetail.priceSale *
-                                            orderDetail.quantity *
-                                            orderDetail.percent
-                                        ).toLocaleString('vi-VN')}
-                                        đ
-                                    </span>
-                                </div>
-                                <div className={cx('total')}>
-                                    <strong>Tổng thanh toán:</strong>
-                                    <strong className={cx('red_text')}>
-                                        {(
-                                            orderDetail.priceSale * orderDetail.quantity -
-                                            orderDetail.priceSale * orderDetail.quantity * orderDetail.percent
-                                        ).toLocaleString('vi-VN')}
-                                        đ
-                                    </strong>
+                                <div className={cx('price')}>
+                                    <div className={cx('total_price')}>
+                                        <span>Tổng tiền:</span>
+                                        <span>{totalValue.toLocaleString('vi-VN')}</span>
+                                    </div>
+                                    <div className={cx('cost_transform')}>
+                                        <span>Phí vận chuyển:</span>
+                                        <span>{(totalValueCoast / 10).toLocaleString('vi-VN')}đ</span>
+                                    </div>
+                                    <div className={cx('total')}>
+                                        <strong>Tổng thanh toán:</strong>
+                                        <strong className={cx('red_text')}>
+                                            {(totalValue - totalValueCoast / 10).toLocaleString('vi-VN')}đ
+                                        </strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                ) : (
+                    <></>
+                )}
                 <div className={cx('turn_list_order')}>
                     <div>
                         <a href="/don-hang">

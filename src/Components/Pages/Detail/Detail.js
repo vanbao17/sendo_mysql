@@ -17,8 +17,10 @@ import { Context } from '../../store/Context';
 import CryptoJS from 'crypto-js';
 const cx = classNames.bind(styles);
 function Detai() {
+    const user = JSON.parse(sessionStorage.getItem('user'));
     const { idProduct } = useParams();
     const { showGototop, setshowGototop } = useContext(Context);
+    const { chatBox, setchatBox } = useContext(Context);
     const [datadetail, setdatadetail] = useState([]);
     const [quanlity, setquanlity] = useState(1);
     const [favoriteProds, setfavoriteProds] = useState([]);
@@ -48,6 +50,7 @@ function Detai() {
     ];
     useEffect(() => {
         let idCate = datadetail.madm1 + '' + datadetail.madm2;
+        sessionStorage.setItem('idShop', datadetail.idShop);
         fetch(`https://sdvanbao17.id.vn/api/v1/favoriteProdShop/${idCate}`)
             .then((respone) => respone.json())
             .then((data) => setfavoriteProds(data))
@@ -188,6 +191,36 @@ function Detai() {
         } else {
             setdis(!dis);
         }
+    };
+    const handleChatWithShop = () => {
+        fetch('https://sdvanbao17.id.vn/api/v1/getChatIdShop/' + datadetail.idShop)
+            .then((rs) => rs.json())
+            .then((dt) => {
+                if (dt.length != 0) {
+                    setchatBox(!chatBox);
+                } else {
+                    const idCustomers = user.idCustomers;
+                    const idShop = datadetail.idShop;
+                    fetch('https://sdvanbao17.id.vn/api/v1/addChatUser', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ idCustomers, idShop }),
+                    })
+                        .then((rs) => {
+                            if (rs.status == 200) {
+                                setchatBox(!chatBox);
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     return (
         <div className={cx('wrapper')}>
@@ -365,7 +398,7 @@ function Detai() {
                             <button>
                                 <ShopIcon className={cx('icon')} />
                             </button>
-                            <button>
+                            <button onClick={handleChatWithShop}>
                                 <ChatIcon className={cx('icon')} />
                             </button>
                             <button className={cx('addCart')}>
