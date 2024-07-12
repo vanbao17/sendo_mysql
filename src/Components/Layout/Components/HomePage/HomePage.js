@@ -11,37 +11,36 @@ import { cateExtention } from '../../../../Assets/images/extentions/extention';
 import { genuine } from '../../../../Assets/images/Genuine/Genuine';
 import Products from '../../../Products/Products';
 import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { Context } from '../../../store/Context';
 const cx = classNames.bind(styles);
 function HomePage() {
     const [dataProd, setdataProd] = useState([]);
+    const { loadding, setloadding } = useContext(Context);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const cateRecommendValue = searchParams.get('cate_recommend');
     useEffect(() => {
-        if (cateRecommendValue !== null) {
-            fetch(`https://sdvanbao17.id.vn/api/v1/productswithcate/${cateRecommendValue}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data !== null) {
-                        setdataProd(data);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        } else {
-            fetch(`https://sdvanbao17.id.vn/api/v1/products`)
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data !== null) {
-                        setdataProd(data);
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
+        const fetchProducts = async () => {
+            try {
+                const urls =
+                    cateRecommendValue !== null
+                        ? [`https://sdvanbao17.id.vn/api/v1/productswithcate/${cateRecommendValue}`]
+                        : [`https://sdvanbao17.id.vn/api/v1/products`];
+                setloadding(true);
+                const responses = await Promise.all(urls.map((url) => fetch(url)));
+                const data = await Promise.all(responses.map((response) => response.json()));
+
+                if (data[0] !== null) {
+                    setdataProd(data[0]);
+                    setloadding(false);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchProducts();
     }, [cateRecommendValue]);
     return (
         <div className={cx('wrapper')}>

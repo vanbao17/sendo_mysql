@@ -36,6 +36,7 @@ function AccountUser() {
     const password_new_confirm = useRef(null);
     const { dis, setdis } = useContext(Context);
     const [fileupload, setfileUpload] = useState();
+    const { loadding, setloadding } = useContext(Context);
     useEffect(() => {
         if (user == null) {
             setdis(!dis);
@@ -118,6 +119,7 @@ function AccountUser() {
         const idCustomers = user.idCustomers;
         const password = password_new.current.value;
         const password_confirm = password_new_confirm.current.value;
+        setloadding(true);
         if (password.trim() === password_confirm.trim()) {
             fetch('https://sdvanbao17.id.vn/api/v1/updatePassword', {
                 method: 'POST',
@@ -129,6 +131,7 @@ function AccountUser() {
                 .then((response) => {
                     if (response.status === 200) {
                         setstatePopupUpdatePass(!statePopupUpdatePass);
+                        setloadding(false);
                     } else {
                         alert('Lỗi cm gì rồi, đợi tau fix đã :))');
                     }

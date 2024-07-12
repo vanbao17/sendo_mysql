@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import publicRoutes from './Components/Routes/Routes';
 import BtnGototop from './Components/Layout/Components/BtnGototop/BtnGototop';
 import BtnChat from './Components/Layout/Components/BtnChat/BtnChat';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useContext, useEffect } from 'react';
 import ShopProds from './Components/Pages/ShopPage/ShopProds/ShopProds';
 import HomeShopPage from './Components/Pages/ShopPage/HomeShopPage/HomeShopPage';
 import ShopCollection from './Components/Pages/ShopPage/ShopCollection/ShopCollection';
 import ShopBestPrice from './Components/Pages/ShopPage/ShopBestPrice/ShopBestPrice';
 import InforS from './Components/Pages/ShopPage/InforS/InforS';
+import Loading from './Components/Pages/Loading/Loading';
+import { Context } from './Components/store/Context';
 function App() {
     // function generateUniqueId() {
     //     return 'xxxx-xxxx-xxxx-2110'.replace(/[x]/g, () => {
@@ -22,6 +24,7 @@ function App() {
     //         localStorage.setItem('sessionId', newSessionId);
     //     }
     // }, []);
+    const { loadding, setloadding } = useContext(Context);
     return (
         <Router>
             <div className="App" style={{ position: 'relative' }}>
@@ -58,6 +61,7 @@ function App() {
                 </Routes>
                 <BtnGototop />
                 <BtnChat />
+                {loadding == true ? <Loading /> : <></>}
             </div>
         </Router>
     );
