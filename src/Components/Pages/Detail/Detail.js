@@ -199,23 +199,27 @@ function Detai() {
                 if (dt.length != 0) {
                     setchatBox(!chatBox);
                 } else {
-                    const idCustomers = user.idCustomers;
-                    const idShop = datadetail.idShop;
-                    fetch('https://sdvanbao17.id.vn/api/v1/addChatUser', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ idCustomers, idShop }),
-                    })
-                        .then((rs) => {
-                            if (rs.status == 200) {
-                                setchatBox(!chatBox);
-                            }
+                    if (user != null) {
+                        const idCustomers = user.idCustomers;
+                        const idShop = datadetail.idShop;
+                        fetch('https://sdvanbao17.id.vn/api/v1/addChatUser', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ idCustomers, idShop }),
                         })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                            .then((rs) => {
+                                if (rs.status == 200) {
+                                    setchatBox(!chatBox);
+                                }
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                    } else {
+                        setdis(!dis);
+                    }
                 }
             })
             .catch((err) => {

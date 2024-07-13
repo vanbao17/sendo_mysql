@@ -1,6 +1,7 @@
 {
   "name": "sendo-ui",
   "version": "0.1.0",
+  "home": "https://sdvanbao17.id.vn/",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
