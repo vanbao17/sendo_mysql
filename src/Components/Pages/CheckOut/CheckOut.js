@@ -91,9 +91,15 @@ function CheckOut() {
         async function fetchData() {
             try {
                 const promises = idShopArray.map(async (item) => {
-                    const productsCartResponse = await fetch(
-                        `https://sdvanbao17.id.vn/api/v1/check-prods-select/${item.idProduct}`,
-                    );
+                    const idProduct = item.idProduct;
+                    const idCustomer = user.idCustomers;
+                    const productsCartResponse = await fetch(`https://sdvanbao17.id.vn/api/v1/check-prods-select`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ idProduct, idCustomer }),
+                    });
                     const productsCart = await productsCartResponse.json();
 
                     const dataResponse = await fetch(`https://sdvanbao17.id.vn/api/v1/detail/${item.idProduct}`);

@@ -67,7 +67,6 @@ function OrderDetail() {
             .then((rs) => rs.json())
             .then((dt) => {
                 const filterData = dt.filter((odi) => odi.idCustomers == user.idCustomers);
-                console.log(filterData);
                 setOrderDetail(filterData);
             })
             .catch((err) => {

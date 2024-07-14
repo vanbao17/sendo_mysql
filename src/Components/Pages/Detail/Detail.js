@@ -60,6 +60,7 @@ function Detai() {
     }, [datadetail]);
     const handleAddToCart = (s) => {
         const user = JSON.parse(sessionStorage.getItem('user'));
+        const idCustomer = user.idCustomers;
         if (user) {
             const dataPost = {
                 idUser: user.idCustomers,
@@ -75,7 +76,13 @@ function Detai() {
                 },
                 body: JSON.stringify(dataPost),
             };
-            fetch(`https://sdvanbao17.id.vn/api/v1/check-prods-select/${idProduct}`)
+            fetch(`https://sdvanbao17.id.vn/api/v1/check-prods-select`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idCustomer, idProduct }),
+            })
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
@@ -91,6 +98,7 @@ function Detai() {
                             oldQuanlity: data[0].quanlityCart,
                             size: size,
                             color: color,
+                            idCustomer: idCustomer,
                         };
                         const options = {
                             method: 'POST',
