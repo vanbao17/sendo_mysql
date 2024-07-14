@@ -82,7 +82,7 @@ function BtnChat() {
                     console.log(err);
                 });
         }
-    }, []);
+    }, [chatBox]);
     const sendMessage = () => {
         const userId = user.idCustomers;
         if (idconvention != null) {
