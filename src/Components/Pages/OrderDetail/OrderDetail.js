@@ -73,7 +73,7 @@ function OrderDetail() {
                 console.log(err);
             });
     }, [paramValue]);
-    const st = lis_nav.filter((it) => it.index == orderDetail.state)[0];
+    const st = lis_nav.filter((it) => it.index == orderDQetail.state)[0];
     const totalValue = orderDetail.reduce((total, item) => total + item.priceSale * item.quantity, 0);
     const totalValueCoast = orderDetail.length != 0 ? orderDetail[0].percent * totalValue : 0;
     return (
