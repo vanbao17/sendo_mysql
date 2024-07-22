@@ -21,11 +21,15 @@ function Detai() {
     const { idProduct } = useParams();
     const { showGototop, setshowGototop } = useContext(Context);
     const { chatBox, setchatBox } = useContext(Context);
+
     const [datadetail, setdatadetail] = useState([]);
     const [quanlity, setquanlity] = useState(1);
     const [favoriteProds, setfavoriteProds] = useState([]);
+    const [imgData, setimgData] = useState([]);
     const [color, setcolor] = useState();
     const [size, setsize] = useState();
+    const [choseImage, setchoseImage] = useState();
+
     const location = useLocation();
     const dataIdProduct = location.state?.dt;
     const route = useNavigate();
@@ -38,16 +42,18 @@ function Detai() {
             .catch((error) => {
                 console.log(error);
             });
-    }, [dataIdProduct]);
-    const imgData = [
-        { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
-        { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
-        { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
-        { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
-        { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
-        { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
-        { img: 'https://media3.scdn.vn/img4/2022/06_09/rq7VyH7ppkx2SINYOqyb_simg_02d57e_100x100_maxb.jpg', name: '' },
-    ];
+        fetch(`https://sdvanbao17.id.vn/api/v1/getImageProduct/${idProduct}`)
+            .then((respone) => respone.json())
+            .then((data) => {
+                const imgs = data.map((i) => {
+                    return { img: i.imageProduct };
+                });
+                setimgData(imgs);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
     useEffect(() => {
         let idCate = datadetail.madm1 + '' + datadetail.madm2;
         sessionStorage.setItem('idShop', datadetail.idShop);
@@ -252,7 +258,7 @@ function Detai() {
 
                             <img
                                 style={{ height: '500px', objectFit: 'cover' }}
-                                src={`${datadetail.imageProduct}`}
+                                src={`${choseImage != undefined ? choseImage : datadetail.imageProduct}`}
                                 alt={`${datadetail.nameProduct}`}
                             />
 
@@ -268,7 +274,15 @@ function Detai() {
                                 </div>
                             </div>
                         </div>
-                        <Slide data={imgData} normal={true} ovr={6} size={72} />
+                        <Slide
+                            data={imgData}
+                            normal={true}
+                            ovr={6}
+                            size={72}
+                            urlChose={(url) => {
+                                setchoseImage(url);
+                            }}
+                        />
                     </div>
                     <div className={cx('infor-main')}>
                         <div className={cx('deal')}></div>
@@ -375,7 +389,7 @@ function Detai() {
                 <div className={cx('infor-other')}>
                     <InforShop Shopinfor={datadetail} />
                     <div id="infor-other">
-                        <InforProRight id="rate" idQuestion="question" dataText={datadetail.descriptionDetail} />
+                        <InforProRight id="rate" idQuestion="question" dataText={datadetail} />
                     </div>
                 </div>
                 <div className={cx('productyourlike')} id="productyourlike">

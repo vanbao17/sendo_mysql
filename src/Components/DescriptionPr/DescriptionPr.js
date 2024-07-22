@@ -1,44 +1,54 @@
 import classNames from 'classnames/bind';
 import styles from './DescriptionPr.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
 function DescriptionPr({ data }) {
     const [seemore, setseemore] = useState(false);
+    const [attrs, setattrs] = useState([]);
+
+    useEffect(() => {
+        fetch(`https://sdvanbao17.id.vn/api/v1/getAttrDetailProduct/${data.idProduct}`)
+            .then((respone) => respone.json())
+            .then((data) => {
+                setattrs(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, [data]);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('dscrip')}>
                 <p className={cx('title')}>Mô tả sản phẩm</p>
-                <span>
-                    Thời tiết bắt đầu lạnh cũng là thời điểm mà các nhãn hàng thời trang tất bật với công việc thiết kế
-                    những dòng sản phẩm mới phù hợp với không khí lạnh năm nay. Còn bạn đã chuẩn bị những gì? Hãy cùng
-                    chúng tôi ngắm nhìn những sản phẩm hot nhất mùa này...
-                </span>
+                <div dangerouslySetInnerHTML={{ __html: data.descriptionDetail }} />
             </div>
-            <div className={cx('basic-infor')}>
-                <p className={cx('title')}>Thông tin cơ bản</p>
+            <div className={cx(seemore == true ? '.basic-infor-see-more' : 'basic-infor')}>
+                <p className={cx('title')}>Chi tiết sản phẩm</p>
                 <div className={cx('list-infor')}>
-                    <div className={cx('item')}>
-                        <span className={cx('title-attribute')}>Chất vải</span>
-                        <span className={cx('attribute')}>Vải dù</span>
-                    </div>
-                    <div className={cx('item')}>
-                        <span className={cx('title-attribute')}>Chất vải</span>
-                        <span className={cx('attribute')}>Vải dù</span>
-                    </div>
+                    {attrs.map((att, index) => {
+                        const string = 'Màu sắc';
+                        if (att.attribute_name != 'Màu sắc' && att.attribute_name != 'Kích thước')
+                            return (
+                                <div className={cx('item', index % 2 == 0 ? 'active' : '')}>
+                                    <span className={cx('title-attribute')}>{att.attribute_name}</span>
+                                    <span className={cx('attribute')}>{att.value}</span>
+                                </div>
+                            );
+                    })}
                 </div>
             </div>
-            <div className={cx('detail-product')}>
+            {/* <div className={cx('detail-product')}>
                 <p className={cx('title')}>Chi tiết sản phẩm</p>
 
-                <div dangerouslySetInnerHTML={{ __html: data }} />
-            </div>
+                <div dangerouslySetInnerHTML={{ __html: data.descriptionDetail }} />
+            </div> */}
             <button
                 className={cx('see-more')}
                 onClick={() => {
                     setseemore(!seemore);
                 }}
             >
-                {seemore ? <span>Xem thêm</span> : <span>Thu gọn</span>}
+                {seemore == false ? <span>Xem thêm</span> : <span>Thu gọn</span>}
             </button>
         </div>
     );

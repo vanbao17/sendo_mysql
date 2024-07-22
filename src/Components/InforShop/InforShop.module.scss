@@ -11,6 +11,9 @@
     top: 80px;
     height: 567px;
 }
+a {
+    color: black;
+}
 .title {
     span {
         font-weight: 700;
@@ -70,6 +73,11 @@ hr {
 .btntoshop {
     button {
         padding: 7px;
+    }
+    a {
+        display: flex;
+        gap: 10px;
+        align-items: center;
     }
 }
 .suggestFromShop {

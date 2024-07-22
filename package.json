@@ -32,8 +32,9 @@
     "sass": "^1.62.1",
     "slugify": "^1.6.6",
     "socket.io": "^4.7.5",
-    "web-vitals": "^2.1.4",
-    "socket.io-client": "^3.0.4"
+    "socket.io-client": "^3.0.4",
+    "styled-components": "^6.1.12",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",

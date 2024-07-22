@@ -26,6 +26,9 @@
         color: #6f787e;
     }
 }
+.list-infor .item.active {
+    background-color: #fff;
+}
 .see-more {
     span {
         font-size: 14px;
@@ -41,4 +44,8 @@
     &:hover {
         background-color: #f2f3f4;
     }
+}
+.basic-infor {
+    height: 300px;
+    overflow: hidden;
 }

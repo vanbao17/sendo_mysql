@@ -65,8 +65,11 @@ function InforShop({ Shopinfor }) {
                     <span>Theo dõi</span>
                 </button>
                 <button className={cx('toShop', 'large')}>
-                    <FontAwesomeIcon icon={faShop} className={cx('icon')} />
-                    <span>Vào shop</span>
+                    <a href={`/shop/${Shopinfor.idShop}`}>
+                        <FontAwesomeIcon icon={faShop} className={cx('icon')} />
+
+                        <span>Vào shop</span>
+                    </a>
                 </button>
                 <button className={cx('callShop')}>
                     <FontAwesomeIcon icon={faPhoneVolume} className={cx('icon')} />

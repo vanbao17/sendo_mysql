@@ -1,9 +1,17 @@
 import classNames from 'classnames/bind';
 import styles from './Comments.module.scss';
 import Comments from './Comments';
+import { format } from 'date-fns';
 import { FlagIcon, LikeIcon } from '../../IconSvg';
 const cx = classNames.bind(styles);
 function CommentItem({ data, normal }) {
+    const dt = [1, 2, 3, 4, 5];
+    const convertDateTime = (dateTimeString) => {
+        const date = new Date(dateTimeString);
+        const formattedDate = format(date, 'dd/MM/yyyy');
+        const formattedTime = format(date, 'HH:mm:ss');
+        return `${formattedDate} | ${formattedTime}`;
+    };
     return (
         <div className={cx('wrapperItem')}>
             {normal == false ? (
@@ -38,30 +46,27 @@ function CommentItem({ data, normal }) {
             ) : (
                 <>
                     <div className={cx('imageUser')}>
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4O-jd-HDATEFcN4KJjaeQH-If38062C8nyBrXmxo&s"></img>
+                        <img src={data.imageUser}></img>
                     </div>
                     <div className={cx('Comment')}>
                         <div className={cx('infor')}>
                             <div className={cx('inforleft')}>
-                                <p className={cx('name')}>Phạm Văn Bảo</p>
-                                <span className={cx('timedatepublic')}>13:50 | 17/11/2003</span>
+                                <p className={cx('name')}>{data.nameCustomers}</p>
+                                <span className={cx('timedatepublic')}>{convertDateTime(data.timePublic)}</span>
                             </div>
                             <div className={cx('inforright')}>
-                                <p className={cx('starscomment')}></p>
+                                {dt.map((i) => {
+                                    return <p className={cx('starscomment', data.rateCount >= i ? 'active' : '')}></p>;
+                                })}
                             </div>
                         </div>
-                        <div className={cx('contentComment')}>
-                            Cần đúng với mô tả. Chất lượng cần tốt hơn. Giao hàng cần nhanh hơn. Shop cần thân thiện
-                            hơn. Nên đóng gói kỹ hơn. shop lừa đảo
-                        </div>
+                        <div className={cx('contentComment')}>{data.contentComment}</div>
                         <div className={cx('commentImage')}>
-                            <div className={cx('tag')}>Xanh Lá</div>
+                            <div className={cx('tag')}>{data.size}</div>
+                            <div className={cx('tag')}>{data.color}</div>
                             <ul>
                                 <li>
-                                    <img
-                                        className={cx('imageComment')}
-                                        src="http://media3.scdn.vn/img4/2023/05_06/9UOmc5d9kqpA3mkelBSN.jpg"
-                                    ></img>
+                                    <img className={cx('imageComment')} src={data.imageComment}></img>
                                 </li>
                             </ul>
                         </div>

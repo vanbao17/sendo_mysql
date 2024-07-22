@@ -9,7 +9,7 @@ function InforProRight({ id, idQuestion, dataText }) {
     return (
         <div className={cx('wrapper')}>
             <DescriptionPr data={dataText} />
-            <Rate id={id} normal={true} />
+            <Rate dataDetail={dataText} id={id} normal={true} />
             <div className={cx('questionProduct')} id={idQuestion}>
                 <p className={cx('title')}>Hỏi về sản phẩm</p>
                 <p>Bạn có thắc mắc cần giải đáp?</p>

@@ -9,11 +9,14 @@
         width: 10%;
         padding: 12px;
         margin-right: 10px;
+        border-radius: 100%;
+        overflow: hidden;
     }
     .imageUser img {
         width: 100%;
         height: auto;
         margin-top: 20px;
+        border-radius: 100%;
     }
     .nameUser {
         display: flex;
@@ -94,14 +97,20 @@
         font-size: 12px;
         font-style: italic;
     }
+    .inforright {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
     .starscomment::before {
-        content: '★★★★★';
+        content: '★';
         width: 100%;
-        -webkit-text-fill-color: transparent;
-        background: linear-gradient(90deg, #ffc600 20%, #e7e8ea 0);
+        color: #e7e8ea;
         background-clip: text;
-        -webkit-background-clip: text;
         font-size: 14px;
+    }
+    .starscomment.active::before {
+        color: #ffc600;
     }
     .contentComment {
         padding: 12px 0px;

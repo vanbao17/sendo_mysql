@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import CatetorysItem from '../../../CatetoryItem/CatetorysItem';
 const cx = classNames.bind(styles);
 
-function Slide({ data, ovr, prod, size, normal, width, height, prodNew }) {
+function Slide({ data, ovr, prod, size, normal, width, height, prodNew, urlChose }) {
     const [lengths, setlenghts] = useState(0);
     const refSlide = useRef();
     function handleSlide() {
@@ -19,6 +19,9 @@ function Slide({ data, ovr, prod, size, normal, width, height, prodNew }) {
     useEffect(() => {
         handleSlide();
     }, [lengths]);
+    const handleSendUrl = (url) => {
+        urlChose(url);
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('overflowslide')}>
@@ -26,7 +29,17 @@ function Slide({ data, ovr, prod, size, normal, width, height, prodNew }) {
                     {/* normal && */}
                     {normal &&
                         data.map((item, index) => {
-                            return <img className={cx('normal')} src={item.img} key={index}></img>;
+                            return (
+                                <img
+                                    style={{ objectFit: 'cover' }}
+                                    onClick={() => {
+                                        handleSendUrl(item.img);
+                                    }}
+                                    className={cx('normal')}
+                                    src={item.img}
+                                    key={index}
+                                ></img>
+                            );
                         })}
                     {prod == false &&
                         data.map((item, index) => {
