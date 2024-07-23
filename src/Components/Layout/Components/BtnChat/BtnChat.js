@@ -1,4 +1,4 @@
-import { faClose, faMessage, faPaperPlane, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faEllipsisV, faMessage, faPaperPlane, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Buttons from '../../../Buttons/Buttons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -24,6 +24,7 @@ function BtnChat() {
     const [idconvention, setIdconvention] = useState();
     const [idshop, setidshop] = useState();
     const [Messes, setMesses] = useState([]);
+    const [indexMess, setindexMess] = useState();
     // const socket = io('http://localhost:3001', {
     //     transports: ['websocket'],
     //     upgrade: true,
@@ -125,6 +126,29 @@ function BtnChat() {
                 });
         }
     }, [mess_vs_shop]);
+    const handleDeleteChat = (id) => {
+        fetch('https://sdvanbao17.id.vn/api/v1/deleteChat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }),
+        })
+            .then((rs) => {
+                if (rs.status == 200) {
+                    const userId = user.idCustomers;
+                    fetch('https://sdvanbao17.id.vn/api/v1/getChatUser/' + userId)
+                        .then((rs) => rs.json())
+                        .then((dt) => setmess_vs_shop(dt))
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <>
             {chatBox == false ? (
@@ -203,6 +227,7 @@ function BtnChat() {
                                                     )}
                                                     onClick={() => {
                                                         setidshop(shop[0]);
+                                                        // setindexMess(null);
                                                         handleGetChatConvent(item.conversation_id);
                                                         setIdconvention(item.conversation_id);
                                                         handleActiveChat(item.conversation_id);
@@ -212,7 +237,29 @@ function BtnChat() {
                                                     <div className={cx('infor_mess')}>
                                                         <div className={cx('name_minute')}>
                                                             <span>{shop[0].tenshop}</span>
-                                                            <p>20 phút trước</p>
+                                                            <p className={cx('container_action_mess')}>
+                                                                <FontAwesomeIcon
+                                                                    icon={faEllipsisV}
+                                                                    className={cx('icon_action')}
+                                                                    onClick={() => {
+                                                                        setindexMess(item.conversation_id);
+                                                                    }}
+                                                                />
+                                                                {indexMess == item.conversation_id ? (
+                                                                    <ul>
+                                                                        <li
+                                                                            onClick={() => {
+                                                                                handleDeleteChat(item.conversation_id);
+                                                                            }}
+                                                                        >
+                                                                            Xóa
+                                                                        </li>
+                                                                    </ul>
+                                                                ) : (
+                                                                    <></>
+                                                                )}
+                                                            </p>
+                                                            {/* <p>20 phút trước</p> */}
                                                         </div>
                                                         <div className={cx('mess_last')}>
                                                             {/* <span>

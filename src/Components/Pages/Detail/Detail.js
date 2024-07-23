@@ -21,7 +21,7 @@ function Detai() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const { idProduct } = useParams();
     const { showGototop, setshowGototop } = useContext(Context);
-    const { chatBox, setchatBox } = useContext(Context);
+    const { chatBox, setchatBox, loadding, setloadding } = useContext(Context);
 
     const [datadetail, setdatadetail] = useState([]);
     const [quanlity, setquanlity] = useState(1);
@@ -37,6 +37,7 @@ function Detai() {
     const nav = useNavigate();
     const { dis, setdis } = useContext(Context);
     useEffect(() => {
+        setloadding(true);
         fetch(`https://sdvanbao17.id.vn/api/v1/detail/${idProduct}`)
             .then((respone) => respone.json())
             .then((data) => setdatadetail(data[0]))
@@ -72,7 +73,10 @@ function Detai() {
         sessionStorage.setItem('idShop', datadetail.idShop);
         fetch(`https://sdvanbao17.id.vn/api/v1/favoriteProdShop/${idCate}`)
             .then((respone) => respone.json())
-            .then((data) => setfavoriteProds(data))
+            .then((data) => {
+                setfavoriteProds(data);
+                setloadding(false);
+            })
             .catch((error) => {
                 console.log(error);
             });
@@ -236,38 +240,51 @@ function Detai() {
         }
     };
     const handleChatWithShop = () => {
-        fetch('https://sdvanbao17.id.vn/api/v1/getChatIdShop/' + datadetail.idShop)
-            .then((rs) => rs.json())
-            .then((dt) => {
-                if (dt.length != 0) {
-                    setchatBox(!chatBox);
-                } else {
-                    if (user != null) {
-                        const idCustomers = user.idCustomers;
-                        const idShop = datadetail.idShop;
-                        fetch('https://sdvanbao17.id.vn/api/v1/addChatUser', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ idCustomers, idShop }),
-                        })
-                            .then((rs) => {
-                                if (rs.status == 200) {
-                                    setchatBox(!chatBox);
-                                }
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                    } else {
-                        setdis(!dis);
-                    }
-                }
+        const user = JSON.parse(sessionStorage.getItem('user'));
+        if (user != null) {
+            const idCustomer = user.idCustomers;
+            const idShop = datadetail.idShop;
+            fetch('https://sdvanbao17.id.vn/api/v1/getChatIdShopCustomer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idCustomer, idShop }),
             })
-            .catch((err) => {
-                console.log(err);
-            });
+                .then((rs) => rs.json())
+                .then((dt) => {
+                    if (dt.length != 0) {
+                        setchatBox(!chatBox);
+                    } else {
+                        if (user != null) {
+                            const idCustomers = user.idCustomers;
+                            const idShop = datadetail.idShop;
+                            fetch('https://sdvanbao17.id.vn/api/v1/addChatUser', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ idCustomers, idShop }),
+                            })
+                                .then((rs) => {
+                                    if (rs.status == 200) {
+                                        setchatBox(!chatBox);
+                                    }
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
+                        } else {
+                            setdis(!dis);
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            setdis(!dis);
+        }
     };
     return (
         <div className={cx('wrapper')}>

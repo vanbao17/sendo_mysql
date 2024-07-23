@@ -42,7 +42,7 @@ function Rate({ dataDetail, id, normal }) {
     };
     useEffect(() => {
         if (dataDetail != undefined) {
-            fetch(' https://sdvanbao17.id.vn/api/v1/getCommentForProduct', {
+            fetch('https://sdvanbao17.id.vn/api/v1/getCommentForProduct', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -150,6 +150,7 @@ function Rate({ dataDetail, id, normal }) {
     const handleSendComment = (e) => {
         e.preventDefault();
         setloadding(true);
+        setStateComment(false);
         if (user != null) {
             const idCustomer = user.idCustomers;
             const contentComment = textareaRef.current.value;

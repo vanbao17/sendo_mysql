@@ -4,7 +4,6 @@ import CommentItem from './CommentItem';
 const cx = classNames.bind(styles);
 
 function Comments({ data, normal }) {
-    console.log(data);
     return (
         <div className={cx('wrapper')}>
             {data.length != 0 ? (

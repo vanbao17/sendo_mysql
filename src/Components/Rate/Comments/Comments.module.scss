@@ -153,4 +153,124 @@
 }
 .action_user {
     margin-left: 15px;
+    position: relative;
+    .icon {
+        cursor: pointer;
+    }
+    .drop_box_action {
+        width: 150px;
+        padding: 12px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.12), 0 -4px 8px 0 rgba(0, 0, 0, 0.04);
+        position: absolute;
+        top: 100%;
+        right: 0;
+    }
+    .drop_box_action ul li {
+        padding: 6px;
+        transition: 0.25s;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .drop_box_action ul li:hover {
+        background-color: #f2f3f4;
+    }
+}
+.container_input_comments {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .title span {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    .title .icon_close {
+        cursor: pointer;
+    }
+    .infor_rate {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin: 12px 0px;
+    }
+    .infor_rate .image_user {
+        width: 50px;
+        height: 50px;
+        border-radius: 100%;
+        overflow: hidden;
+        background-color: #828282;
+    }
+    .infor_rate .image_user img {
+        width: 100%;
+    }
+    .input_comment {
+        width: 100%;
+        max-height: 100px;
+    }
+    .input_comment textarea {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100px;
+        outline: none;
+        padding: 6px;
+        border-radius: 5px;
+    }
+    .action_send {
+        width: 100%;
+        margin-top: 12px;
+    }
+    .action_send button {
+        width: 100%;
+        background-color: #ee2624;
+        transition: 0.25s;
+    }
+    .action_send button:hover {
+        opacity: 0.8;
+    }
+    .action_send button span {
+        font-weight: 600;
+    }
+    .action_post {
+        margin-bottom: 12px;
+    }
+    .list_image {
+        height: 300px;
+        overflow-y: scroll;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .list_image > div {
+        flex: 1 1 200px;
+        max-width: fit-content;
+    }
+    ul {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    // .star_item {
+    //     width: 18px;
+    //     height: 20px;
+    //     background-color: transparent;
+    //     border: 8px solid black;
+    //     clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    // }
+    .star_item::after {
+        content: '★';
+        font-size: 24px;
+        display: block;
+        color: #c4c4c5;
+        transition: 0.25s;
+    }
+    .star_item.active::after {
+        color: #ffc600;
+    }
 }
