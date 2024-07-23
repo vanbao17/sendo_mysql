@@ -3,8 +3,16 @@ import styles from './Comments.module.scss';
 import Comments from './Comments';
 import { format } from 'date-fns';
 import { FlagIcon, LikeIcon } from '../../IconSvg';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
+import 'react-photo-view/dist/react-photo-view.css';
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDashboard, faEllipsis, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 function CommentItem({ data, normal }) {
+    const [attrComment, setAttComment] = useState([]);
+    const [imagesComment, setImagesComment] = useState([]);
+    const user = JSON.parse(sessionStorage.getItem('user'));
     const dt = [1, 2, 3, 4, 5];
     const convertDateTime = (dateTimeString) => {
         const date = new Date(dateTimeString);
@@ -12,6 +20,22 @@ function CommentItem({ data, normal }) {
         const formattedTime = format(date, 'HH:mm:ss');
         return `${formattedDate} | ${formattedTime}`;
     };
+    useEffect(() => {
+        fetch(' https://sdvanbao17.id.vn/api/v1/getFullAttribute')
+            .then((rs) => rs.json())
+            .then((dt) => {
+                const attr = [data.size, data.color];
+                const filter = dt.filter((i) => attr.includes(i.attribute_value_id));
+                setAttComment(filter);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+    useEffect(() => {
+        const list_url = data.imageComment.split(',');
+        setImagesComment(list_url);
+    }, [data]);
     return (
         <div className={cx('wrapperItem')}>
             {normal == false ? (
@@ -58,17 +82,57 @@ function CommentItem({ data, normal }) {
                                 {dt.map((i) => {
                                     return <p className={cx('starscomment', data.rateCount >= i ? 'active' : '')}></p>;
                                 })}
+                                {data.idCustomers == user.idCustomers ? (
+                                    <div className={cx('action_user')}>
+                                        <FontAwesomeIcon icon={faEllipsisVertical} className={cx('icon')} />
+                                        <div className={cx('drop_box_action')}>
+                                            <ul>
+                                                <li></li>
+                                                <li></li>
+                                                <li></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         </div>
                         <div className={cx('contentComment')}>{data.contentComment}</div>
                         <div className={cx('commentImage')}>
-                            <div className={cx('tag')}>{data.size}</div>
-                            <div className={cx('tag')}>{data.color}</div>
-                            <ul>
-                                <li>
-                                    <img className={cx('imageComment')} src={data.imageComment}></img>
-                                </li>
-                            </ul>
+                            {attrComment.map((item) => {
+                                return (
+                                    <div className={cx('tag')} style={{ marginRight: '20px' }}>
+                                        {item.value}
+                                    </div>
+                                );
+                            })}
+                            {/* <ul>
+                                {imagesComment.length != 0 ? (
+                                    imagesComment.map((img) => {
+                                        return (
+                                            <li>
+                                                <img className={cx('imageComment')} src={img}></img>
+                                            </li>
+                                        );
+                                    })
+                                ) : (
+                                    <></>
+                                )}
+                            </ul> */}
+                            <PhotoProvider>
+                                <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                                    {imagesComment.map((image, index) => (
+                                        <PhotoView key={index} src={image}>
+                                            <img
+                                                src={image}
+                                                alt=""
+                                                style={{ width: '8%', margin: '10px', cursor: 'pointer' }}
+                                            />
+                                        </PhotoView>
+                                    ))}
+                                </div>
+                            </PhotoProvider>{' '}
                         </div>
                         <div className={cx('action')}>
                             <div></div>

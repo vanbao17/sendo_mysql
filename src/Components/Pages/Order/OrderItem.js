@@ -111,10 +111,12 @@ function OrderItem({ data }) {
                                             </a>
                                         </span>
                                         <span className={cx('state')}>
-                                            {it.state == 1
+                                            {it.state_payment == 1
                                                 ? 'Đang chờ shop xác nhận'
-                                                : it.state == 5
+                                                : it.state_payment == 4
                                                 ? 'Đã hủy - Không muốn mua nữa'
+                                                : it.state_payment == 5
+                                                ? 'Đã giao hàng thành công'
                                                 : 'Ngày giao dự kiên - ' + addDays(formatDate(it.created_at), 6)}
                                         </span>
                                     </div>

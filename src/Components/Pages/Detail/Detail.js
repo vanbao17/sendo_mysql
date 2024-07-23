@@ -15,6 +15,7 @@ import { BinIcon, ChatIcon, ShopIcon } from '../../IconSvg';
 import { useContext, useEffect, useState } from 'react';
 import { Context } from '../../store/Context';
 import CryptoJS from 'crypto-js';
+import styled from 'styled-components';
 const cx = classNames.bind(styles);
 function Detai() {
     const user = JSON.parse(sessionStorage.getItem('user'));
@@ -26,12 +27,12 @@ function Detai() {
     const [quanlity, setquanlity] = useState(1);
     const [favoriteProds, setfavoriteProds] = useState([]);
     const [imgData, setimgData] = useState([]);
+    const [comments, setcomments] = useState([]);
     const [color, setcolor] = useState();
     const [size, setsize] = useState();
     const [choseImage, setchoseImage] = useState();
+    const [total, settotal] = useState(0);
 
-    const location = useLocation();
-    const dataIdProduct = location.state?.dt;
     const route = useNavigate();
     const nav = useNavigate();
     const { dis, setdis } = useContext(Context);
@@ -52,6 +53,18 @@ function Detai() {
             })
             .catch((error) => {
                 console.log(error);
+            });
+        fetch(' https://sdvanbao17.id.vn/api/v1/getCommentForProduct', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idProduct }),
+        })
+            .then((rs) => rs.json())
+            .then((dt) => setcomments(dt))
+            .catch((err) => {
+                console.log(err);
             });
     }, []);
     useEffect(() => {
@@ -173,6 +186,22 @@ function Detai() {
     const getDataColor = (data) => {
         setcolor(data);
     };
+    useEffect(() => {
+        comments.forEach((i) => {
+            settotal((e) => e + parseInt(i.rateCount));
+        });
+    }, [comments]);
+    const StarContainer = styled.div`
+        position: relative;
+        &::before {
+            content: '★★★★★';
+            display: block;
+            -webkit-text-fill-color: transparent;
+            background: linear-gradient(90deg, #ffc600 ${(total / comments.length / 5) * 100}%, #e7e8ea 0);
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+    `;
     const handleCheckOut = () => {
         const user = JSON.parse(sessionStorage.getItem('user'));
         if (user) {
@@ -315,9 +344,12 @@ function Detai() {
                             <span>Chi tiết </span> */}
                         </div>
                         <div className={cx('ovr')}>
-                            <div className={cx('rate')}></div>
+                            <StarContainer>
+                                <div></div>
+                            </StarContainer>
+
                             <div className={cx('count-rate')}>
-                                <span>{datadetail.QuanlityExists} Lượt Đánh giá</span>
+                                <span>{comments.length} Lượt Đánh giá</span>
                             </div>
                             <div className={cx('count-buy')}>
                                 <BinIcon />
@@ -393,7 +425,7 @@ function Detai() {
                     </div>
                 </div>
                 <div className={cx('productyourlike')} id="productyourlike">
-                    <span>Ở đây có sản phẩm bạn thích</span>
+                    <h3>Ở đây có sản phẩm bạn thích</h3>
                     <Products data={favoriteProds}></Products>
                 </div>
             </div>

@@ -9,14 +9,17 @@ import Comments from './Comments/Comments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faImage, faMessage, faStar } from '@fortawesome/free-solid-svg-icons';
 import { Context } from '../store/Context';
+import { format } from 'date-fns';
 const cx = classNames.bind(styles);
 
 function Rate({ dataDetail, id, normal }) {
     const [stateComment, setStateComment] = useState(false);
+    const [stateButtonComment, setStateButtonComment] = useState(false);
     const [selectedImages, setSelectedImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
+    const [filename, setfilename] = useState([]);
     const [comments, setcomments] = useState([]);
-    const [total, settotal] = useState([]);
+    const [total, settotal] = useState(0);
     const [dt, setdt] = useState([
         { rate: 5, count: 0 },
         { rate: 4, count: 0 },
@@ -26,13 +29,19 @@ function Rate({ dataDetail, id, normal }) {
     ]);
     const [indexStar, setindexStar] = useState();
     const [rate, setRate] = useState(null);
-    const { dis, setdis } = useContext(Context);
+    const { dis, setdis, loadding, setloadding } = useContext(Context);
     const fileInputRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem('user'));
+    const idProduct = dataDetail.idProduct;
+    const textareaRef = useRef();
 
+    const formatDate = (stringDate) => {
+        const date = new Date(stringDate);
+        const formattedDate = format(date, 'yyyy-MM-dd HH:mm:ss');
+        return formattedDate;
+    };
     useEffect(() => {
         if (dataDetail != undefined) {
-            const idProduct = dataDetail.idProduct;
             fetch(' https://sdvanbao17.id.vn/api/v1/getCommentForProduct', {
                 method: 'POST',
                 headers: {
@@ -61,7 +70,7 @@ function Rate({ dataDetail, id, normal }) {
             { rate: 1, count: s1 },
         ]);
         comments.forEach((i) => {
-            settotal((e) => [e + i.rateCount]);
+            settotal((e) => e + parseInt(i.rateCount));
         });
     }, [comments]);
     const [selectted, setselectted] = useState([]);
@@ -79,7 +88,7 @@ function Rate({ dataDetail, id, normal }) {
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         setSelectedImages(files);
-
+        setfilename(files.map((i) => 'https://sdvanbao17.id.vn/uploads/' + i.name).join(','));
         const previewUrls = files.map((file) => URL.createObjectURL(file));
         setPreviewImages(previewUrls);
     };
@@ -93,21 +102,11 @@ function Rate({ dataDetail, id, normal }) {
     };
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData();
-        selectedImages.forEach((image) => {
-            formData.append('images', image);
-        });
-
-        formData.append('idproduct', 1);
-
         // try {
         //     const response = await fetch('http://localhost:3001/upload', {
         //         method: 'POST',
         //         body: formData,
         //     });
-
         //     const data = await response.json();
         //     console.log('Success:', data);
         // } catch (error) {
@@ -120,11 +119,75 @@ function Rate({ dataDetail, id, normal }) {
             content: '★★★★★';
             display: block;
             -webkit-text-fill-color: transparent;
-            background: linear-gradient(90deg, #ffc600 ${(total / 5) * 100}%, #e7e8ea 0);
+            background: linear-gradient(90deg, #ffc600 ${(total / comments.length / 5) * 100}%, #e7e8ea 0);
             background-clip: text;
             -webkit-background-clip: text;
         }
     `;
+    useEffect(() => {
+        if (user != null) {
+            const idCustomer = user.idCustomers;
+            fetch(' https://sdvanbao17.id.vn/api/v1/checkStateComment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idCustomer, idProduct }),
+            })
+                .then((rs) => rs.json())
+                .then((data) => {
+                    if (data.length != 0) {
+                        setStateButtonComment(true);
+                    } else {
+                        setStateButtonComment(false);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [dataDetail]);
+    const handleSendComment = (e) => {
+        e.preventDefault();
+        setloadding(true);
+        if (user != null) {
+            const idCustomer = user.idCustomers;
+            const contentComment = textareaRef.current.value;
+            const timePublic = formatDate(new Date());
+            const formData = new FormData();
+            selectedImages.forEach((image) => {
+                formData.append('images', image);
+            });
+            fetch('https://sdvanbao17.id.vn/api/v1/upload_images_product', {
+                method: 'POST',
+                body: formData,
+            })
+                .then((response) => {
+                    console.log('File uploaded successfully');
+                    fetch('https://sdvanbao17.id.vn/api/v1/addComment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ idCustomer, idProduct, contentComment, timePublic, rate, filename }),
+                    })
+                        .then((rs) => {
+                            if (rs.status == 200) {
+                                setloadding(false);
+                                window.location.href = `/detail/${dataDetail.nameProduct}/${dataDetail.idProduct}`;
+                            }
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                })
+                .catch((error) => {
+                    console.error('Error uploading file:', error);
+                });
+        } else {
+            setdis(!dis);
+        }
+    };
     return (
         <div className={cx('wrapper')} id={id}>
             <div className={cx('nonTempRate')}>
@@ -134,7 +197,7 @@ function Rate({ dataDetail, id, normal }) {
                 <div className={cx('ovrRate')}>
                     <div className={cx('total')}>
                         <span className={cx('dis-total')}>
-                            <span className={cx('avg')}>{total / comments.length}</span>
+                            <span className={cx('avg')}>{comments.length != 0 ? total / comments.length : 0}</span>
                             <span>/5</span>
                             <StarContainer>
                                 <div className={cx('stars')}></div>
@@ -194,20 +257,23 @@ function Rate({ dataDetail, id, normal }) {
                     <p>Chọn mua sản phẩm để là người đầu tiên đánh giá sản phẩm này.</p>
                 </div>
             )}
-
-            <button
-                className={cx('action_comment')}
-                onClick={() => {
-                    if (user == null) {
-                        setdis(!dis);
-                    } else {
-                        setStateComment(true);
-                    }
-                }}
-            >
-                <FontAwesomeIcon icon={faMessage} className={cx('icon')} />
-                <span>Bình luận ngay</span>
-            </button>
+            {stateButtonComment == true ? (
+                <button
+                    className={cx('action_comment')}
+                    onClick={() => {
+                        if (user == null) {
+                            setdis(!dis);
+                        } else {
+                            setStateComment(true);
+                        }
+                    }}
+                >
+                    <FontAwesomeIcon icon={faMessage} className={cx('icon')} />
+                    <span>Bình luận ngay</span>
+                </button>
+            ) : (
+                <></>
+            )}
             {stateComment == true ? (
                 <Popup>
                     <div className={cx('container_input_comments')}>
@@ -255,7 +321,7 @@ function Rate({ dataDetail, id, normal }) {
                             </ul>
                         </div>
                         <div className={cx('input_comment')}>
-                            <textarea></textarea>
+                            <textarea ref={textareaRef}></textarea>
                         </div>
                         <div className={cx('action_send')}>
                             <form onSubmit={handleSubmit} className={cx('actions')} encType="multipart/form-data">
@@ -300,7 +366,7 @@ function Rate({ dataDetail, id, normal }) {
                                         </div>
                                     ))}
                                 </div>
-                                <button>
+                                <button onClick={handleSendComment}>
                                     <span>Gửi</span>
                                 </button>
                             </form>

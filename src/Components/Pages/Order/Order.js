@@ -32,11 +32,11 @@ function Order() {
         },
         {
             index: 4,
-            name: 'Đã giao hàng',
+            name: 'Đã hủy ',
         },
         {
             index: 5,
-            name: 'Đã hủy ',
+            name: 'Đã giao hàng',
         },
     ];
     useEffect(() => {
@@ -116,7 +116,6 @@ function Order() {
                         {orders.map((item, index) => {
                             if (item.state == active) {
                                 return <OrderItem Order={orders} data={item} key={index} />;
-                                return <span>123</span>;
                             }
                         })}
                     </div>

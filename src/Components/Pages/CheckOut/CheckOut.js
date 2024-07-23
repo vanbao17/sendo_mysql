@@ -193,6 +193,8 @@ function CheckOut() {
         const address_id = addressUser[0].id;
         const transform_method_id = trasnformMethod.id;
         const transform_option_id = indexTransformOptions;
+        const size = idShopArray[0].size;
+        const color = idShopArray[0].color;
         const order_item = [];
         await product.forEach((pd) => {
             order_item.push({ idProduct: pd.idProduct, quantity: pd.quanlityCart, price: pd.priceSale });
@@ -213,6 +215,8 @@ function CheckOut() {
                 transform_option_id,
                 idShop,
                 order_item,
+                size,
+                color,
             }),
         })
             .then((rs) => rs.json())

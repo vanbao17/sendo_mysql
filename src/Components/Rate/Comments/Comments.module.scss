@@ -4,9 +4,11 @@
 .wrapperItem {
     display: flex;
     padding-left: 24px;
+    align-items: flex-start;
     padding-bottom: 12px;
     .imageUser {
         width: 10%;
+        height: 10%x;
         padding: 12px;
         margin-right: 10px;
         border-radius: 100%;
@@ -14,8 +16,9 @@
     }
     .imageUser img {
         width: 100%;
-        height: auto;
+        height: 40px;
         margin-top: 20px;
+        object-fit: cover;
         border-radius: 100%;
     }
     .nameUser {
@@ -123,6 +126,8 @@
     }
     .commentImage ul {
         width: 100%;
+        display: flex;
+        gap: 10px;
     }
     .commentImage ul li {
         list-style-type: none;
@@ -145,4 +150,7 @@
         gap: 10px;
         cursor: pointer;
     }
+}
+.action_user {
+    margin-left: 15px;
 }
