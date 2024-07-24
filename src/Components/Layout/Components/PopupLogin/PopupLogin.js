@@ -254,9 +254,9 @@ function PopupLogin({ className, style }) {
                         <div className={cx('content2')}>
                             <p>Hoặc thông qua : </p>
                             <div className={cx('face-goo')}>
-                                <GoogleOAuthProvider clientId="927153163763-liqf9jmc15drk1dfep7mrpn78mk9hg4e.apps.googleusercontent.com">
+                                <GoogleOAuthProvider clientId="222966081099-58vsc5pfefgd3qhoomjtsqgdcorhlau3.apps.googleusercontent.com">
                                     <GoogleLogin
-                                        clientId="927153163763-liqf9jmc15drk1dfep7mrpn78mk9hg4e.apps.googleusercontent.com"
+                                        clientId="222966081099-58vsc5pfefgd3qhoomjtsqgdcorhlau3.apps.googleusercontent.com"
                                         buttonTetx="Đăng nhập bằng Google"
                                         onSuccess={handleLoginGG}
                                         onFailure={() => {
