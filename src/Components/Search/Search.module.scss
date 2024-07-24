@@ -4,6 +4,7 @@
     max-width: 100%;
     gap: 7px;
     align-items: center;
+    position: relative;
     input {
         width: 100%;
         border-radius: 5px;
@@ -58,4 +59,10 @@
     li:hover {
         background-color: #f2f3f4;
     }
+}
+.container_listcate {
+    position: absolute;
+    left: -15%;
+    top: 95%;
+    z-index: 999;
 }

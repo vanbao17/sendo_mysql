@@ -25,6 +25,7 @@ function BtnChat() {
     const [idshop, setidshop] = useState();
     const [Messes, setMesses] = useState([]);
     const [indexMess, setindexMess] = useState();
+    const divClick = useRef();
     // const socket = io('http://localhost:3001', {
     //     transports: ['websocket'],
     //     upgrade: true,
@@ -104,7 +105,10 @@ function BtnChat() {
     const handleGetChatConvent = (id) => {
         fetch('https://sdvanbao17.id.vn/api/v1/getMessIdConve/' + id)
             .then((rs) => rs.json())
-            .then((dt) => setMesses(dt))
+            .then((dt) => {
+                const sortedMessages = dt.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                setMesses(sortedMessages);
+            })
             .catch((err) => {
                 console.log(err);
             });
@@ -135,6 +139,8 @@ function BtnChat() {
             body: JSON.stringify({ id }),
         })
             .then((rs) => {
+                setMesses([]);
+                setMessages([]);
                 if (rs.status == 200) {
                     const userId = user.idCustomers;
                     fetch('https://sdvanbao17.id.vn/api/v1/getChatUser/' + userId)
@@ -149,6 +155,7 @@ function BtnChat() {
                 console.log(err);
             });
     };
+
     return (
         <>
             {chatBox == false ? (
@@ -228,10 +235,13 @@ function BtnChat() {
                                                     onClick={() => {
                                                         setidshop(shop[0]);
                                                         // setindexMess(null);
-                                                        handleGetChatConvent(item.conversation_id);
+                                                        if (messages.length == 0) {
+                                                            handleGetChatConvent(item.conversation_id);
+                                                        }
                                                         setIdconvention(item.conversation_id);
                                                         handleActiveChat(item.conversation_id);
                                                     }}
+                                                    ref={divClick}
                                                 >
                                                     <img src={shop[0].imageShop}></img>
                                                     <div className={cx('infor_mess')}>

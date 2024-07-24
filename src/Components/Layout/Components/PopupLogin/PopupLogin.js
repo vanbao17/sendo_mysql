@@ -83,7 +83,7 @@ function PopupLogin({ className, style }) {
             });
     };
     //
-    const handleButtonLogin = () => {
+    const handleButtonLogin = async () => {
         setloadding(true);
         if (whatnext == null) {
             const phone_data = '+84' + phoneNumber.slice(1);
@@ -94,13 +94,12 @@ function PopupLogin({ className, style }) {
                 },
                 body: JSON.stringify({ phone_data }),
             };
-            fetch('https://sdvanbao17.id.vn/api/v1/get-customer', options)
+            await fetch('https://sdvanbao17.id.vn/api/v1/get-customer', options)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.length !== 0) {
                         setwhatnext(true);
                         setinforuser(data[0]);
-                        setloadding(false);
                     } else {
                         setwhatnext(false);
                         handleSendOTP();
@@ -109,6 +108,7 @@ function PopupLogin({ className, style }) {
                 .catch((err) => {
                     if (err) throw err;
                 });
+            setloadding(false);
         } else {
             if (whatnext == true) {
                 if (inforuser != null) {

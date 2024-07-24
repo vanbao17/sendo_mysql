@@ -46,10 +46,10 @@ function Search() {
     };
     return (
         <div className={cx('wrapper')}>
-            <Tippy
+            {/* <Tippy
                 interactive={true}
                 appendTo={() => document.body}
-                // visible
+                visible={true}
                 offset={[50, 15]}
                 delay={[0, 0]}
                 placement="bottom"
@@ -60,7 +60,41 @@ function Search() {
                         <ListCate width="24px" height="24px "></ListCate>
                     </Link>
                 </a>
-            </Tippy>
+            </Tippy> */}
+            <a
+                className={cx('listcate')}
+                onMouseMove={() => {
+                    if (stateMouse == false) {
+                        setStateMouse(!stateMouse);
+                    }
+                }}
+                onMouseLeave={() => {
+                    setStateMouse(!stateMouse);
+                }}
+            >
+                <Link to="/site-map">
+                    <ListCate width="24px" height="24px "></ListCate>
+                </Link>
+            </a>
+            {stateMouse == true ? (
+                <div
+                    className={cx('container_listcate')}
+                    onMouseMove={() => {
+                        if (stateMouse == false) {
+                            setStateMouse(!stateMouse);
+                        } else {
+                            setStateMouse(stateMouse);
+                        }
+                    }}
+                    onMouseLeave={() => {
+                        setStateMouse(!stateMouse);
+                    }}
+                >
+                    <ListCates />
+                </div>
+            ) : (
+                <></>
+            )}
 
             <div className={cx('containerInput')}>
                 <input

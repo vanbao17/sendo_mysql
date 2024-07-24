@@ -28,6 +28,7 @@ function Detai() {
     const [favoriteProds, setfavoriteProds] = useState([]);
     const [imgData, setimgData] = useState([]);
     const [comments, setcomments] = useState([]);
+    const [selled, setselled] = useState();
     const [color, setcolor] = useState();
     const [size, setsize] = useState();
     const [choseImage, setchoseImage] = useState();
@@ -64,6 +65,18 @@ function Detai() {
         })
             .then((rs) => rs.json())
             .then((dt) => setcomments(dt))
+            .catch((err) => {
+                console.log(err);
+            });
+        fetch(' https://sdvanbao17.id.vn/api/v1/getOrderFinal', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idProduct }),
+        })
+            .then((rs) => rs.json())
+            .then((dt) => setselled(dt.length))
             .catch((err) => {
                 console.log(err);
             });
@@ -202,6 +215,17 @@ function Detai() {
             display: block;
             -webkit-text-fill-color: transparent;
             background: linear-gradient(90deg, #ffc600 ${(total / comments.length / 5) * 100}%, #e7e8ea 0);
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+    `;
+    const StarContainerSpan = styled.div`
+        position: relative;
+        &::before {
+            content: '★★★★★';
+            display: block;
+            -webkit-text-fill-color: transparent;
+            background: linear-gradient(90deg, #e7e8ea ${100}%, #e7e8ea 0);
             background-clip: text;
             -webkit-background-clip: text;
         }
@@ -361,16 +385,22 @@ function Detai() {
                             <span>Chi tiết </span> */}
                         </div>
                         <div className={cx('ovr')}>
-                            <StarContainer>
-                                <div></div>
-                            </StarContainer>
+                            {comments.length == 0 ? (
+                                <StarContainerSpan>
+                                    <div></div>
+                                </StarContainerSpan>
+                            ) : (
+                                <StarContainer>
+                                    <div></div>
+                                </StarContainer>
+                            )}
 
                             <div className={cx('count-rate')}>
                                 <span>{comments.length} Lượt Đánh giá</span>
                             </div>
                             <div className={cx('count-buy')}>
                                 <BinIcon />
-                                <span>{datadetail.slmua} Lượt mua</span>
+                                <span>{selled} Lượt mua</span>
                             </div>
                         </div>
                         <hr className={cx('main-hr')}></hr>

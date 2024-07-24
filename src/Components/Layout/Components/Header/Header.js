@@ -157,9 +157,9 @@ function Header({ nav }) {
             </section>
             <nav className={cx('nav', menufix ? 'fixed' : '')}>
                 <header>
-                    <Link to="/" className={cx('logo')}>
+                    <a href="/" className={cx('logo')}>
                         <LogoSendo width="5.6rem" height="3rem"></LogoSendo>
-                    </Link>
+                    </a>
                     <Search></Search>
                     <div className={cx('action-user')}>
                         <div
