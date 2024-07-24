@@ -4,12 +4,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
-function SizesBtn({ data, idProduct, handleSendData }) {
-    const [active, setactive] = useState(null);
+function SizesBtn({ data = null, idProduct, handleSendData, title = null }) {
+    const [active, setactive] = useState(data);
     const [sizes, setsizes] = useState([]);
     function handle(index) {
         setactive(index);
     }
+
     useEffect(() => {
         if (active != undefined) {
             handleSendData(active);
@@ -18,21 +19,30 @@ function SizesBtn({ data, idProduct, handleSendData }) {
     useEffect(() => {
         fetch(`https://sdvanbao17.id.vn/api/v1/getSizesProduct/${idProduct}`)
             .then((respone) => respone.json())
-            .then((data) => {
-                setsizes(data);
-                setactive(data[0]);
+            .then((dt) => {
+                setsizes(dt);
+                if (data == null) {
+                    setactive(dt[0]);
+                } else {
+                    setactive(data);
+                }
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, [idProduct]);
+    }, [idProduct, data]);
 
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('displaySize')}>
-                <p>Chọn Size</p>
-                <p></p>
-            </div>
+            {title == null ? (
+                <div className={cx('displaySize')}>
+                    <p>Chọn Size</p>
+                    <p></p>
+                </div>
+            ) : (
+                <></>
+            )}
+
             {sizes.map((item, index) => {
                 return (
                     <button

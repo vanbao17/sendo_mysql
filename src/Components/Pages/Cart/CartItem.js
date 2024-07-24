@@ -25,7 +25,7 @@ function CartItem({ update, data, handleDeleteCart, handleSendData }) {
     const [quanlity, setquanlity] = useState(1);
     // const [listbuys, setlistbuys] = useState([]);
     function renderSizeColor() {
-        return <TippyUpdate idProduct={data.idProduct} colorItem={color} sizeItem={size} />;
+        return <TippyUpdate data={data} idProduct={data.idProduct} colorItem={color} sizeItem={size} />;
     }
     const handleQuanlity = (dt) => {
         setquanlity(dt);

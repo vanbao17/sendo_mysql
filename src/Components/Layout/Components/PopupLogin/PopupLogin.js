@@ -9,7 +9,7 @@ import { gapi } from 'gapi-script';
 import jwt_decode from 'jwt-decode';
 import firebase from '../../../Config/firebase';
 const cx = classNames.bind(styles);
-const id = '927153163763-liqf9jmc15drk1dfep7mrpn78mk9hg4e.apps.googleusercontent.com';
+const id = '222966081099-58vsc5pfefgd3qhoomjtsqgdcorhlau3.apps.googleusercontent.com';
 function PopupLogin({ className, style }) {
     useEffect(() => {
         function start() {

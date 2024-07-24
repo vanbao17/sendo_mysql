@@ -3,8 +3,8 @@ import classNames from 'classnames/bind';
 import styles from './ColorsBtn.module.scss';
 import { useEffect, useState } from 'react';
 const cx = classNames.bind(styles);
-function ColorsBtn({ dataColor, imgs, idProduct, handleSendData }) {
-    const [active, setactive] = useState(null);
+function ColorsBtn({ data = null, dataColor, imgs, idProduct, handleSendData, title = null }) {
+    const [active, setactive] = useState();
     const [colors, setcolors] = useState([]);
     function handle(index) {
         setactive(index);
@@ -17,20 +17,29 @@ function ColorsBtn({ dataColor, imgs, idProduct, handleSendData }) {
     useEffect(() => {
         fetch(`https://sdvanbao17.id.vn/api/v1/getColorsProduct/${idProduct}`)
             .then((respone) => respone.json())
-            .then((data) => {
-                setcolors(data);
-                setactive(data[0]);
+            .then((dt) => {
+                setcolors(dt);
+                if (data != null) {
+                    setactive(data);
+                } else {
+                    setactive(dt[0]);
+                }
             })
             .catch((error) => {
                 console.log(error);
             });
-    }, [idProduct]);
+    }, [idProduct, data]);
     return (
         <div className={cx('wrapper')}>
-            <div className={cx('displaySize')}>
-                <p>Chọn Màu</p>
-                <p></p>
-            </div>
+            {title == null ? (
+                <div className={cx('displaySize')}>
+                    <p>Chọn Màu</p>
+                    <p></p>
+                </div>
+            ) : (
+                <></>
+            )}
+
             {dataColor &&
                 colors.map((item, index) => {
                     return (

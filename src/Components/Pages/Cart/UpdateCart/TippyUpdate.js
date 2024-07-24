@@ -1,53 +1,53 @@
 import classNames from 'classnames/bind';
 import styles from './TippyUpdate.module.scss';
-import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import ColorsBtn from '../../../ColorsBtn/ColorsBtn';
+import SizesBtn from '../../../SizesBtn/SizesBtn';
 const cx = classNames.bind(styles);
 
-function TippyUpdate({ size = 38, color = 'hehe', data, colorItem, sizeItem, idProduct }) {
+function TippyUpdate({ data, colorItem, sizeItem, idProduct }) {
     const [colors, setcolors] = useState([]);
     const [sizes, setsizes] = useState([]);
-    const dt = {
-        size: [38, 39, 40, 41, 42, 43],
-        img: [
-            'https://media3.scdn.vn/img4/2021/10_02/hGEdcm2CoPwpLTbEkUXg_simg_02d57e_50x50_maxb.jpg',
-            'https://media3.scdn.vn/img4/2021/10_02/hGEdcm2CoPwpLTbEkUXg_simg_02d57e_50x50_maxb.jpg',
-            'https://media3.scdn.vn/img4/2021/10_02/hGEdcm2CoPwpLTbEkUXg_simg_02d57e_50x50_maxb.jpg',
-            'https://media3.scdn.vn/img4/2021/10_02/hGEdcm2CoPwpLTbEkUXg_simg_02d57e_50x50_maxb.jpg',
-        ],
+    const [cl, setcolor] = useState();
+    const [s, setsize] = useState();
+    const handleUpdateCart = () => {
+        const id = data.idCart;
+        fetch(`https://sdvanbao17.id.vn/api/v1/updateCartColorSize`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ s, cl, id }),
+        })
+            .then((respone) => {
+                if (respone.status == 200) {
+                    window.location.reload();
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
-    useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/getColorsProduct/${idProduct}`)
-            .then((respone) => respone.json())
-            .then((data) => {
-                setcolors(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [idProduct]);
-    useEffect(() => {
-        fetch(`https://sdvanbao17.id.vn/api/v1/getSizesProduct/${idProduct}`)
-            .then((respone) => respone.json())
-            .then((data) => {
-                setsizes(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, [idProduct]);
-    const [dtupdate, setdtupdate] = useState({ size: size, color: color });
-    const [active, setactive] = useState(null);
-    const [active1, setactive1] = useState(null);
-    function handleClickBtn(index, item) {}
+    const getDataSize = (dt) => {
+        setsize(dt.attribute_value_id);
+    };
+    const getDataColor = (dt) => {
+        setcolor(dt.attribute_value_id);
+    };
     return (
         <div className={cx('container-update')}>
             <div className={cx('size')}>
                 <span className={cx('title')}>
-                    Chọn kích thước:<strong>42</strong>
+                    Chọn kích thước:<strong>{sizeItem != undefined ? sizeItem.value : ''}</strong>
                 </span>
                 <div className={cx('list-sizes')}>
-                    {sizes.map((item, index) => {
+                    <SizesBtn
+                        handleSendData={getDataSize}
+                        idProduct={idProduct}
+                        data={sizeItem != undefined ? sizeItem : null}
+                        title={true}
+                    />
+                    {/* {sizes.map((item, index) => {
                         return (
                             <button
                                 key={index}
@@ -67,42 +67,27 @@ function TippyUpdate({ size = 38, color = 'hehe', data, colorItem, sizeItem, idP
                                 {item.value}
                             </button>
                         );
-                    })}
+                    })} */}
                 </div>
             </div>
             <div className={cx('color')}>
                 <span className={cx('title')}>
-                    Chọn màu sắc:<strong>A01 Đen</strong>
+                    Chọn màu sắc:<strong>{colorItem != undefined ? colorItem.value : ''}</strong>
                 </span>
                 <div className={cx('list-colors')}>
-                    {colors.map((item, index) => {
-                        return (
-                            <button
-                                key={index}
-                                className={cx(
-                                    'item-img',
-                                    colorItem !== undefined
-                                        ? colorItem.attribute_value_id == item.attribute_value_id
-                                            ? 'active'
-                                            : ''
-                                        : '',
-                                )}
-                                onClick={() => {
-                                    setactive1(index);
-                                    setdtupdate({ size: dtupdate.size, color: item });
-                                }}
-                            >
-                                {/* <img src={item} alt="img"></img> */}
-                                <span>{item.value}</span>
-                            </button>
-                        );
-                    })}
+                    <ColorsBtn
+                        data={colorItem != undefined ? colorItem : null}
+                        handleSendData={getDataColor}
+                        idProduct={idProduct}
+                        dataColor={true}
+                        title={true}
+                    />
                 </div>
             </div>
-            <span className={cx('price')}>
+            {/* <span className={cx('price')}>
                 Đơn giá :<strong>23.000đ</strong>
-            </span>
-            <button className={cx('btn-update')} onClick={() => {}}>
+            </span> */}
+            <button className={cx('btn-update')} onClick={handleUpdateCart}>
                 <span>Cập nhật</span>
             </button>
         </div>
