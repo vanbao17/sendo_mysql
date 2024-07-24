@@ -156,7 +156,13 @@ function Detai() {
                                     route('/gio-hang', { state: { dt: 1 } });
                                 } else {
                                     const secretKey = 'Phamvanbao_0123';
-                                    const idShopString = JSON.stringify([datadetail]);
+                                    const idShopString = JSON.stringify([
+                                        {
+                                            ...datadetail,
+                                            size: size.attribute_value_id,
+                                            color: color.attribute_value_id,
+                                        },
+                                    ]);
                                     const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
                                     window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
                                 }
@@ -177,7 +183,13 @@ function Detai() {
                                     route('/gio-hang', { state: { dt: 1 } });
                                 } else {
                                     const secretKey = 'Phamvanbao_0123';
-                                    const idShopString = JSON.stringify([datadetail]);
+                                    const idShopString = JSON.stringify([
+                                        {
+                                            ...datadetail,
+                                            size: size.attribute_value_id,
+                                            color: color.attribute_value_id,
+                                        },
+                                    ]);
                                     const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
                                     window.location.href = `/thanh-toan?product=${encodeURIComponent(encryptedIdShop)}`;
                                 }
