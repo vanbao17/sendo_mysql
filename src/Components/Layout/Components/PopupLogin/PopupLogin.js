@@ -182,10 +182,27 @@ function PopupLogin({ className, style }) {
     };
     const handleLoginGG = (response) => {
         const data = jwt_decode(response.credential);
-        setuser(data);
-        sessionStorage.setItem('user', JSON.stringify(data));
-        setusergg(true);
-        setdis(false);
+        const email = data.email;
+        const name = data.name;
+        const picture = data.picture;
+        const sub = data.sub;
+        fetch('https://sdvanbao17.id.vn/api/v1/signInWithEmail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, sub, name, picture }),
+        })
+            .then((rs) => rs.json())
+            .then((dt) => {
+                setuser(dt);
+                sessionStorage.setItem('user', JSON.stringify(dt));
+                setusergg(true);
+                setdis(false);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     return (

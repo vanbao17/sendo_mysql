@@ -14,11 +14,13 @@ const cx = classNames.bind(styles);
 function AccountUser() {
     // const [dob, setdob] = useState(null);
     // const [name, setname] = useState(null);
-    // const [phone, setphone] = useState(null);
     // const [email, setemail] = useState(null);
+    const inputPhoneRef = useRef();
+    const inputEmailRef = useRef();
     const [statePopupUpdatePass, setstatePopupUpdatePass] = useState(false);
     const [seePassword, setseePassword] = useState(false);
     const [seePassword1, setseePassword1] = useState(false);
+    const [warning, setwarning] = useState(null);
     const [preview, setPreview] = useState(null);
     const user = JSON.parse(sessionStorage.getItem('user'));
 
@@ -49,6 +51,9 @@ function AccountUser() {
                 emailUser: user.emailUser,
                 dateOB: user.dateOB,
             });
+            if (user.googleId != null) {
+                inputEmailRef.current.readOnly = true;
+            }
         }
     }, []);
     const handleButtonClick = () => {
@@ -69,6 +74,7 @@ function AccountUser() {
     };
     const handleUpdateInfor = () => {
         const { idCustomers, imageUser, nameCustomers, phoneNumber, emailUser, dateOB } = us;
+
         if (fileupload !== undefined) {
             fetch('https://sdvanbao17.id.vn/api/v1/upload_images_product', {
                 method: 'POST',
@@ -89,6 +95,9 @@ function AccountUser() {
             body: JSON.stringify({ idCustomers, imageUser, nameCustomers, phoneNumber, emailUser, dateOB }),
         })
             .then((response) => {
+                if (response.status == 201) {
+                    setwarning('Gmail đã bị trùng');
+                }
                 if (response.status == 200) {
                     fetch('https://sdvanbao17.id.vn/api/v1/getCustomerId/' + user.idCustomers)
                         .then((response) => response.json())
@@ -214,15 +223,24 @@ function AccountUser() {
                                     }}
                                 ></input>
                             </div>
-                            <div className={cx('phone', 'container_input')}>
-                                <span className={cx('label')}>Số điện thoại</span>
-                                <input value={us.phoneNumber} type="text" readOnly></input>
-                            </div>
+                            {user.googleId == null ? (
+                                <div className={cx('phone', 'container_input')}>
+                                    <span className={cx('label')}>Số điện thoại</span>
+                                    <input value={us.phoneNumber} type="text" ref={inputPhoneRef} readOnly></input>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
+
                             <div className={cx('email', 'container_input')}>
-                                <span className={cx('label')}>Email cá nhân</span>
+                                <span style={warning != null ? { color: 'red' } : {}} className={cx('label')}>
+                                    Email cá nhân
+                                </span>
                                 <input
-                                    value={us.emailUser != null ? us.emailUser : ''}
-                                    placeholder="Nhập đầy đủ email"
+                                    style={warning != null ? { border: '1px solid red', color: 'red' } : {}}
+                                    ref={inputEmailRef}
+                                    value={us.emailUser || ''}
+                                    placeholder="Nhập đầy đủ email"
                                     type="text"
                                     onChange={(e) => {
                                         setus((prevState) => ({
@@ -230,7 +248,8 @@ function AccountUser() {
                                             emailUser: e.target.value,
                                         }));
                                     }}
-                                ></input>
+                                />
+                                <span style={{ color: 'red', fontSize: '12px' }}>{warning != null ? warning : ''}</span>
                             </div>
                             <div className={cx('date', 'container_input')}>
                                 <span className={cx('label')}>Ngày sinh</span>
@@ -252,13 +271,17 @@ function AccountUser() {
                         <button onClick={handleUpdateInfor}>
                             <span>Cập nhật</span>
                         </button>
-                        <a
-                            onClick={() => {
-                                setstatePopupUpdatePass(!statePopupUpdatePass);
-                            }}
-                        >
-                            Tạo / đổi mật khẩu{' '}
-                        </a>
+                        {user.googleId == null ? (
+                            <a
+                                onClick={() => {
+                                    setstatePopupUpdatePass(!statePopupUpdatePass);
+                                }}
+                            >
+                                Tạo / đổi mật khẩu{' '}
+                            </a>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
             </div>
@@ -341,6 +364,7 @@ function AccountUser() {
                                 )}
                             </div>
                         </div>
+
                         <div className={cx('button_submit')}>
                             <button onClick={handleUpdatePassword}>
                                 <span>Hoàn tất</span>
