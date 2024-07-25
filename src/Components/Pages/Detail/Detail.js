@@ -265,7 +265,10 @@ function Detai() {
                         // const idShop = encodeURIComponent(datadetail.idShop);
                         // window.location.href = `https://senvb.vercel.app/thanh-toan?idProduct=${encodedIdProduct}&idShop=${idShop}`;
                     } else {
-                        nav('/them-dia-chi');
+                        const secretKey = 'Phamvanbao_0123';
+                        const idShopString = JSON.stringify([datadetail]);
+                        const encryptedIdShop = CryptoJS.AES.encrypt(idShopString, secretKey).toString();
+                        window.location.href = `/them-dia-chi?product=${encodeURIComponent(encryptedIdShop)}`;
                     }
                 })
                 .catch((err) => {

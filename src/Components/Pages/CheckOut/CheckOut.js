@@ -256,7 +256,7 @@ function CheckOut() {
                                     <span>{user.nameCustomers}</span>|<p>{user.phoneNumber}</p>
                                 </div>
                                 <div className={cx('address')}>
-                                    <span> {addressUser.loaidiachi == 0 ? 'Nhà riêng' : 'Cơ quan'}</span>
+                                    <span> {addressUser.loaidiachi == 0 ? 'Nhà riêng' : 'Công ty'}</span>
                                     {addressUser.length !== 0
                                         ? addressUser[0].address +
                                           ', ' +

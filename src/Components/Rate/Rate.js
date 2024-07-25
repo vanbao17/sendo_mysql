@@ -250,7 +250,7 @@ function Rate({ dataDetail, id, normal }) {
                 </div>
             </div>
             {comments.length != 0 ? (
-                <Comments data={comments} normal={normal} />
+                <Comments data={comments} normal={normal} datadetail={dataDetail} />
             ) : (
                 <div className={cx('tempRate')}>
                     <img src="https://web-static.scdn.vn/sendo-communication-rating/863edd0-web/media/rating-empty.f56ae9e22805ed6a864d1a540bea0947.svg"></img>
