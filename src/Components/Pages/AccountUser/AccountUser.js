@@ -95,7 +95,7 @@ function AccountUser() {
             body: JSON.stringify({ idCustomers, imageUser, nameCustomers, phoneNumber, emailUser, dateOB }),
         })
             .then((response) => {
-                if (response.status == 201) {
+                if (response.status == 201 || response.status == 500) {
                     setwarning('Gmail đã bị trùng');
                 }
                 if (response.status == 200) {
