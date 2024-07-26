@@ -3,8 +3,10 @@ import classNames from 'classnames/bind';
 import styles from './InforS.module.scss';
 import { BoxIcon, LocationIcon, OclockIcon, ShopIcon } from '../../../IconSvg';
 import Rate from '../../../Rate/Rate';
+import { useLocation, useParams } from 'react-router-dom';
 const cx = classNames.bind(styles);
 function InforS() {
+    const { paramValue } = useParams();
     return (
         <ShopPage>
             <div className={cx('containInfor')}>
@@ -48,7 +50,7 @@ function InforS() {
                     </div>
                 </div>
                 <div className={cx('rightcontain')}>
-                    <Rate normal={false}></Rate>
+                    <Rate normal={false} idShop={paramValue}></Rate>
                 </div>
             </div>
         </ShopPage>

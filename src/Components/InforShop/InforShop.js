@@ -10,6 +10,9 @@ import { Context } from '../store/Context';
 const cx = classNames.bind(styles);
 function InforShop({ Shopinfor }) {
     const [proSale, setproSale] = useState([]);
+    const [comments, setcomments] = useState([]);
+    const [total, settotal] = useState(0);
+
     useEffect(() => {
         fetch(`https://sdvanbao17.id.vn/api/v1/prodShop/${Shopinfor.idShop}`)
             .then((respone) => respone.json())
@@ -17,7 +20,18 @@ function InforShop({ Shopinfor }) {
             .catch((error) => {
                 console.log(error);
             });
+        fetch('https://sdvanbao17.id.vn/api/v1/getCommentForShop/' + Shopinfor.idShop)
+            .then((rs) => rs.json())
+            .then((dt) => setcomments(dt))
+            .catch((err) => {
+                console.log(err);
+            });
     }, [Shopinfor]);
+    useEffect(() => {
+        comments.forEach((i) => {
+            settotal((e) => e + parseInt(i.rateCount));
+        });
+    }, [comments]);
     const handleShopInfor = () => {
         // route(`/shop/${Shopinfor.idShop}?`, { state: { dt: Shopinfor } });
     };
@@ -46,7 +60,7 @@ function InforShop({ Shopinfor }) {
                         <div className={cx('addressAndRate')}>
                             <span className={cx('address')}>{Shopinfor.diachi} </span>
                             <span className={cx('rate')}>
-                                | 4.5 <span className={cx('rateStar')}> ★</span>
+                                {total / comments.length} | 5 <span className={cx('rateStar')}> ★</span>
                             </span>
                         </div>
                     </div>

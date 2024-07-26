@@ -12,7 +12,7 @@ import { Context } from '../store/Context';
 import { format } from 'date-fns';
 const cx = classNames.bind(styles);
 
-function Rate({ dataDetail, id, normal }) {
+function Rate({ dataDetail, id, normal, idShop = null }) {
     const [stateComment, setStateComment] = useState(false);
     const [stateButtonComment, setStateButtonComment] = useState(false);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -32,7 +32,7 @@ function Rate({ dataDetail, id, normal }) {
     const { dis, setdis, loadding, setloadding } = useContext(Context);
     const fileInputRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem('user'));
-    const idProduct = dataDetail.idProduct;
+
     const textareaRef = useRef();
 
     const formatDate = (stringDate) => {
@@ -41,19 +41,29 @@ function Rate({ dataDetail, id, normal }) {
         return formattedDate;
     };
     useEffect(() => {
-        if (dataDetail != undefined) {
-            fetch('https://sdvanbao17.id.vn/api/v1/getCommentForProduct', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ idProduct }),
-            })
+        if (idShop != null) {
+            fetch('https://sdvanbao17.id.vn/api/v1/getCommentForShop/' + idShop)
                 .then((rs) => rs.json())
                 .then((dt) => setcomments(dt))
                 .catch((err) => {
                     console.log(err);
                 });
+        } else {
+            if (dataDetail != undefined) {
+                const idProduct = dataDetail.idProduct;
+                fetch('https://sdvanbao17.id.vn/api/v1/getCommentForProduct', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ idProduct }),
+                })
+                    .then((rs) => rs.json())
+                    .then((dt) => setcomments(dt))
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
         }
     }, [dataDetail]);
     useEffect(() => {
@@ -125,8 +135,9 @@ function Rate({ dataDetail, id, normal }) {
         }
     `;
     useEffect(() => {
-        if (user != null) {
+        if (user != null && dataDetail != undefined) {
             const idCustomer = user.idCustomers;
+            const idProduct = dataDetail.idProduct;
             fetch(' https://sdvanbao17.id.vn/api/v1/checkStateComment', {
                 method: 'POST',
                 headers: {
@@ -147,6 +158,12 @@ function Rate({ dataDetail, id, normal }) {
                 });
         }
     }, [dataDetail]);
+    useEffect(() => {
+        const check = comments.filter((comment) => comment.idCustomers == user.idCustomers);
+        if (check.length != 0) {
+            setStateButtonComment(false);
+        }
+    }, [stateButtonComment]);
     const handleSendComment = (e) => {
         e.preventDefault();
         setloadding(true);
@@ -156,6 +173,7 @@ function Rate({ dataDetail, id, normal }) {
             const contentComment = textareaRef.current.value;
             const timePublic = formatDate(new Date());
             const formData = new FormData();
+            const idProduct = dataDetail.idProduct;
             selectedImages.forEach((image) => {
                 formData.append('images', image);
             });

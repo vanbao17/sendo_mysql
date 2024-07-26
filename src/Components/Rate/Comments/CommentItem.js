@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Popup from '../../Layout/Components/Popup/Popup';
 import { Context } from '../../store/Context';
+import styled from 'styled-components';
 const cx = classNames.bind(styles);
 function CommentItem({ data, normal, datadetail }) {
     const [attrComment, setAttComment] = useState([]);
@@ -173,34 +174,43 @@ function CommentItem({ data, normal, datadetail }) {
         setPreviewImages(newPreviewImages);
     };
     const handleSubmit = (event) => {};
+    const StarContainer = styled.div`
+        position: relative;
+        &::before {
+            content: '★★★★★';
+            display: block;
+            -webkit-text-fill-color: transparent;
+            background: linear-gradient(90deg, #ffc600 ${(data.rateCount / 5) * 100}%, #e7e8ea 0);
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+    `;
     return (
         <div className={cx('wrapperItem')}>
             <div className={cx('container')}>
                 {normal == false ? (
                     <>
                         <div className={cx('imageUser')}>
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4O-jd-HDATEFcN4KJjaeQH-If38062C8nyBrXmxo&s"></img>
+                            <img src={data.imageUser}></img>
                         </div>
                         <div className={cx('content')}>
                             <div className={cx('line')}>
                                 <hr></hr>
                             </div>
                             <p className={cx('nameUser')}>
-                                <span>0385230184</span>
-                                <p className={cx('timePublic')}>Hôm nay</p>
+                                <span>{data.nameCustomers}</span>
+                                <p className={cx('timePublic')}>{formatDate(data.timePublic)}</p>
                             </p>
-                            <span className={cx('status')}>Tạm hài lòng</span>
-                            <p className={cx('stars')}></p>
-                            <p className={cx('comment')}>
-                                Cần đúng với mô tả. Chất lượng cần tốt hơn. Giao hàng cần nhanh hơn. Shop cần thân thiện
-                                hơn. Nên đóng gói kỹ hơn. shop lừa đảo
-                            </p>
+                            <StarContainer>
+                                <div></div>
+                            </StarContainer>
+                            <p className={cx('comment')}>{data.contentComment}</p>
                             <a className={cx('buyrecent')}>
                                 <div className={cx('imageProd')}>
-                                    <img src="https://media3.scdn.vn/img4/2023/10_27/trf740hJU8xYr0bFy6oR_simg_b5529c_250x250_maxb.jpg"></img>
+                                    <img src={data.imageProduct}></img>
                                 </div>
                                 <div className={cx('nameProd')}>
-                                    <span>Dây cáp sạc nhanh</span>
+                                    <span>{data.nameProduct}</span>
                                 </div>
                             </a>
                         </div>
