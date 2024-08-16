@@ -22,3 +22,18 @@ html *::-webkit-scrollbar-track {
 .wrapper {
     background-color: #f2f3f4;
 }
+/* Đối tượng cuộn */
+::-webkit-scrollbar {
+    height: 0px; /* Chiều cao của thanh trượt ngang */
+}
+
+/* Nền của thanh cuộn */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Thanh cuộn */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}

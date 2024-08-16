@@ -2,14 +2,30 @@
     width: 100%;
     background-color: #fff;
 }
-.container {
-    width: 85%;
-    margin: 0px auto;
-    .setWidth {
+@media (max-width: '670px') {
+    .container {
         width: 100%;
-        display: flex;
+        margin: 0px auto;
+        .setWidth {
+            width: 100%;
+            display: flex;
+            overflow-x: scroll;
+        }
+    }
+    .container.children {
+        width: 100% !important;
     }
 }
-.container.children {
-    width: 100% !important;
+@media (min-width: '1250px') {
+    .container {
+        width: 85%;
+        margin: 0px auto;
+        .setWidth {
+            width: 100%;
+            display: flex;
+        }
+    }
+    .container.children {
+        width: 100% !important;
+    }
 }

@@ -26,6 +26,7 @@ function BtnChat() {
     const [Messes, setMesses] = useState([]);
     const [indexMess, setindexMess] = useState();
     const divClick = useRef();
+
     // const socket = io('http://localhost:3001', {
     //     transports: ['websocket'],
     //     upgrade: true,

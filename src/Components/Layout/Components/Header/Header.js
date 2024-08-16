@@ -17,11 +17,13 @@ import 'tippy.js/dist/tippy.css'; // optional
 import { useNavigate, NavLink } from 'react-router-dom';
 import Navigates from './Navigates';
 import { googleLogout } from '@react-oauth/google';
+import useMediaQuery from '@mui/material/useMediaQuery';
 const cx = classNames.bind(styles);
 function Header({ nav }) {
     const { dis, setdis, user, menufix, usergg, setusergg, setuserfb, setuser } = useContext(Context);
     const storedUser = sessionStorage.getItem('user');
     const userSession = storedUser ? JSON.parse(storedUser) : null;
+    const isSmallScreen = useMediaQuery('(max-width: 670px)');
     const OptionUser = [
         {
             label: 'Thông tin tài khoản',
@@ -160,7 +162,7 @@ function Header({ nav }) {
                     <a href="/" className={cx('logo')}>
                         <LogoSendo width="5.6rem" height="3rem"></LogoSendo>
                     </a>
-                    <Search></Search>
+                    {isSmallScreen == false ? <Search></Search> : <></>}
                     <div className={cx('action-user')}>
                         <div
                             className={cx('cart-icon')}
@@ -209,6 +211,7 @@ function Header({ nav }) {
                             </TippyHeadless>
                         )}
                     </div>
+                    {isSmallScreen == true ? <Search></Search> : <></>}
                 </header>
                 {nav && <Navigates />}
             </nav>

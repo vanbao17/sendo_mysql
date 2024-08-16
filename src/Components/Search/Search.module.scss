@@ -1,68 +1,140 @@
-.wrapper {
-    display: flex;
-    flex-grow: 1;
-    max-width: 100%;
-    gap: 7px;
-    align-items: center;
-    position: relative;
-    input {
+@media (max-width: '670px') {
+    .wrapper {
+        display: flex;
+        flex-grow: 1;
         width: 100%;
-        border-radius: 5px;
-        outline: none;
-        border: none;
-        background-color: #fff;
-        font-weight: inherit;
-        font-size: 1rem;
-        outline: 0;
-        padding: 0.5rem 1.6rem;
-        line-height: 1.5rem;
+        gap: 7px;
+        align-items: center;
+        position: relative;
+        input {
+            width: 100%;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            background-color: #fff;
+            font-weight: inherit;
+            font-size: 1rem;
+            outline: 0;
+            padding: 0.5rem 1.6rem;
+            line-height: 1.5rem;
+        }
+        .search-icon {
+            border-radius: 5px;
+            width: 3rem;
+            padding: 8px 0px;
+        }
     }
-    .search-icon {
-        border-radius: 5px;
-        width: 3rem;
+    .listcate {
+        padding: 4px;
+        border-radius: 3px;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.271);
+            cursor: pointer;
+        }
+    }
+    .containerInput {
+        width: 100%;
+        position: relative;
+    }
+    .containerResult {
         padding: 8px 0px;
+        border-radius: 4px;
+        width: 100%;
+        top: 100%;
+        background-color: #fff;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        li {
+            padding: 8px 8px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        span {
+            color: #6f787e;
+            line-break: 24px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        li:hover {
+            background-color: #f2f3f4;
+        }
+    }
+    .container_listcate {
+        position: absolute;
+        left: -15%;
+        top: 95%;
+        z-index: 999;
     }
 }
-.listcate {
-    padding: 4px;
-    border-radius: 3px;
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.271);
-        cursor: pointer;
+@media (min-width: '1250px') {
+    .wrapper {
+        display: flex;
+        flex-grow: 1;
+        max-width: 100%;
+        gap: 7px;
+        align-items: center;
+        position: relative;
+        input {
+            width: 100%;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            background-color: #fff;
+            font-weight: inherit;
+            font-size: 1rem;
+            outline: 0;
+            padding: 0.5rem 1.6rem;
+            line-height: 1.5rem;
+        }
+        .search-icon {
+            border-radius: 5px;
+            width: 3rem;
+            padding: 8px 0px;
+        }
     }
-}
-.containerInput {
-    width: 100%;
-    position: relative;
-}
-.containerResult {
-    padding: 8px 0px;
-    border-radius: 4px;
-    width: 100%;
-    top: 100%;
-    background-color: #fff;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    li {
-        padding: 8px 8px;
-        cursor: pointer;
-        transition: 0.25s;
+    .listcate {
+        padding: 4px;
+        border-radius: 3px;
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.271);
+            cursor: pointer;
+        }
     }
-    span {
-        color: #6f787e;
-        line-break: 24px;
-        padding: 4px 12px;
-        font-size: 12px;
-        font-weight: 700;
+    .containerInput {
+        width: 100%;
+        position: relative;
     }
-    li:hover {
-        background-color: #f2f3f4;
+    .containerResult {
+        padding: 8px 0px;
+        border-radius: 4px;
+        width: 100%;
+        top: 100%;
+        background-color: #fff;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        li {
+            padding: 8px 8px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        span {
+            color: #6f787e;
+            line-break: 24px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        li:hover {
+            background-color: #f2f3f4;
+        }
     }
-}
-.container_listcate {
-    position: absolute;
-    left: -15%;
-    top: 95%;
-    z-index: 999;
+    .container_listcate {
+        position: absolute;
+        left: -15%;
+        top: 95%;
+        z-index: 999;
+    }
 }

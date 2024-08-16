@@ -345,6 +345,7 @@ function Detai() {
                                 style={{ height: '500px', objectFit: 'cover' }}
                                 src={`${choseImage != undefined ? choseImage : datadetail.imageProduct}`}
                                 alt={`${datadetail.nameProduct}`}
+                                className={cx('image_product')}
                             />
 
                             <div className={cx('action')}>
